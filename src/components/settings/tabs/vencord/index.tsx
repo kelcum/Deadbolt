@@ -185,7 +185,7 @@ function EquicordSettings() {
             ) : (
                 <SpecialCard
                     title="Support the Project"
-                    description="Please consider supporting the development of Equicord by donating!"
+                    description="Wraithcord is built on Equicord - please consider supporting Equicord's development by donating!"
                     cardImage={donateImage}
                     backgroundImage={DONOR_BACKGROUND_IMAGE}
                     backgroundColor="#c3a3ce"
