@@ -1,18 +1,18 @@
 {
-    "name": "equicord",
+    "name": "wraithcord",
     "private": "true",
     "version": "1.15.4.0",
-    "description": "The other cutest Discord client mod",
-    "homepage": "https://github.com/Equicord/Equicord#readme",
+    "description": "A cold, no-frills Discord client mod",
+    "homepage": "https://github.com/kelcum/Wraithcord#readme",
     "bugs": {
-        "url": "https://github.com/Equicord/Equicord/issues"
+        "url": "https://github.com/kelcum/Wraithcord/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/Equicord/Equicord.git"
+        "url": "git+https://github.com/kelcum/Wraithcord.git"
     },
     "license": "GPL-3.0-or-later",
-    "author": "Equicord",
+    "author": "kelcum",
     "scripts": {
         "build": "node --require=./scripts/suppressExperimentalWarnings.js scripts/build/build.mjs",
         "buildStandalone": "pnpm build --standalone",
