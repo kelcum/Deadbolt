@@ -1,7 +1,7 @@
 {
     "name": "wraithcord",
     "private": "true",
-    "version": "1.15.4.0",
+    "version": "1.15.6.0",
     "description": "A cold, no-frills Discord client mod",
     "homepage": "https://github.com/kelcum/Wraithcord#readme",
     "bugs": {
