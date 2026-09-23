@@ -10,19 +10,30 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { Activity } from "@vencord/discord-types";
 import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
-import { FluxDispatcher } from "@webpack/common";
+import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
 
 const Native = VencordNative.pluginHelpers.VSCodeActivity as PluginNative<typeof import("./native")>;
 
 const logger = new Logger("VSCodeActivity");
 
-// Windows-only placeholder id - there's no owned Discord application with
-// uploaded VS Code branded assets behind this, so the activity renders as
-// text only (no icon). See the settings description for details.
-const APPLICATION_ID = "1000000000000000000";
+// Placeholder used when no real application ID is configured. Discord has
+// no registered "detectable game" entry for VS Code at all (checked the
+// public applications/detectable list), so without an app you own with an
+// uploaded Rich Presence asset there's no icon to show - this just needs
+// to be a syntactically valid id.
+const PLACEHOLDER_APPLICATION_ID = "1000000000000000000";
 const SOCKET_ID = "DeadboltVSCodeActivity";
 
 const TITLE_SUFFIX = / - Visual Studio Code(?: - Insiders)?$/;
+
+const DEFAULT_SPOOF_FILES = [
+    "index.ts",
+    "native.ts",
+    "deadboltLoading.css",
+    "PluginCard.tsx",
+    "patcher.ts",
+    "badges/index.tsx",
+].join("\n");
 
 interface ParsedTitle {
     file?: string;
@@ -59,9 +70,11 @@ function activityKey(parsed: ParsedTitle) {
     return `${parsed.file ?? ""}|${parsed.workspace ?? ""}|${parsed.dirty}`;
 }
 
-function buildActivity(parsed: ParsedTitle, sessionStart: number): Activity {
+async function buildActivity(parsed: ParsedTitle, sessionStart: number): Promise<Activity> {
+    const appId = settings.store.applicationId.trim() || PLACEHOLDER_APPLICATION_ID;
+
     const activity = {
-        application_id: APPLICATION_ID,
+        application_id: appId,
         name: "Visual Studio Code",
         type: ActivityType.PLAYING,
         timestamps: { start: sessionStart },
@@ -80,10 +93,24 @@ function buildActivity(parsed: ParsedTitle, sessionStart: number): Activity {
         activity.state = `Workspace: ${parsed.workspace}`;
     }
 
+    const assetKey = settings.store.iconAssetKey.trim();
+    if (settings.store.applicationId.trim() && assetKey) {
+        try {
+            const assetId = (await ApplicationAssetUtils.fetchAssetIds(appId, [assetKey]))[0];
+            if (assetId) {
+                activity.assets = { large_image: assetId, large_text: "Visual Studio Code" };
+            }
+        } catch (e) {
+            logger.warn("Failed to fetch custom icon asset, falling back to text-only", e);
+        }
+    }
+
     return activity;
 }
 
 let pollTimer: ReturnType<typeof setInterval> | undefined;
+let spoofTimer: ReturnType<typeof setInterval> | undefined;
+let spoofIndex = 0;
 let sessionStart = 0;
 let lastKey = "";
 
@@ -91,6 +118,18 @@ function clearActivity() {
     if (!lastKey) return;
     lastKey = "";
     FluxDispatcher.dispatch({ type: "LOCAL_ACTIVITY_UPDATE", activity: null, socketId: SOCKET_ID });
+}
+
+async function pushActivity(parsed: ParsedTitle, keyPrefix: string) {
+    const key = keyPrefix + activityKey(parsed);
+    if (key === lastKey) return;
+    lastKey = key;
+
+    FluxDispatcher.dispatch({
+        type: "LOCAL_ACTIVITY_UPDATE",
+        activity: await buildActivity(parsed, sessionStart),
+        socketId: SOCKET_ID
+    });
 }
 
 async function poll() {
@@ -104,26 +143,52 @@ async function poll() {
         }
 
         if (!sessionStart) sessionStart = Date.now();
-
-        const parsed = parseTitle(title);
-        const key = activityKey(parsed);
-        if (key === lastKey) return;
-        lastKey = key;
-
-        FluxDispatcher.dispatch({
-            type: "LOCAL_ACTIVITY_UPDATE",
-            activity: buildActivity(parsed, sessionStart),
-            socketId: SOCKET_ID
-        });
+        await pushActivity(parseTitle(title), "real:");
     } catch (e) {
         logger.error("Failed to poll VS Code window title", e);
     }
 }
 
+function getSpoofFileList(): string[] {
+    return settings.store.spoofFiles.split("\n").map(f => f.trim()).filter(Boolean);
+}
+
+async function spoofPoll() {
+    try {
+        const files = getSpoofFileList();
+        if (!files.length) return;
+
+        if (!sessionStart) sessionStart = Date.now();
+
+        await pushActivity({
+            file: files[spoofIndex % files.length],
+            workspace: settings.store.spoofWorkspace.trim() || undefined,
+            dirty: false
+        }, "spoof:");
+    } catch (e) {
+        logger.error("Failed to update spoofed activity", e);
+    }
+}
+
+function advanceSpoof() {
+    spoofIndex++;
+    spoofPoll();
+}
+
 function startPolling() {
     stopPolling();
-    poll();
-    pollTimer = setInterval(poll, settings.store.pollInterval);
+    sessionStart = 0;
+    lastKey = "";
+
+    if (settings.store.spoofMode) {
+        spoofIndex = 0;
+        spoofPoll();
+        const minutes = Math.max(1, settings.store.spoofRotateMinutes);
+        spoofTimer = setInterval(advanceSpoof, minutes * 60000);
+    } else {
+        poll();
+        pollTimer = setInterval(poll, settings.store.pollInterval);
+    }
 }
 
 function stopPolling() {
@@ -131,32 +196,69 @@ function stopPolling() {
         clearInterval(pollTimer);
         pollTimer = undefined;
     }
+    if (spoofTimer !== undefined) {
+        clearInterval(spoofTimer);
+        spoofTimer = undefined;
+    }
     sessionStart = 0;
     clearActivity();
 }
 
 const settings = definePluginSettings({
+    spoofMode: {
+        description: "Always show as actively editing (a rotating fake file), regardless of whether VS Code is actually open or what you're really doing",
+        type: OptionType.BOOLEAN,
+        default: false,
+        onChange: () => startPolling()
+    },
+    spoofWorkspace: {
+        description: "Workspace/folder name to show while spoofing",
+        type: OptionType.STRING,
+        default: "Deadbolt"
+    },
+    spoofFiles: {
+        description: "Files to rotate through while spoofing, one per line",
+        type: OptionType.STRING,
+        default: DEFAULT_SPOOF_FILES,
+        multiline: true
+    },
+    spoofRotateMinutes: {
+        description: "How often to switch to a different fake file while spoofing (minutes)",
+        type: OptionType.NUMBER,
+        default: 6,
+        onChange: () => startPolling()
+    },
     pollInterval: {
-        description: "How often to check VS Code's window title (ms)",
+        description: "How often to check VS Code's real window title (ms) - ignored while spoofing",
         type: OptionType.NUMBER,
         default: 15000,
         onChange: () => startPolling()
     },
     showWorkspace: {
-        description: "Show the open workspace/folder name as the status line",
+        description: "Show the workspace/folder name as the status line",
         type: OptionType.BOOLEAN,
         default: true
     },
     showDirtyIndicator: {
-        description: "Note when the current file has unsaved changes",
+        description: "Note when the current (real) file has unsaved changes",
         type: OptionType.BOOLEAN,
         default: true
+    },
+    applicationId: {
+        description: "Optional: your own Discord application ID (developer portal) with an uploaded Rich Presence asset, for a real icon. Leave blank for text-only.",
+        type: OptionType.STRING,
+        default: ""
+    },
+    iconAssetKey: {
+        description: "Asset key name you uploaded under that application's Rich Presence tab",
+        type: OptionType.STRING,
+        default: "vscode"
     },
 });
 
 export default definePlugin({
     name: "VSCodeActivity",
-    description: "Replaces Discord's generic 'Playing Visual Studio Code' detection with the actual file/workspace you're editing, read from VS Code's own window title. Windows only. Pair with IgnoreActivities to hide the generic one.",
+    description: "Replaces Discord's generic 'Playing Visual Studio Code' detection with the actual file/workspace you're editing (or, in spoof mode, a fake rotating one). Real mode reads Code.exe's own window title, Windows only. Pair with IgnoreActivities to hide the generic entry.",
     tags: ["Activity"],
     authors: [Devs.K3],
 
