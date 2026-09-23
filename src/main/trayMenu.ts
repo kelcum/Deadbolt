@@ -94,18 +94,18 @@ function openAboutWindow() {
 function createEquicordMenuItems(): MenuItemConstructorOptions[] {
     return [
         {
-            label: "Wraithcord",
+            label: "Deadbolt",
             submenu: [
                 {
-                    label: "About Wraithcord",
+                    label: "About Deadbolt",
                     click: () => openAboutWindow()
                 },
                 {
-                    label: cachedUpdateAvailable ? "Update Wraithcord" : "Check for Updates",
+                    label: cachedUpdateAvailable ? "Update Deadbolt" : "Check for Updates",
                     click: () => sendToRenderer(IpcEvents.TRAY_CHECK_UPDATES)
                 },
                 {
-                    label: "Repair Wraithcord",
+                    label: "Repair Deadbolt",
                     click: () => sendToRenderer(IpcEvents.TRAY_REPAIR)
                 },
                 { type: "separator" },
@@ -127,7 +127,7 @@ export function patchTrayMenu(): void {
     const originalBuildFromTemplate = Menu.buildFromTemplate;
 
     Menu.buildFromTemplate = function (template: MenuItemConstructorOptions[]) {
-        const alreadyPatched = template.some(item => item.label === "Wraithcord");
+        const alreadyPatched = template.some(item => item.label === "Deadbolt");
         if (isTrayMenu(template) && !alreadyPatched) {
             const insertIndex = findInsertIndex(template);
             const equicordItems = createEquicordMenuItems();

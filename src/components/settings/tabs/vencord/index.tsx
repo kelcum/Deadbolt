@@ -185,7 +185,7 @@ function EquicordSettings() {
             ) : (
                 <SpecialCard
                     title="Support the Project"
-                    description="Wraithcord is built on Equicord - please consider supporting Equicord's development by donating!"
+                    description="Deadbolt is built on Equicord - please consider supporting Equicord's development by donating!"
                     cardImage={donateImage}
                     backgroundImage={DONOR_BACKGROUND_IMAGE}
                     backgroundColor="#c3a3ce"
@@ -283,7 +283,7 @@ function EquicordSettings() {
     );
 }
 
-export default wrapTab(EquicordSettings, "Wraithcord Settings");
+export default wrapTab(EquicordSettings, "Deadbolt Settings");
 
 export function isEquicordDonor(userId: string): boolean {
     const donorBadges = BadgeAPI.getEquicordDonorBadges(userId);

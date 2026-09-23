@@ -24,8 +24,8 @@ const suffix = IS_DEV ? "dev" : "";
 
 export const DATA_DIR = process.env.EQUICORD_USER_DATA_DIR ?? (
     process.env.DISCORD_USER_DATA_DIR
-        ? join(process.env.DISCORD_USER_DATA_DIR, "..", "WraithcordData", suffix)
-        : join(app.getPath("userData"), "..", "Wraithcord", suffix)
+        ? join(process.env.DISCORD_USER_DATA_DIR, "..", "DeadboltData", suffix)
+        : join(app.getPath("userData"), "..", "Deadbolt", suffix)
 );
 
 export const SETTINGS_DIR = join(DATA_DIR, "settings");
@@ -68,7 +68,7 @@ if (IS_DEV) {
                 app.relaunch();
                 app.exit(0);
             } catch (err) {
-                console.error("[Wraithcord] Failed to copy prod data:", err);
+                console.error("[Deadbolt] Failed to copy prod data:", err);
             }
         }, 5000);
     }

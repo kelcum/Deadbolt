@@ -155,8 +155,8 @@ async function loadDir(dir, basePath = "") {
  */
 async function buildExtension(target, files) {
     const entries = {
-        "dist/Wraithcord.js": await readFile("dist/browser/extension.js"),
-        "dist/Wraithcord.css": await readFile("dist/browser/extension.css"),
+        "dist/Deadbolt.js": await readFile("dist/browser/extension.js"),
+        "dist/Deadbolt.css": await readFile("dist/browser/extension.css"),
         ...await loadDir("dist/browser/vendor/monaco", "dist/browser/"),
         ...Object.fromEntries(await Promise.all(files.map(async f => {
             let content = await readFile(join("browser", f));

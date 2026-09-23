@@ -1,15 +1,15 @@
 {
-    "name": "wraithcord",
+    "name": "deadbolt",
     "private": "true",
     "version": "1.15.6.0",
     "description": "A cold, no-frills Discord client mod",
-    "homepage": "https://github.com/kelcum/Wraithcord#readme",
+    "homepage": "https://github.com/kelcum/Deadbolt#readme",
     "bugs": {
-        "url": "https://github.com/kelcum/Wraithcord/issues"
+        "url": "https://github.com/kelcum/Deadbolt/issues"
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/kelcum/Wraithcord.git"
+        "url": "git+https://github.com/kelcum/Deadbolt.git"
     },
     "license": "GPL-3.0-or-later",
     "author": "kelcum",

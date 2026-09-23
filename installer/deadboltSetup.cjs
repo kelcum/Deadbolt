@@ -6,11 +6,11 @@ const path = require("path");
 const os = require("os");
 const { spawnSync } = require("child_process");
 
-const REPO = "kelcum/Wraithcord";
+const REPO = "kelcum/Deadbolt";
 const EQUILOTL_URL = "https://github.com/Equicord/Equilotl/releases/latest/download/EquilotlCli.exe";
-const INSTALL_DIR = path.join(os.homedir(), "AppData", "Local", "WraithcordInstall");
+const INSTALL_DIR = path.join(os.homedir(), "AppData", "Local", "DeadboltInstall");
 const DIST_DIR = path.join(INSTALL_DIR, "dist");
-const ZIP_PATH = path.join(INSTALL_DIR, "wraithcord-dist.zip");
+const ZIP_PATH = path.join(INSTALL_DIR, "deadbolt-dist.zip");
 const EQUILOTL_PATH = path.join(INSTALL_DIR, "EquilotlCli.exe");
 
 function log(msg) {
@@ -19,7 +19,7 @@ function log(msg) {
 
 function fetchJson(url) {
     return new Promise((resolve, reject) => {
-        https.get(url, { headers: { "User-Agent": "wraithcord-setup" } }, res => {
+        https.get(url, { headers: { "User-Agent": "deadbolt-setup" } }, res => {
             if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
                 resolve(fetchJson(res.headers.location));
                 return;
@@ -45,7 +45,7 @@ function downloadFile(url, destPath) {
     return new Promise((resolve, reject) => {
         const request = res => {
             if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
-                https.get(res.headers.location, { headers: { "User-Agent": "wraithcord-setup" } }, request).on("error", reject);
+                https.get(res.headers.location, { headers: { "User-Agent": "deadbolt-setup" } }, request).on("error", reject);
                 return;
             }
             if (res.statusCode !== 200) {
@@ -57,24 +57,24 @@ function downloadFile(url, destPath) {
             file.on("finish", () => file.close(() => resolve()));
             file.on("error", reject);
         };
-        https.get(url, { headers: { "User-Agent": "wraithcord-setup" } }, request).on("error", reject);
+        https.get(url, { headers: { "User-Agent": "deadbolt-setup" } }, request).on("error", reject);
     });
 }
 
 async function main() {
-    log("=== Wraithcord Setup ===");
+    log("=== Deadbolt Setup ===");
     log("");
 
     fs.mkdirSync(INSTALL_DIR, { recursive: true });
 
-    log("Checking latest Wraithcord release...");
+    log("Checking latest Deadbolt release...");
     const release = await fetchJson(`https://api.github.com/repos/${REPO}/releases/latest`);
-    const asset = (release.assets || []).find(a => a.name === "wraithcord-dist.zip");
+    const asset = (release.assets || []).find(a => a.name === "deadbolt-dist.zip");
     if (!asset) {
-        throw new Error("Could not find wraithcord-dist.zip in the latest release. Has one been published?");
+        throw new Error("Could not find deadbolt-dist.zip in the latest release. Has one been published?");
     }
 
-    log(`Downloading Wraithcord ${release.tag_name}...`);
+    log(`Downloading Deadbolt ${release.tag_name}...`);
     await downloadFile(asset.browser_download_url, ZIP_PATH);
 
     log("Extracting...");
@@ -85,7 +85,7 @@ async function main() {
         `Expand-Archive -LiteralPath '${ZIP_PATH}' -DestinationPath '${DIST_DIR}' -Force`
     ], { stdio: "inherit" });
     if (extract.status !== 0) {
-        throw new Error("Failed to extract Wraithcord build.");
+        throw new Error("Failed to extract Deadbolt build.");
     }
 
     if (!fs.existsSync(EQUILOTL_PATH)) {
@@ -111,7 +111,7 @@ async function main() {
 
     log("");
     if (result.status === 0) {
-        log("Done! Relaunch Discord to see Wraithcord.");
+        log("Done! Relaunch Discord to see Deadbolt.");
     } else {
         log("Something went wrong during install. Scroll up for details.");
     }

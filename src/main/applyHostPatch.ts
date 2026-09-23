@@ -61,7 +61,7 @@ export const patchResourcesDir = (resources: string, patcherJsPath: string): boo
             try {
                 undo[i]();
             } catch (cleanupErr) {
-                console.error("[Wraithcord] Rollback step failed", cleanupErr);
+                console.error("[Deadbolt] Rollback step failed", cleanupErr);
             }
         }
         throw err;
@@ -103,14 +103,14 @@ export const findStaleSibling = (currentExeDir: string): string | null => {
             try {
                 isDir = statSync(join(discordPath, name)).isDirectory();
             } catch (statErr) {
-                console.error("[Wraithcord] Skipping unreadable sibling", name, statErr);
+                console.error("[Deadbolt] Skipping unreadable sibling", name, statErr);
                 continue;
             }
             if (!isDir) continue;
             if (isNewer(name, latest)) latest = name;
         }
     } catch (err) {
-        console.error("[Wraithcord] Failed to scan for sibling versions", err);
+        console.error("[Deadbolt] Failed to scan for sibling versions", err);
         return null;
     }
 

@@ -1,10 +1,10 @@
 {
     "manifest_version": 2,
     "minimum_chrome_version": "91",
-    "name": "Wraithcord Web",
+    "name": "Deadbolt Web",
     "description": "A cold, no-frills Discord mod now in your browser",
     "author": "kelcum",
-    "homepage_url": "https://github.com/kelcum/Wraithcord",
+    "homepage_url": "https://github.com/kelcum/Deadbolt",
     "icons": {
         "128": "icon.png"
     },
@@ -32,7 +32,7 @@
                 "*://*.discord.com/*"
             ],
             "js": [
-                "dist/Wraithcord.js"
+                "dist/Deadbolt.js"
             ],
             "all_frames": true,
             "world": "MAIN"
@@ -44,8 +44,8 @@
         ]
     },
     "web_accessible_resources": [
-        "dist/Wraithcord.js",
-        "dist/Wraithcord.css"
+        "dist/Deadbolt.js",
+        "dist/Deadbolt.css"
     ],
     "browser_specific_settings": {
         "gecko": {

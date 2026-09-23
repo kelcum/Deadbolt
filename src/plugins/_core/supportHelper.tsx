@@ -145,8 +145,8 @@ async function generateDebugInfoMessage() {
         : platformName();
 
     const info = {
-        Wraithcord:
-            `v${VERSION} • [${gitHashShort}](<https://github.com/kelcum/Wraithcord/commit/${gitHash}>)` +
+        Deadbolt:
+            `v${VERSION} • [${gitHashShort}](<https://github.com/kelcum/Deadbolt/commit/${gitHash}>)` +
             `${IS_EQUIBOP ? "" : SettingsPlugin.getVersionInfo()} - ${Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(BUILD_TIMESTAMP)}`,
         Client: `${RELEASE_CHANNEL} ~ ${clientString}`,
         Platform: platformDisplay

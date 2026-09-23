@@ -1,11 +1,11 @@
 // ==UserScript==
-// @name            Wraithcord
+// @name            Deadbolt
 // @description     A Discord client mod - Web version
 // @version         %version%
 // @author          kelcum (https://github.com/kelcum)
-// @namespace       https://github.com/kelcum/Wraithcord
-// @supportURL      https://github.com/kelcum/Wraithcord
-// @icon            https://raw.githubusercontent.com/kelcum/Wraithcord/refs/heads/main/browser/icon.png
+// @namespace       https://github.com/kelcum/Deadbolt
+// @supportURL      https://github.com/kelcum/Deadbolt
+// @icon            https://raw.githubusercontent.com/kelcum/Deadbolt/refs/heads/main/browser/icon.png
 // @license         GPL-3.0
 // @match           *://*.discord.com/*
 // @grant           GM_xmlhttpRequest
@@ -23,4 +23,4 @@
 // to overwrite stuff on the window on sites that use CSP. Use Tampermonkey or use a chromium based browser
 // https://github.com/violentmonkey/violentmonkey/issues/997
 
-// this is a compiled and minified version of Wraithcord. For the source code, visit the GitHub repo
+// this is a compiled and minified version of Deadbolt. For the source code, visit the GitHub repo

@@ -71,7 +71,7 @@ window.VencordNative = {
     },
 
     updater: {
-        getRepo: async () => ({ ok: true, value: "https://github.com/kelcum/Wraithcord" }),
+        getRepo: async () => ({ ok: true, value: "https://github.com/kelcum/Deadbolt" }),
         getUpdates: async () => ({ ok: true, value: [] }),
         update: async () => ({ ok: true, value: false }),
         rebuild: async () => ({ ok: true, value: true }),
@@ -123,13 +123,13 @@ window.VencordNative = {
     settings: {
         get: () => {
             try {
-                return JSON.parse(localStorage.getItem("WraithcordSettings") || "{}");
+                return JSON.parse(localStorage.getItem("DeadboltSettings") || "{}");
             } catch (e) {
                 console.error("Failed to parse settings from localStorage: ", e);
                 return {};
             }
         },
-        set: async (s: Settings) => localStorage.setItem("WraithcordSettings", JSON.stringify(s)),
+        set: async (s: Settings) => localStorage.setItem("DeadboltSettings", JSON.stringify(s)),
         getSettingsDir: async () => "LocalStorage",
         openFolder: async () => Promise.reject("settings:openFolder is not supported on web"),
     },
