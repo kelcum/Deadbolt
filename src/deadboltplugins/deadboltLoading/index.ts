@@ -149,7 +149,7 @@ function showDeadboltOverlay() {
 export default definePlugin({
     name: "DeadboltLoading",
     description: "Replaces Discord's connecting screen with a full, animated Deadbolt splash (crest + Deadbolt-themed quotes).",
-    tags: ["Appearance", "Deadbolt", "Customisation"],
+    tags: ["Appearance", "Customisation"],
     authors: [Devs.K3],
     enabledByDefault: true,
 
