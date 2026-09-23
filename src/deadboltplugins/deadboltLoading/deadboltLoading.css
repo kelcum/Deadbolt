@@ -4,7 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-/* Give Discord's loading / "Did you know" text a brushed-chrome look */
+/* Give Discord's loading / "Did you know" text a brushed-chrome look,
+   in case the full-screen overlay below is turned off. */
 [class*="loadingText_"] {
     background: linear-gradient(
         100deg,
@@ -26,17 +27,135 @@
 }
 
 @keyframes deadbolt-loading-sheen {
-    0% {
-        background-position: 0% center;
-    }
+    0% { background-position: 0% center; }
+    100% { background-position: 220% center; }
+}
 
-    100% {
-        background-position: 220% center;
-    }
+/* ── Full-screen splash that covers Discord's own connecting screen ── */
+
+.deadbolt-splash-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 24px;
+    background: radial-gradient(circle at 50% 38%, #1b1e26 0%, #0a0b0f 72%);
+    -webkit-app-region: drag;
+    animation: deadbolt-splash-fade-in 0.35s ease-out;
+}
+
+.deadbolt-splash-overlay.deadbolt-splash-out {
+    animation: deadbolt-splash-fade-out 0.4s ease-in forwards;
+    pointer-events: none;
+}
+
+.deadbolt-splash-crest {
+    position: relative;
+    width: 108px;
+    height: 108px;
+    border-radius: 26px;
+    overflow: hidden;
+    isolation: isolate;
+    box-shadow: 0 16px 44px rgb(0 0 0 / 55%), 0 0 0 1px rgb(255 255 255 / 6%);
+}
+
+.deadbolt-splash-crest img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    animation: deadbolt-splash-breathe 2.6s ease-in-out infinite;
+}
+
+.deadbolt-splash-crest::before {
+    content: "";
+    position: absolute;
+    inset: -45%;
+    background: conic-gradient(
+        from 0deg,
+        rgb(255 255 255 / 0%) 0deg,
+        rgb(255 255 255 / 55%) 35deg,
+        rgb(190 214 255 / 10%) 85deg,
+        rgb(255 255 255 / 0%) 140deg,
+        rgb(255 255 255 / 50%) 205deg,
+        rgb(200 220 255 / 10%) 260deg,
+        rgb(255 255 255 / 0%) 320deg,
+        rgb(255 255 255 / 0%) 360deg
+    );
+    animation: deadbolt-splash-spin 3.4s linear infinite;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.deadbolt-splash-word {
+    font-weight: 800;
+    font-size: 22px;
+    letter-spacing: 0.32em;
+    background: linear-gradient(100deg, #e9eef4, #a7b1bd 40%, #ffffff 52%, #c3ccd6);
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: deadbolt-splash-sheen 3.4s linear infinite;
+}
+
+.deadbolt-splash-tip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    max-width: 440px;
+    text-align: center;
+    padding: 0 24px;
+}
+
+.deadbolt-splash-tip-label {
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(220 224 232 / 55%);
+}
+
+.deadbolt-splash-tip-text {
+    font-size: 15px;
+    color: rgb(230 233 238 / 88%);
+}
+
+@keyframes deadbolt-splash-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes deadbolt-splash-fade-out {
+    from { opacity: 1; }
+    to { opacity: 0; }
+}
+
+@keyframes deadbolt-splash-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes deadbolt-splash-breathe {
+    0%, 100% { filter: brightness(1) contrast(1); }
+    50% { filter: brightness(1.28) contrast(1.12) saturate(1.05); }
+}
+
+@keyframes deadbolt-splash-sheen {
+    0% { background-position: 0% center; }
+    100% { background-position: 220% center; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    [class*="loadingText_"] {
+    [class*="loadingText_"],
+    .deadbolt-splash-overlay,
+    .deadbolt-splash-crest img,
+    .deadbolt-splash-crest::before,
+    .deadbolt-splash-word {
         animation: none;
     }
 }
