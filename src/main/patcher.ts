@@ -94,12 +94,13 @@ if (!IS_VANILLA) {
             options.webPreferences.preload = join(__dirname, "preload.js");
             options.webPreferences.sandbox = false;
 
-            // Deadbolt: brand the main window / taskbar icon with the crest
-            if (isMainWindow && process.platform === "win32") {
-                try {
-                    options.icon = join(__dirname, "..", "..", "browser", "deadbolt.ico");
-                } catch { }
-            }
+            // Deadbolt: brand the window / taskbar icon with the crest.
+            // Applied to every modded window (not just the one titled "Discord")
+            // so it still lands if the main window's title differs per channel.
+            const deadboltIcon = process.platform === "win32"
+                ? join(__dirname, "..", "..", "browser", "deadbolt.ico")
+                : null;
+            if (deadboltIcon) options.icon = deadboltIcon;
 
             if (mainWindowFrameless && isMainWindow) {
                 options.frame = false;
@@ -130,6 +131,11 @@ if (!IS_VANILLA) {
             process.env.DISCORD_PRELOAD = original;
 
             super(options);
+
+            // Re-assert the Deadbolt icon after creation in case Discord set its own
+            if (deadboltIcon) {
+                try { this.setIcon(deadboltIcon); } catch { }
+            }
 
             if (disableMinSize) {
                 // Disable the Electron call entirely so that Discord can't dynamically change the size

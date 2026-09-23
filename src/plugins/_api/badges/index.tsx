@@ -28,7 +28,7 @@ import { copyWithToast } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { shouldShowContributorBadge, shouldShowEquicordContributorBadge } from "@utils/misc";
 import definePlugin from "@utils/types";
-import { ContextMenuApi, Menu, Toasts, UserStore } from "@webpack/common";
+import { ContextMenuApi, Menu, Toasts, Tooltip, UserStore } from "@webpack/common";
 
 import Plugins, { PluginMeta } from "~plugins";
 
@@ -64,16 +64,31 @@ const EquicordContributorBadge: ProfileBadge = {
     },
 };
 
+// When Deadbolt came into existence (edit freely).
+const DEADBOLT_CREATED = "September 23, 2026";
+
 function AnimatedDeadboltCreatorBadge() {
     return (
-        <span
-            className="deadbolt-creator-badge"
-            role="img"
-            aria-label="Deadbolt Creator"
-            title="Deadbolt Creator"
+        <Tooltip
+            text={
+                <div className="deadbolt-creator-tip">
+                    <div className="deadbolt-creator-tip-title">Deadbolt Creator</div>
+                    <div className="deadbolt-creator-tip-sub">Forged {DEADBOLT_CREATED}</div>
+                </div>
+            }
         >
-            <img src={DEADBOLT_CREATOR_BADGE_ICON} alt="" draggable={false} />
-        </span>
+            {({ onMouseEnter, onMouseLeave }) => (
+                <span
+                    className="deadbolt-creator-badge"
+                    role="img"
+                    aria-label="Deadbolt Creator"
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                >
+                    <img src={DEADBOLT_CREATOR_BADGE_ICON} alt="" draggable={false} />
+                </span>
+            )}
+        </Tooltip>
     );
 }
 
