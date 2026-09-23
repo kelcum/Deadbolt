@@ -175,6 +175,14 @@ function advanceSpoof() {
     spoofPoll();
 }
 
+// Some settings (icon, display toggles) don't change the file/workspace
+// key pushActivity() dedupes on, so changing them alone would otherwise
+// sit there unapplied until the next natural rotation/poll. Force it.
+function refreshNow() {
+    lastKey = "";
+    if (settings.store.spoofMode) spoofPoll(); else poll();
+}
+
 function startPolling() {
     stopPolling();
     sessionStart = 0;
@@ -214,13 +222,15 @@ const settings = definePluginSettings({
     spoofWorkspace: {
         description: "Workspace/folder name to show while spoofing",
         type: OptionType.STRING,
-        default: "Deadbolt"
+        default: "Deadbolt",
+        onChange: refreshNow
     },
     spoofFiles: {
         description: "Files to rotate through while spoofing, one per line",
         type: OptionType.STRING,
         default: DEFAULT_SPOOF_FILES,
-        multiline: true
+        multiline: true,
+        onChange: refreshNow
     },
     spoofRotateMinutes: {
         description: "How often to switch to a different fake file while spoofing (minutes)",
@@ -237,22 +247,26 @@ const settings = definePluginSettings({
     showWorkspace: {
         description: "Show the workspace/folder name as the status line",
         type: OptionType.BOOLEAN,
-        default: true
+        default: true,
+        onChange: refreshNow
     },
     showDirtyIndicator: {
         description: "Note when the current (real) file has unsaved changes",
         type: OptionType.BOOLEAN,
-        default: true
+        default: true,
+        onChange: refreshNow
     },
     applicationId: {
         description: "Optional: your own Discord application ID (developer portal) with an uploaded Rich Presence asset, for a real icon. Leave blank for text-only.",
         type: OptionType.STRING,
-        default: ""
+        default: "",
+        onChange: refreshNow
     },
     iconAssetKey: {
         description: "Asset key name you uploaded under that application's Rich Presence tab",
         type: OptionType.STRING,
-        default: "vscode"
+        default: "vscode",
+        onChange: refreshNow
     },
 });
 
