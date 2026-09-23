@@ -44,7 +44,7 @@
     gap: 24px;
     background: radial-gradient(circle at 50% 38%, #1b1e26 0%, #0a0b0f 72%);
     -webkit-app-region: drag;
-    animation: deadbolt-splash-fade-in 0.35s ease-out;
+    animation: deadbolt-splash-fade-in 0.15s ease-out;
 }
 
 .deadbolt-splash-overlay.deadbolt-splash-out {

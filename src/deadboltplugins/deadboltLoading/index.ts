@@ -58,7 +58,14 @@ const settings = definePluginSettings({
 
 const logger = new Logger("DeadboltLoading");
 
+// Discord's actual gateway connect can finish in well under a second, which
+// made the overlay flash on and off before it could register visually.
+// Guarantee it stays up at least this long regardless of how fast the
+// underlying connecting screen resolves.
+const MIN_VISIBLE_MS = 1400;
+
 let overlayEl: HTMLDivElement | null = null;
+let shownAt = 0;
 let hideTimer: number | undefined;
 let removalObserver: MutationObserver | undefined;
 
@@ -92,6 +99,19 @@ function hideDeadboltOverlay() {
     }
 }
 
+// The connecting screen can genuinely disappear in well under a second.
+// Defer the actual hide until the overlay has been visible for at least
+// MIN_VISIBLE_MS instead of yanking it away the instant Discord is ready.
+function requestHideDeadboltOverlay() {
+    const elapsed = Date.now() - shownAt;
+    if (elapsed < MIN_VISIBLE_MS) {
+        window.clearTimeout(hideTimer);
+        hideTimer = window.setTimeout(hideDeadboltOverlay, MIN_VISIBLE_MS - elapsed);
+        return;
+    }
+    hideDeadboltOverlay();
+}
+
 function showDeadboltOverlay() {
     if (!settings.store.replaceScreen) return;
     if (overlayEl || !document.body) return;
@@ -108,6 +128,7 @@ function showDeadboltOverlay() {
 
     document.body.appendChild(el);
     overlayEl = el;
+    shownAt = Date.now();
 
     // Safety net: never let the splash outlive the actual connecting screen
     // by more than a few seconds, even if we fail to detect its removal.
@@ -117,7 +138,7 @@ function showDeadboltOverlay() {
     try {
         removalObserver?.disconnect();
         removalObserver = new MutationObserver(() => {
-            if (!connectingScreenStillUp()) hideDeadboltOverlay();
+            if (!connectingScreenStillUp()) requestHideDeadboltOverlay();
         });
         removalObserver.observe(document.body, { childList: true, subtree: true });
     } catch (e) {
