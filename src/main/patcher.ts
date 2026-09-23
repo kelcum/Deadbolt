@@ -94,6 +94,13 @@ if (!IS_VANILLA) {
             options.webPreferences.preload = join(__dirname, "preload.js");
             options.webPreferences.sandbox = false;
 
+            // Deadbolt: brand the main window / taskbar icon with the crest
+            if (isMainWindow && process.platform === "win32") {
+                try {
+                    options.icon = join(__dirname, "..", "..", "browser", "deadbolt.ico");
+                } catch { }
+            }
+
             if (mainWindowFrameless && isMainWindow) {
                 options.frame = false;
             } else if (frameless) {
