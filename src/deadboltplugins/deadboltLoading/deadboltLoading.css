@@ -1,0 +1,42 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+/* Give Discord's loading / "Did you know" text a brushed-chrome look */
+[class*="loadingText_"] {
+    background: linear-gradient(
+        100deg,
+        #e9eef4 0%,
+        #a7b1bd 22%,
+        #ffffff 40%,
+        #757f8b 58%,
+        #c3ccd6 78%,
+        #e9eef4 100%
+    );
+    background-size: 220% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    animation: deadbolt-loading-sheen 6s linear infinite;
+}
+
+@keyframes deadbolt-loading-sheen {
+    0% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: 220% center;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    [class*="loadingText_"] {
+        animation: none;
+    }
+}

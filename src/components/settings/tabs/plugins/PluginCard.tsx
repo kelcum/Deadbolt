@@ -94,9 +94,9 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
     const pluginInfo = [
         {
             condition: isModifiedPlugin,
-            src: "https://equicord.org/assets/icons/equicord/modified.png",
-            alt: "Modified",
-            title: "Modified Vencord Plugin"
+            src: DEADBOLT_PLUGIN_ICON,
+            alt: "Deadbolt",
+            title: "Modified Plugin"
         },
         {
             condition: isDeadboltPlugin,
@@ -106,14 +106,14 @@ export function PluginCard({ plugin, disabled, onRestartNeeded, onMouseEnter, on
         },
         {
             condition: isEquicordPlugin,
-            src: "https://equicord.org/assets/favicon.png",
-            alt: "Equicord",
+            src: DEADBOLT_PLUGIN_ICON,
+            alt: "Deadbolt",
             title: "Equicord Plugin"
         },
         {
             condition: isVencordPlugin,
-            src: "https://equicord.org/assets/icons/vencord/icon-light.png",
-            alt: "Vencord",
+            src: DEADBOLT_PLUGIN_ICON,
+            alt: "Deadbolt",
             title: "Vencord Plugin"
         },
         {
