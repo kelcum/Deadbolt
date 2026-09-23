@@ -8,9 +8,9 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType, PluginNative } from "@utils/types";
-import { Activity } from "@vencord/discord-types";
+import { Activity, RunningGame } from "@vencord/discord-types";
 import { ActivityFlags, ActivityType } from "@vencord/discord-types/enums";
-import { ApplicationAssetUtils, FluxDispatcher } from "@webpack/common";
+import { ApplicationAssetUtils, FluxDispatcher, RunningGameStore } from "@webpack/common";
 
 const Native = VencordNative.pluginHelpers.VSCodeActivity as PluginNative<typeof import("./native")>;
 
@@ -175,6 +175,48 @@ function advanceSpoof() {
     spoofPoll();
 }
 
+// ── Hide real games while spoofing, using Discord's own native per-game
+// detection toggle (the same thing right-clicking "Disable Activity"
+// does) rather than a webpack patch, so it plays nicely with whatever
+// IgnoreActivities is separately configured to do. ──
+
+const suppressedGames = new Map<string, RunningGame>();
+
+function gameKey(game: RunningGame) {
+    return game.id ?? game.exePath;
+}
+
+function shouldHideRealGames() {
+    return settings.store.spoofMode && settings.store.hideRealGamesWhileSpoofing;
+}
+
+function suppressRealGames() {
+    if (!shouldHideRealGames()) return;
+
+    for (const game of RunningGameStore.getRunningGames()) {
+        const key = gameKey(game);
+        if (suppressedGames.has(key)) continue;
+        if (!RunningGameStore.isDetectionEnabled(game)) continue;
+
+        FluxDispatcher.dispatch({ type: "RUNNING_GAME_TOGGLE_DETECTION", game });
+        suppressedGames.set(key, game);
+    }
+}
+
+function restoreRealGames() {
+    for (const game of suppressedGames.values()) {
+        if (!RunningGameStore.isDetectionEnabled(game)) {
+            FluxDispatcher.dispatch({ type: "RUNNING_GAME_TOGGLE_DETECTION", game });
+        }
+    }
+    suppressedGames.clear();
+}
+
+function syncRealGameSuppression() {
+    if (shouldHideRealGames()) suppressRealGames();
+    else restoreRealGames();
+}
+
 // Some settings (icon, display toggles) don't change the file/workspace
 // key pushActivity() dedupes on, so changing them alone would otherwise
 // sit there unapplied until the next natural rotation/poll. Force it.
@@ -193,6 +235,7 @@ function startPolling() {
         spoofPoll();
         const minutes = Math.max(1, settings.store.spoofRotateMinutes);
         spoofTimer = setInterval(advanceSpoof, minutes * 60000);
+        suppressRealGames();
     } else {
         poll();
         pollTimer = setInterval(poll, settings.store.pollInterval);
@@ -210,6 +253,7 @@ function stopPolling() {
     }
     sessionStart = 0;
     clearActivity();
+    restoreRealGames();
 }
 
 const settings = definePluginSettings({
@@ -237,6 +281,12 @@ const settings = definePluginSettings({
         type: OptionType.NUMBER,
         default: 6,
         onChange: () => startPolling()
+    },
+    hideRealGamesWhileSpoofing: {
+        description: "While spoof mode is on, disable Discord's detection of any real running games so only the fake VS Code activity shows",
+        type: OptionType.BOOLEAN,
+        default: true,
+        onChange: syncRealGameSuppression
     },
     pollInterval: {
         description: "How often to check VS Code's real window title (ms) - ignored while spoofing",
@@ -272,17 +322,19 @@ const settings = definePluginSettings({
 
 export default definePlugin({
     name: "VSCodeActivity",
-    description: "Replaces Discord's generic 'Playing Visual Studio Code' detection with the actual file/workspace you're editing (or, in spoof mode, a fake rotating one). Real mode reads Code.exe's own window title, Windows only. Pair with IgnoreActivities to hide the generic entry.",
+    description: "Replaces Discord's generic 'Playing Visual Studio Code' detection with the actual file/workspace you're editing (or, in spoof mode, a fake rotating one that can also hide real running games). Real mode reads Code.exe's own window title, Windows only. Pair with IgnoreActivities to hide the generic entry.",
     tags: ["Activity"],
     authors: [Devs.K3],
 
     settings,
 
     start() {
+        RunningGameStore.addChangeListener(suppressRealGames);
         startPolling();
     },
 
     stop() {
+        RunningGameStore.removeChangeListener(suppressRealGames);
         stopPolling();
     }
 });
