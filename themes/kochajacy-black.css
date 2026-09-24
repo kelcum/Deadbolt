@@ -1,0 +1,202 @@
+/**
+ * @author kochajacy
+ */
+
+@import url("https://eight-p.github.io/BD.8P/Themes/T1/dist/T1.css");
+
+:root {
+  --T1Fv: 11;
+
+  /* Keep only the server bar layout from the original theme */
+  --serverBar-FolderStyle: 1;
+  --serverBar-Spacing: 17px;
+  --serverBar-IconSize: 100;
+  --background-app: url ("https://i.postimg.cc/524LX8D5/5c406374-7a26-4b4f-a8dc-49cbd81265af.png");
+  --background-server: url ("");
+}
+
+/* Black theme and grayscale colors */
+html.theme-dark:root,
+html.theme-darker:root,
+html.theme-midnight:root,
+#app-mount .theme-dark,
+#app-mount .theme-darker,
+#app-mount .theme-midnight {
+  --header-primary: #e3e5e8;
+  --header-secondary: #dcdfe4;
+  --text-normal: #e3e5e8;
+  --text-muted: #dcdfe4;
+  --text-link: #e3e5e8;
+  --text-link-low-saturation: #e3e5e8;
+  --text-positive: #e3e5e8;
+  --text-warning: #e3e5e8;
+  --text-danger: #e3e5e8;
+  --text-primary: #e3e5e8;
+  --text-secondary: #dcdfe4;
+  --text-tertiary: #dcdfe4;
+  --channels-default: #dcdfe4;
+  --interactive-normal: #dcdfe4;
+  --interactive-hover: #e3e5e8;
+  --interactive-active: #e3e5e8;
+  --interactive-muted: #9a9da2;
+  --logo-primary: #e3e5e8;
+
+  --background-primary: #000000;
+  --background-secondary: #000000;
+  --background-secondary-alt: #000000;
+  --background-tertiary: #000000;
+  --background-accent: #000000;
+  --background-floating: #000000;
+  --background-mobile-primary: #000000;
+  --background-mobile-secondary: #000000;
+
+  --background-modifier-hover: #000000;
+  --background-modifier-active: #000000;
+  --background-modifier-selected: #000000;
+  --background-modifier-accent: #000000;
+  --background-mentioned: #000000;
+  --background-mentioned-hover: #000000;
+  --background-message-hover: #000000;
+  --channeltextarea-background: #000000;
+  --activity-card-background: #000000;
+
+  --deprecated-card-bg: #000000;
+  --deprecated-card-editable-bg: #000000;
+  --deprecated-store-bg: #000000;
+  --deprecated-quickswitcher-input-background: #000000;
+  --deprecated-text-input-bg: #000000;
+  --deprecated-text-input-border: #000000;
+  --deprecated-text-input-border-hover: #000000;
+  --deprecated-text-input-border-disabled: #000000;
+
+  --background-base-low: #000000;
+  --background-base-lower: #000000;
+  --background-base-lowest: #000000;
+  --background-surface-high: #000000;
+  --background-surface-higher: #000000;
+  --background-surface-highest: #000000;
+  --bg-overlay-floating: #000000;
+  --bg-base-secondary: #000000;
+
+  --modal-background: #000000;
+  --modal-footer-background: #000000;
+
+  --elevation-stroke: none;
+  --elevation-low: none;
+  --elevation-medium: none;
+  --elevation-high: none;
+
+  --focus-primary: #e3e5e8;
+
+  --status-online: #6b6f76;
+  --status-idle: #6b6f76;
+  --status-DnD: #6b6f76;
+  --status-invisible: #6b6f76;
+
+  --scrollbar-thin-thumb: #1a1a1a;
+  --scrollbar-thin-track: #000000;
+  --scrollbar-auto-thumb: #1a1a1a;
+  --scrollbar-auto-track: #000000;
+  --scrollbar-thumb: #1a1a1a;
+  --scrollbar-thumb-hover: #2a2a2a;
+}
+
+/* Profile backgrounds */
+html.theme-dark:root,
+#app-mount .theme-dark {
+  --profile-gradient-overlay-color: #000000;
+  --profile-gradient-modal-background-color: #000000;
+  --profile-gradient-button-color: #000000;
+  --profile-body-background-color: #000000;
+}
+
+/* Hide profile/banner videos */
+#app-mount video[class*="banner"] {
+  display: none !important;
+}
+
+/* Hide Nitro and gift buttons */
+[aria-label*="Nitro" i],
+[aria-label*="Gift" i],
+[title*="Nitro" i],
+[title*="Gift" i],
+button:has(path[d^=" M7,-6 C7,-7.6570000648498535 5.6570000648498535,-9 4,-9 C4,-9 3.9110000133514404,-9"]) {
+  display: none !important;
+}
+
+/* Hide stickers */
+.expression-picker-chat-input-button:has(path[d^=" M-6,-10 C-6,-10 6,-10 6,-10 C8.208999633789062,-10 10"]),
+button[aria-label*="Sticker" i] {
+  display: none !important;
+}
+
+/* Hide emoji */
+.expression-picker-chat-input-button:has(.emojiButton__04eed),
+button[aria-label*="Emoji" i],
+button[aria-label*="emoji" i] {
+  display: none !important;
+}
+
+/* Hide apps and activities */
+.app-launcher-entrypoint,
+button[aria-label*="Apps" i],
+button[aria-label*="Activities" i] {
+  display: none !important;
+}
+
+/* Hide Nitro navigation */
+[data-list-item-id*="nitro" i],
+a[aria-label="Nitro Home" i],
+div[aria-label="Nitro Home" i] {
+  display: none !important;
+}
+
+/* Hide Discover */
+[data-list-item-id*="discover" i],
+button[aria-label*="Explore Discoverable Servers" i],
+button[aria-label*="Discover" i],
+li:has([data-list-item-id*="discover" i]),
+li:has(button[aria-label*="Discover" i]),
+[role="listitem"]:has([data-list-item-id*="discover" i]),
+[role="listitem"]:has(button[aria-label*="Discover" i]) {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+/* Hide noise suppression and Krisp */
+button[aria-label*="Noise Suppression" i],
+button[aria-label*="Krisp" i],
+[title*="Noise Suppression" i],
+[title*="Krisp" i] {
+  display: none !important;
+}
+
+/* Hide activities */
+button[aria-label*="Activities" i],
+button[aria-label="Activities" i] {
+  display: none !important;
+}
+
+/* Hide soundboard */
+button[aria-label*="Soundboard" i],
+span:has(> div > button[aria-label*="Soundboard" i]),
+span:has(> div > button[aria-label*="Soundboard" i]) > div {
+  display: none !important;
+  pointer-events: none !important;
+  visibility: hidden !important;
+}
+
+/* Hide back and forward buttons */
+[aria-label="Go back" i],
+[aria-label="Go forward" i],
+.backForwardButtons__63abb {
+  display: none !important;
+}
+
+/* Hide inbox, help, and trailing buttons */
+[aria-label="Inbox" i],
+[aria-label="Help" i],
+.trailing_c38106 {
+  display: none !important;
+}
