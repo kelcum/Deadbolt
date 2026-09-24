@@ -63,6 +63,24 @@ After building Deadbolt's web extension, locate the appropriate ZIP file in the 
 
 Note: Firefox extension zip requires Firefox for developers
 
+## Adding your own plugins
+
+Every build (`pnpm build` or `pnpm dev`) creates `src/userplugins` for you. Any plugin folder you put in there gets built into Deadbolt automatically.
+
+You can also add a plugin without leaving Discord. Turn on **UserPluginUploader**, then run:
+
+```
+/addplugin name:MyPlugin file:<your plugin file>
+```
+
+- `name` becomes the folder name, so the plugin lands in `src/userplugins/MyPlugin/`. Letters, numbers, dashes and underscores only.
+- `file` is the plugin code. You can drag it straight into the command. `.ts`, `.tsx`, `.js`, `.jsx` and plain `.txt` all work: it's saved as `index.tsx` if the code has JSX in it and `index.ts` otherwise.
+- `replace:True` overwrites a plugin folder that already has that name.
+
+Deadbolt then rebuilds itself, turns the plugin on and offers to reload Discord. If the rebuild fails, nothing is changed and the build error is shown in chat, so a broken file can't break your next build. The file is read locally and never sent to Discord.
+
+This only works when you built Deadbolt from source on the same PC (it needs the `src` folder and `pnpm` in your PATH), and only in the desktop app. The plugin file needs the usual `export default definePlugin({ name: "...", ... })` with `name` as the first property.
+
 ## Windows: reapplying branding after a Canary update
 
 Discord Canary's own updater prunes old install folders and resets a few
