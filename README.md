@@ -63,6 +63,25 @@ After building Deadbolt's web extension, locate the appropriate ZIP file in the 
 
 Note: Firefox extension zip requires Firefox for developers
 
+## Windows: reapplying branding after a Canary update
+
+Discord Canary's own updater prunes old install folders and resets a few
+OS-level files (its icon, the boot splash image, Start Menu shortcuts) on
+every update — none of that is part of Deadbolt itself, so it silently
+reverts. It can also occasionally leave the injection stub in a broken
+state, which shows up as a "Cannot find module ...patcher.js" crash on
+launch.
+
+If that happens, rebuild and reapply:
+
+```shell
+pnpm install
+pnpm build
+powershell -ExecutionPolicy Bypass -File scripts\reapply-branding.ps1 -Restart
+```
+
+`-Restart` relaunches Discord Canary only; Stable is never touched.
+
 ## Credits
 
 Deadbolt is built on [Equicord](https://github.com/Equicord/Equicord) and its 300+ plugin library — thank you to Equicord's contributors, to [Vendicated](https://github.com/Vendicated) for creating [Vencord](https://github.com/Vendicated/Vencord), and to [Suncord](https://github.com/verticalsync/Suncord) by [verticalsync](https://github.com/verticalsync).
