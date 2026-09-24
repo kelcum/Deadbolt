@@ -1,8 +1,25 @@
-# [<img src="./browser/icon.png" width="40" align="left" alt="Deadbolt">](https://github.com/kelcum/Deadbolt) Deadbolt
+<div align="center">
 
-[![Tests](https://github.com/kelcum/Deadbolt/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/kelcum/Deadbolt/actions/workflows/test.yml)
+<img src="./.github/assets/banner.png" width="100%" alt="Deadbolt">
+
+[![Tests](https://img.shields.io/github/actions/workflow/status/kelcum/Deadbolt/test.yml?branch=main&style=for-the-badge&label=tests&labelColor=171A21&color=b6c0cb)](https://github.com/kelcum/Deadbolt/actions/workflows/test.yml)
+[![License](https://img.shields.io/badge/license-GPL--3.0--or--later-b6c0cb?style=for-the-badge&labelColor=171A21)](LICENSE)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-b6c0cb?style=for-the-badge&labelColor=171A21)](#building-from-source)
+[![Plugins](https://img.shields.io/badge/plugins-300%2B-b6c0cb?style=for-the-badge&labelColor=171A21)](https://equicord.org/plugins)
 
 Deadbolt is a personal fork of [Equicord](https://github.com/Equicord/Equicord) (itself a fork of [Vencord](https://github.com/Vendicated/Vencord)), focused on quality-of-life plugins.
+
+</div>
+
+## Highlights
+
+What sets this fork apart from vanilla Equicord:
+
+- **A boot splash that's actually Deadbolt's** — replaces Discord's own connecting screen with an animated chrome crest and Deadbolt-branded quotes, instead of just retexting Discord's default one.
+- **An animated creator badge** — a continuously rotating chrome shine on the profile badge, with a rich hover card instead of a plain tooltip.
+- **`/addplugin`** — add a plugin to Deadbolt from inside Discord itself: attach the file, Deadbolt saves it, rebuilds, and offers to reload. No editor, no terminal. See [Adding your own plugins](#adding-your-own-plugins).
+- **VSCodeActivity** — shows the real file/workspace you're editing in VS Code instead of Discord's generic "Playing Visual Studio Code", with an optional spoof mode that fakes a coding session (and can hide real game activity) on demand.
+- **One-command recovery on Windows** — Discord Canary's own updater periodically resets the icon, splash, and shortcuts; [`scripts/reapply-branding.ps1`](scripts/reapply-branding.ps1) puts it all back in one run.
 
 ### Included Plugins
 
@@ -13,6 +30,9 @@ Deadbolt ships with the same 300+ plugin library Equicord maintains, plus whatev
 There's no packaged installer for Deadbolt — Equicord's official installer (Equilotl) only targets the upstream Equicord repo, not this fork. Build and inject it from source instead; see below.
 
 ## Building from source
+
+<details>
+<summary>Click to expand</summary>
 
 ### Dependencies
 
@@ -59,9 +79,11 @@ Build Deadbolt for web:
 pnpm buildWeb
 ```
 
-After building Deadbolt's web extension, locate the appropriate ZIP file in the `dist` directory and follow your browser’s guide for installing custom extensions, if supported.
+After building Deadbolt's web extension, locate the appropriate ZIP file in the `dist` directory and follow your browser's guide for installing custom extensions, if supported.
 
 Note: Firefox extension zip requires Firefox for developers
+
+</details>
 
 ## Adding your own plugins
 
@@ -113,9 +135,9 @@ Deadbolt is not connected to Vencord or Equicord.
 <details>
 <summary>Using Deadbolt violates Discord's terms of service</summary>
 
-Client modifications are against Discord’s Terms of Service.
+Client modifications are against Discord's Terms of Service.
 
-However, Discord is pretty indifferent about them and there are no known cases of users getting banned for using client mods! So you should generally be fine if you don’t use plugins that implement abusive behaviour. But no worries, all inbuilt plugins are safe to use!
+However, Discord is pretty indifferent about them and there are no known cases of users getting banned for using client mods! So you should generally be fine if you don't use plugins that implement abusive behaviour. But no worries, all inbuilt plugins are safe to use!
 
 Regardless, if your account is essential to you and getting disabled would be a disaster for you, you should probably not use any client mods (not exclusive to Deadbolt), just to be safe.
 
