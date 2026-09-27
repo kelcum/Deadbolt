@@ -71,6 +71,15 @@ if (-not $versionDirs) {
 foreach ($verDir in $versionDirs) {
     Write-Step "Version folder: $($verDir.Name)"
 
+    # Discord sometimes ships resources/app.asar as a real packed archive
+    # rather than the unpacked directory we can write index.js into
+    # directly - unpack it in place (same path, now a directory) first.
+    $appAsar = Join-Path $verDir.FullName "resources\app.asar"
+    if ((Test-Path $appAsar) -and -not (Get-Item $appAsar).PSIsContainer) {
+        Write-Step "app.asar is a packed archive here, unpacking it first..."
+        & node (Join-Path $RepoRoot "scripts\ensure-asar-unpacked.cjs") $appAsar | ForEach-Object { Write-Host "   $_" }
+    }
+
     $indexJs = Join-Path $verDir.FullName "resources\app.asar\index.js"
     if (Test-Path $indexJs) {
         Set-Content -Path $indexJs -Value $StubContent -NoNewline -Encoding ascii
