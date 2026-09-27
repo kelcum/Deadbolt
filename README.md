@@ -126,11 +126,11 @@ powershell -ExecutionPolicy Bypass -File scripts\reapply-branding.ps1 -Restart
 
 [`scripts/auto-update.ps1`](scripts/auto-update.ps1) combines all of the above into one unattended script: it fast-forwards from `origin/main` (only if the working tree is clean, never rebasing over local changes), rebuilds when that actually brings new commits, and reapplies branding every run regardless — Canary's own updater can reset that independently of any Deadbolt-side change. It only restarts Canary if it was already running; it never launches Discord on its own, and Stable is never touched. Logs to `scripts/auto-update.log`, trimmed to the last 500 lines each run.
 
-To run it automatically on a schedule (e.g. every 30 minutes):
+To run it automatically on a schedule (e.g. every 5 hours):
 
 ```powershell
 $action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument '-ExecutionPolicy Bypass -File "C:\path\to\Deadbolt\scripts\auto-update.ps1"'
-$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 30)
+$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Hours 5) -RepetitionDuration (New-TimeSpan -Days 3650)
 Register-ScheduledTask -TaskName "Deadbolt Auto-Update" -Action $action -Trigger $trigger -Description "Keeps Deadbolt synced with origin/main and reapplies Canary branding"
 ```
 
