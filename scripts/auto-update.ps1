@@ -7,17 +7,18 @@
 .DESCRIPTION
     Meant to run on a schedule (Task Scheduler), not interactively. It only
     ever fast-forwards (never rebases/force-pulls), only rebuilds when the
-    pull actually brought new commits, and only restarts Discord Canary if
-    it's already running when this fires - it will never launch Discord on
-    its own. Discord Stable is never touched.
+    pull actually brought new commits, and only restarts a Discord client
+    (Canary or Stable) if it's already running when this fires - it will
+    never launch either one on its own.
 
     This handles two separate kinds of staleness:
     1. New commits on origin/main (e.g. from an upstream Equicord sync) -
        pulled and rebuilt here.
-    2. Discord Canary's own updater resetting the injection stub / icon /
-       splash / shortcuts - reapplied every run via reapply-branding.ps1,
-       regardless of whether step 1 found anything (that reset can happen
-       independently of any Deadbolt-side change).
+    2. Discord's own updater (Canary or Stable) resetting the injection
+       stub / icon / splash / shortcuts - reapplied every run via
+       reapply-branding.ps1 for both clients, regardless of whether step 1
+       found anything (that reset can happen independently of any
+       Deadbolt-side change).
 
     Logs to auto-update.log next to this script, trimmed to the last 500
     lines each run so it can't grow unbounded.
@@ -95,18 +96,14 @@ try {
     $ErrorActionPreference = $prevEap
 }
 
-# Reapply branding/injection every run regardless of the above - Canary's
+# Reapply branding/injection every run regardless of the above - Discord's
 # own updater can reset this independently of any Deadbolt-side change.
+# Covers both Canary and Stable; reapply-branding.ps1 only restarts whichever
+# client(s) were already running, and never launches one that wasn't.
 try {
-    $canaryRunning = $null -ne (Get-Process -Name "DiscordCanary" -ErrorAction SilentlyContinue)
-    $reapplyArgs = @{ File = (Join-Path $RepoRoot "scripts\reapply-branding.ps1") }
-    if ($canaryRunning) {
-        Log "Discord Canary is running - reapplying branding and restarting it to pick up any change."
-        & powershell -ExecutionPolicy Bypass -File $reapplyArgs.File -Restart *>&1 | ForEach-Object { Log $_ }
-    } else {
-        Log "Discord Canary isn't running - reapplying branding without launching it."
-        & powershell -ExecutionPolicy Bypass -File $reapplyArgs.File *>&1 | ForEach-Object { Log $_ }
-    }
+    $reapplyScript = Join-Path $RepoRoot "scripts\reapply-branding.ps1"
+    Log "Reapplying branding to Canary and Stable (only restarting whichever is already running)..."
+    & powershell -ExecutionPolicy Bypass -File $reapplyScript -Restart *>&1 | ForEach-Object { Log $_ }
 } catch {
     Log "ERROR during branding reapply: $_"
 }

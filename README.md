@@ -103,14 +103,14 @@ Deadbolt then rebuilds itself, turns the plugin on and offers to reload Discord.
 
 This only works when you built Deadbolt from source on the same PC (it needs the `src` folder and `pnpm` in your PATH), and only in the desktop app. The plugin file needs the usual `export default definePlugin({ name: "...", ... })` with `name` as the first property.
 
-## Windows: reapplying branding after a Canary update
+## Windows: reapplying branding after a Discord update
 
-Discord Canary's own updater prunes old install folders and resets a few
-OS-level files (its icon, the boot splash image, Start Menu shortcuts) on
-every update — none of that is part of Deadbolt itself, so it silently
-reverts. It can also occasionally leave the injection stub in a broken
-state, which shows up as a "Cannot find module ...patcher.js" crash on
-launch.
+Discord's own updater (Canary or Stable) prunes old install folders and
+resets a few OS-level files (its icon, the boot splash image, Start Menu
+shortcuts) on every update — none of that is part of Deadbolt itself, so it
+silently reverts. It can also occasionally leave the injection stub in a
+broken state, which shows up as a "Cannot find module ...patcher.js" crash
+on launch.
 
 If that happens, rebuild and reapply:
 
@@ -120,11 +120,11 @@ pnpm build
 powershell -ExecutionPolicy Bypass -File scripts\reapply-branding.ps1 -Restart
 ```
 
-`-Restart` relaunches Discord Canary only; Stable is never touched. Discord occasionally ships `resources/app.asar` as a real packed archive instead of the unpacked directory this relies on — the script unpacks it in place automatically when that happens (`scripts/ensure-asar-unpacked.cjs`).
+By default this reapplies to both Canary and Stable; pass `-Clients Canary` or `-Clients Stable` to restrict it to one. `-Restart` only relaunches whichever client(s) were already running — it never launches one that wasn't. Discord occasionally ships `resources/app.asar` as a real packed archive instead of the unpacked directory this relies on — the script unpacks it in place automatically when that happens (`scripts/ensure-asar-unpacked.cjs`).
 
 ### Running this automatically
 
-[`scripts/auto-update.ps1`](scripts/auto-update.ps1) combines all of the above into one unattended script: it fast-forwards from `origin/main` (only if the working tree is clean, never rebasing over local changes), rebuilds when that actually brings new commits, and reapplies branding every run regardless — Canary's own updater can reset that independently of any Deadbolt-side change. It only restarts Canary if it was already running; it never launches Discord on its own, and Stable is never touched. Logs to `scripts/auto-update.log`, trimmed to the last 500 lines each run.
+[`scripts/auto-update.ps1`](scripts/auto-update.ps1) combines all of the above into one unattended script: it fast-forwards from `origin/main` (only if the working tree is clean, never rebasing over local changes), rebuilds when that actually brings new commits, and reapplies branding to both Canary and Stable every run regardless — Discord's own updater can reset that independently of any Deadbolt-side change. It only restarts a client if it was already running; it never launches Discord on its own. Logs to `scripts/auto-update.log`, trimmed to the last 500 lines each run.
 
 To run it automatically on a schedule (e.g. every 5 hours):
 
