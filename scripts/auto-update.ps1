@@ -44,6 +44,13 @@ if (Test-Path $LogFile) {
 
 Log "=== auto-update run starting ==="
 
+# Native git/pnpm commands write ordinary progress info to stderr (e.g.
+# git fetch's "From https://..." line); with $ErrorActionPreference =
+# "Stop" that can otherwise get misread as a terminating error even on
+# success. Run this block with it relaxed and check $LASTEXITCODE
+# explicitly instead.
+$prevEap = $ErrorActionPreference
+$ErrorActionPreference = "Continue"
 try {
     Set-Location $RepoRoot
 
@@ -52,7 +59,8 @@ try {
         Log "Working tree isn't clean, skipping pull/build so nothing local gets clobbered:"
         Log ($status | Out-String)
     } else {
-        git fetch origin main *>&1 | ForEach-Object { Log $_ }
+        git fetch origin main 2>&1 | ForEach-Object { Log $_ }
+        if ($LASTEXITCODE -ne 0) { throw "git fetch failed (exit $LASTEXITCODE)" }
 
         $before = git rev-parse HEAD
         $behind = [int](git rev-list --count "HEAD..origin/main")
@@ -64,15 +72,17 @@ try {
             Log "Already up to date with origin/main ($before)."
         } else {
             Log "$behind commit(s) behind origin/main, fast-forwarding..."
-            git merge --ff-only origin/main *>&1 | ForEach-Object { Log $_ }
+            git merge --ff-only origin/main 2>&1 | ForEach-Object { Log $_ }
+            if ($LASTEXITCODE -ne 0) { throw "git merge --ff-only failed (exit $LASTEXITCODE)" }
             $after = git rev-parse HEAD
 
             if ($after -ne $before) {
                 Log "Updated $before -> $after. Installing and rebuilding..."
-                pnpm install --config.confirmModulesPurge=false *>&1 | ForEach-Object { Log $_ }
-                pnpm build *>&1 | ForEach-Object { Log $_ }
-                if ($LASTEXITCODE -ne 0) {
-                    Log "BUILD FAILED (exit $LASTEXITCODE) - leaving whatever dist/ produced, needs a human to look."
+                pnpm install --config.confirmModulesPurge=false 2>&1 | ForEach-Object { Log $_ }
+                $installExit = $LASTEXITCODE
+                pnpm build 2>&1 | ForEach-Object { Log $_ }
+                if ($installExit -ne 0 -or $LASTEXITCODE -ne 0) {
+                    Log "BUILD FAILED (install exit $installExit, build exit $LASTEXITCODE) - leaving whatever dist/ produced, needs a human to look."
                 } else {
                     Log "Build succeeded."
                 }
@@ -81,6 +91,8 @@ try {
     }
 } catch {
     Log "ERROR during git/build step: $_"
+} finally {
+    $ErrorActionPreference = $prevEap
 }
 
 # Reapply branding/injection every run regardless of the above - Canary's
