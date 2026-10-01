@@ -48,7 +48,7 @@ Discord Canary/Stable's own updater periodically resets the icon, splash, and sh
 ### macOS
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kelcum/Deadbolt/main/scripts/install-macos.sh -o /tmp/deadbolt-macos.sh && bash /tmp/deadbolt-macos.sh
+curl -fsSL https://xan.gripe/deadbolt/install-macos.sh | bash
 ```
 
 Injects through Discord's external `discord_desktop_core` module rather than modifying the signed `app.asar`, so `/Applications/Discord.app` is never touched and its Apple code signature stays valid — no "Discord is damaged", no re-signing, no Gatekeeper fights. Full details, manual install, update/uninstall/repair commands: **[MACOS.md](MACOS.md)**.
@@ -56,7 +56,7 @@ Injects through Discord's external `discord_desktop_core` module rather than mod
 ### Linux
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kelcum/Deadbolt/main/scripts/install-linux.sh -o /tmp/deadbolt-linux.sh && bash /tmp/deadbolt-linux.sh
+curl -fsSL https://xan.gripe/deadbolt/install-linux.sh | bash
 ```
 
 Works the same way across every distro — the script just checks Git/Node.js 22+/pnpm are present and tells you the right command for your distro if one's missing (it never runs a package manager for you). Per-distro prerequisite commands, manual install, update/uninstall/repair: **[LINUX.md](LINUX.md)**.

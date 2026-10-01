@@ -40,7 +40,13 @@ missing — it never runs a package manager on your behalf), then clones,
 builds, and injects:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kelcum/Deadbolt/main/scripts/install-linux.sh -o /tmp/deadbolt-linux.sh && bash /tmp/deadbolt-linux.sh
+curl -fsSL https://xan.gripe/deadbolt/install-linux.sh | bash
+```
+
+Want to read it before running it? That URL is a thin redirect to [`scripts/install-linux.sh`](scripts/install-linux.sh) in this repo - download and inspect that instead:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kelcum/Deadbolt/main/scripts/install-linux.sh -o /tmp/deadbolt-linux.sh && less /tmp/deadbolt-linux.sh && bash /tmp/deadbolt-linux.sh
 ```
 
 ## Manual installation

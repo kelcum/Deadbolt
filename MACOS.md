@@ -20,16 +20,14 @@ This keeps `/Applications/Discord.app` untouched and preserves Discord's origina
 
 ## One-command installation
 
-Recommended:
-
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kelcum/Deadbolt/main/scripts/install-macos.sh -o /tmp/deadbolt-macos.sh && bash /tmp/deadbolt-macos.sh
+curl -fsSL https://xan.gripe/deadbolt/install-macos.sh | bash
 ```
 
-Short form:
+Want to read it before running it? That URL is a thin redirect to [`scripts/install-macos.sh`](scripts/install-macos.sh) in this repo - download and inspect that instead:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/kelcum/Deadbolt/main/scripts/install-macos.sh | bash
+curl -fsSL https://raw.githubusercontent.com/kelcum/Deadbolt/main/scripts/install-macos.sh -o /tmp/deadbolt-macos.sh && less /tmp/deadbolt-macos.sh && bash /tmp/deadbolt-macos.sh
 ```
 
 ## Manual installation
