@@ -124,7 +124,13 @@ By default this reapplies to both Canary and Stable; pass `-Clients Canary` or `
 
 ### Running this automatically
 
-[`scripts/auto-update.ps1`](scripts/auto-update.ps1) combines all of the above into one unattended script: it fast-forwards from `origin/main` (only if the working tree is clean, never rebasing over local changes), rebuilds when that actually brings new commits, and reapplies branding to both Canary and Stable every run regardless — Discord's own updater can reset that independently of any Deadbolt-side change. It only restarts a client if it was already running; it never launches Discord on its own. Logs to `scripts/auto-update.log`, trimmed to the last 500 lines each run.
+[`scripts/auto-update.ps1`](scripts/auto-update.ps1) combines all of the above into one unattended script, run only if the working tree is clean (never rebasing/force-pulling over local changes):
+
+1. Fast-forwards from `origin/main` (your own fork) if it's ahead.
+2. Merges in new commits from `upstream` Equicord/Equicord:main. A clean merge gets rebuilt and verified before being pushed back to `origin/main`; a conflicted merge is aborted and left alone for a human to resolve — it never guesses at a resolution or pushes a broken build.
+3. Reapplies branding to both Canary and Stable every run regardless of 1/2 — Discord's own updater can reset that independently of any Deadbolt-side change. Only restarts a client if it was already running; never launches Discord on its own.
+
+Logs to `scripts/auto-update.log`, trimmed to the last 500 lines each run.
 
 To run it automatically on a schedule (e.g. every 5 hours):
 
