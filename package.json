@@ -1,7 +1,7 @@
 {
     "name": "deadbolt",
     "private": "true",
-    "version": "1.15.7.0",
+    "version": "1.15.9.0",
     "description": "A cold, no-frills Discord client mod",
     "homepage": "https://github.com/kelcum/Deadbolt#readme",
     "bugs": {
