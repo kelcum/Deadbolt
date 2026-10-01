@@ -132,7 +132,7 @@ const DeadboltCreatorBadge: ProfileBadge = {
     shouldShow: ({ userId }) => DEADBOLT_CREATOR_IDS.includes(userId),
 };
 
-function AnimatedDeadboltContributorBadge() {
+function AnimatedDeadboltContributorBadge({ userId }: ProfileBadge & BadgeUserArgs) {
     return (
         <Tooltip
             text={
@@ -148,6 +148,8 @@ function AnimatedDeadboltContributorBadge() {
                     aria-label="Deadbolt Contributor"
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
+                    onClick={() => openContributorModal(UserStore.getUser(userId))}
+                    style={{ cursor: "pointer" }}
                 >
                     <img src={DEADBOLT_CONTRIBUTOR_BADGE_ICON} alt="" draggable={false} />
                 </span>
@@ -163,7 +165,6 @@ const DeadboltContributorBadge: ProfileBadge = {
     component: AnimatedDeadboltContributorBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => DEADBOLT_CONTRIBUTOR_IDS.includes(userId),
-    onClick: (_, { userId }) => openContributorModal(UserStore.getUser(userId)),
 };
 
 const UserPluginContributorBadge: ProfileBadge = {
