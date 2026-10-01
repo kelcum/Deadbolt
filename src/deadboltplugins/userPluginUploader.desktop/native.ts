@@ -40,17 +40,50 @@ export async function addUserPlugin(_: IpcMainInvokeEvent, folder: string, code:
     await writeFile(join(dir, entry), code);
 
     const buildError = await new Promise<string | null>(resolve =>
-        exec(IS_DEV ? "pnpm build --dev" : "pnpm build", { cwd: repoRoot }, (err, _stdout, stderr) => resolve(err ? stderr : null))
+        exec(
+            IS_DEV ? "pnpm build --dev" : "pnpm build",
+            {
+                cwd: repoRoot,
+                maxBuffer: 4 * 1024 * 1024,
+                env: {
+                    ...process.env,
+                    NO_COLOR: "1",
+                    FORCE_COLOR: "0"
+                }
+            },
+            (err, stdout, stderr) => {
+                if (!err) return resolve(null);
+
+                const output = `${stdout}\n${stderr}`.trim();
+                resolve(output || err.message);
+            }
+        )
     );
-    if (buildError === null) return { pluginName, entry };
 
-    if (existed) await Promise.all(ENTRY_FILES.map((f, i) => backup[i] === null ? rm(join(dir, f), { force: true }) : writeFile(join(dir, f), backup[i])));
-    else await rm(dir, { recursive: true });
+    if (buildError === null)
+        return { pluginName, entry };
 
-    const details = buildError.match(/^.+: ERROR: .+$/gm);
+    if (existed)
+        await Promise.all(
+            ENTRY_FILES.map((f, i) =>
+                backup[i] === null
+                    ? rm(join(dir, f), { force: true })
+                    : writeFile(join(dir, f), backup[i])
+            )
+        );
+    else
+        await rm(dir, { recursive: true });
+
+    const cleanOutput = buildError
+        .replace(/\x1B\[[0-?]*[ -\/]*[@-~]/g, "")
+        .trim();
+
+    const maxLength = 1500;
+    const output = cleanOutput.length > maxLength
+        ? "...\n" + cleanOutput.slice(-maxLength)
+        : cleanOutput;
+
     return {
-        error: details
-            ? `Deadbolt failed to rebuild with your plugin, so nothing was changed.\n\`\`\`\n${details.join("\n")}\n\`\`\``
-            : "Deadbolt failed to rebuild, so nothing was changed. Run pnpm build in your Deadbolt folder to see why."
+        error: `Deadbolt failed to rebuild with your plugin, so nothing was changed.\n\`\`\`\n${output}\n\`\`\``
     };
 }
