@@ -163,6 +163,7 @@ const DeadboltContributorBadge: ProfileBadge = {
     component: AnimatedDeadboltContributorBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => DEADBOLT_CONTRIBUTOR_IDS.includes(userId),
+    onClick: (_, { userId }) => openContributorModal(UserStore.getUser(userId)),
 };
 
 const UserPluginContributorBadge: ProfileBadge = {
