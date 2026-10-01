@@ -4,10 +4,12 @@
 
 [![Tests](https://img.shields.io/github/actions/workflow/status/kelcum/Deadbolt/test.yml?branch=main&style=for-the-badge&label=tests&labelColor=171A21&color=b6c0cb)](https://github.com/kelcum/Deadbolt/actions/workflows/test.yml)
 [![License](https://img.shields.io/badge/license-GPL--3.0--or--later-b6c0cb?style=for-the-badge&labelColor=171A21)](LICENSE)
-[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS-b6c0cb?style=for-the-badge&labelColor=171A21)](#building-from-source)
+[![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-b6c0cb?style=for-the-badge&labelColor=171A21)](#installing)
 [![Plugins](https://img.shields.io/badge/plugins-300%2B-b6c0cb?style=for-the-badge&labelColor=171A21)](https://equicord.org/plugins)
 
 Deadbolt is a personal fork of [Equicord](https://github.com/Equicord/Equicord) (itself a fork of [Vencord](https://github.com/Vendicated/Vencord)), focused on quality-of-life plugins.
+
+**[Windows](#windows) · [macOS](#macos) · [Linux](#linux)**
 
 </div>
 
@@ -16,37 +18,66 @@ Deadbolt is a personal fork of [Equicord](https://github.com/Equicord/Equicord) 
 What sets this fork apart from vanilla Equicord:
 
 - **A boot splash that's actually Deadbolt's** — replaces Discord's own connecting screen with an animated chrome crest and Deadbolt-branded quotes, instead of just retexting Discord's default one.
-- **An animated creator badge** — a continuously rotating chrome shine on the profile badge, with a rich hover card instead of a plain tooltip.
+- **Animated profile badges** — a continuously rotating chrome shine on the Creator badge and a violet counterpart for Contributors, each with a rich hover card instead of a plain tooltip.
 - **`/addplugin`** — add a plugin to Deadbolt from inside Discord itself: attach the file, Deadbolt saves it, rebuilds, and offers to reload. No editor, no terminal. See [Adding your own plugins](#adding-your-own-plugins).
 - **VSCodeActivity** — shows the real file/workspace you're editing in VS Code instead of Discord's generic "Playing Visual Studio Code", with an optional spoof mode that fakes a coding session (and can hide real game activity) on demand.
-- **One-command recovery on Windows** — Discord Canary's own updater periodically resets the icon, splash, and shortcuts; [`scripts/reapply-branding.ps1`](scripts/reapply-branding.ps1) puts it all back in one run.
+- **A real macOS install, not a broken one** — macOS injects through Discord's external `discord_desktop_core` module instead of modifying the signed `app.asar`, so Discord's Apple code signature stays intact. See [macOS](#macos).
+- **One-command recovery on Windows** — Discord's own updater periodically resets the icon, splash, and shortcuts (Canary *and* Stable); [`scripts/reapply-branding.ps1`](scripts/reapply-branding.ps1) puts it all back in one run, and [`scripts/auto-update.ps1`](scripts/auto-update.ps1) can do it on a schedule, unattended.
 
 ### Included Plugins
 
 Deadbolt ships with the same 300+ plugin library Equicord maintains, plus whatever gets added here going forward. Browse Equicord's plugin list [here](https://equicord.org/plugins) for what's included by default.
 
-## Installing / Uninstalling
+## Installing
 
-There's no packaged installer for Deadbolt — Equicord's official installer (Equilotl) only targets the upstream Equicord repo, not this fork. Build and inject it from source instead; see below.
+There's no packaged GUI installer — Equicord's official installer (Equilotl) only targets the upstream Equicord repo, not this fork. Instead, each platform has a one-command script that builds Deadbolt from source and injects it:
+
+### Windows
+
+```powershell
+git clone https://github.com/kelcum/Deadbolt
+cd Deadbolt
+npm i -g pnpm
+pnpm install --frozen-lockfile
+pnpm build
+pnpm inject
+```
+
+Discord Canary/Stable's own updater periodically resets the icon, splash, and shortcuts (and can occasionally break the injection stub) — see [Windows: reapplying branding after a Discord update](#windows-reapplying-branding-after-a-discord-update) if that happens, or to automate it entirely.
+
+### macOS
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kelcum/Deadbolt/main/scripts/install-macos.sh -o /tmp/deadbolt-macos.sh && bash /tmp/deadbolt-macos.sh
+```
+
+Injects through Discord's external `discord_desktop_core` module rather than modifying the signed `app.asar`, so `/Applications/Discord.app` is never touched and its Apple code signature stays valid — no "Discord is damaged", no re-signing, no Gatekeeper fights. Full details, manual install, update/uninstall/repair commands: **[MACOS.md](MACOS.md)**.
+
+### Linux
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kelcum/Deadbolt/main/scripts/install-linux.sh -o /tmp/deadbolt-linux.sh && bash /tmp/deadbolt-linux.sh
+```
+
+Works the same way across every distro — the script just checks Git/Node.js 22+/pnpm are present and tells you the right command for your distro if one's missing (it never runs a package manager for you). Per-distro prerequisite commands, manual install, update/uninstall/repair: **[LINUX.md](LINUX.md)**.
+
+> [!IMPORTANT]
+> Make sure you aren't using an admin/root terminal for any of the above. It **will** mess up your Discord/Deadbolt instance and you **will** most likely have to reinstall.
 
 ## Building from source
 
 <details>
-<summary>Click to expand</summary>
+<summary>Manual build, any platform</summary>
 
 ### Dependencies
 
-[Git](https://git-scm.com/download) and [Node.JS LTS](https://nodejs.dev/en/) are required.
+[Git](https://git-scm.com/download) and [Node.js 22+](https://nodejs.org) are required.
 
 Install `pnpm`:
-
-> :exclamation: This next command may need to be run as admin/root depending on your system, and you may need to close and reopen your terminal for pnpm to be in your PATH.
 
 ```shell
 npm i -g pnpm
 ```
-
-> :exclamation: **IMPORTANT** Make sure you aren't using an admin/root terminal from here onwards. It **will** mess up your Discord/Deadbolt instance and you **will** most likely have to reinstall.
 
 Clone Deadbolt:
 
