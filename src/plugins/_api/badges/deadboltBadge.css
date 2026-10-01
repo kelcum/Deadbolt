@@ -120,12 +120,126 @@
     100% { background-position: 200% center; }
 }
 
+/* Contributor badge - same animation mechanics as Creator, recolored to the
+   violet/indigo accent (#7C6FF0) so the two read as distinct at a glance. */
+.deadbolt-contributor-badge {
+    position: relative;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    overflow: hidden;
+    transform: scale(0.9);
+    vertical-align: middle;
+    line-height: 0;
+    isolation: isolate;
+    box-shadow: 0 0 0 1px rgb(124 111 240 / 15%), 0 1px 3px rgb(0 0 0 / 45%);
+    animation: deadbolt-contributor-pulse 3s ease-in-out infinite;
+}
+
+.deadbolt-contributor-badge img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    animation:
+        deadbolt-contributor-breathe 2.6s ease-in-out infinite,
+        deadbolt-contributor-bolt-spin 6s linear infinite;
+}
+
+@keyframes deadbolt-contributor-bolt-spin {
+    to { transform: rotate(360deg); }
+}
+
+.deadbolt-contributor-badge::before {
+    content: "";
+    position: absolute;
+    inset: -45%;
+    background: conic-gradient(
+        from 0deg,
+        rgb(124 111 240 / 0%) 0deg,
+        rgb(201 192 255 / 65%) 35deg,
+        rgb(124 111 240 / 15%) 85deg,
+        rgb(124 111 240 / 0%) 140deg,
+        rgb(201 192 255 / 55%) 205deg,
+        rgb(124 111 240 / 15%) 260deg,
+        rgb(124 111 240 / 0%) 320deg,
+        rgb(124 111 240 / 0%) 360deg
+    );
+    animation: deadbolt-contributor-spin 3.1s linear infinite;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.deadbolt-contributor-badge::after {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    background: linear-gradient(
+        115deg,
+        transparent 42%,
+        rgb(201 192 255 / 85%) 50%,
+        transparent 58%
+    );
+    transform: translateX(-160%);
+    animation: deadbolt-contributor-sheen 1.9s linear infinite;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 2;
+}
+
+@keyframes deadbolt-contributor-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes deadbolt-contributor-sheen {
+    0% { transform: translateX(-160%); }
+    100% { transform: translateX(160%); }
+}
+
+@keyframes deadbolt-contributor-breathe {
+    0%, 100% { filter: brightness(1) contrast(1); }
+    50% { filter: brightness(1.25) contrast(1.1) saturate(1.1); }
+}
+
+@keyframes deadbolt-contributor-pulse {
+    0%, 100% { box-shadow: 0 0 0 1px rgb(124 111 240 / 15%), 0 1px 3px rgb(0 0 0 / 45%); }
+    50% { box-shadow: 0 0 0 1px rgb(124 111 240 / 35%), 0 0 7px rgb(124 111 240 / 55%), 0 1px 3px rgb(0 0 0 / 45%); }
+}
+
+.deadbolt-contributor-tip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 4px;
+}
+
+.deadbolt-contributor-tip-title {
+    font-weight: 700;
+    font-size: 14px;
+    background: linear-gradient(100deg, #c9c0ff, #7c6ff0 45%, #e4defe 55%, #9b8ef5);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: deadbolt-tip-sheen 3s linear infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
     .deadbolt-creator-badge,
     .deadbolt-creator-badge::before,
     .deadbolt-creator-badge::after,
     .deadbolt-creator-badge img,
-    .deadbolt-creator-tip-title {
+    .deadbolt-creator-tip-title,
+    .deadbolt-contributor-badge,
+    .deadbolt-contributor-badge::before,
+    .deadbolt-contributor-badge::after,
+    .deadbolt-contributor-badge img,
+    .deadbolt-contributor-tip-title {
         animation: none;
     }
 }
