@@ -26,18 +26,21 @@ import { IS_VANILLA } from "./utils/constants";
 
 console.log("[Deadbolt] Starting up...");
 
-// Our injector file at app/index.js
-const injectorPath = require.main!.filename;
+const IS_CORE_INJECT = process.env.DEADBOLT_CORE_INJECT === "1";
 
-// The original app.asar
-const asarPath = join(dirname(injectorPath), "..", "_app.asar");
+if (!IS_CORE_INJECT) {
+    const injectorPath = require.main!.filename;
+    const asarPath = join(dirname(injectorPath), "..", "_app.asar");
 
-const discordPkg = require(join(asarPath, "package.json"));
-require.main!.filename = join(asarPath, discordPkg.main);
-if (IS_VESKTOP || IS_EQUIBOP) require.main!.filename = join(dirname(injectorPath), "..", "..", "package.json");
+    const discordPkg = require(join(asarPath, "package.json"));
+    require.main!.filename = join(asarPath, discordPkg.main);
 
-// @ts-expect-error Untyped method? Dies from cringe
-app.setAppPath(asarPath);
+    if (IS_VESKTOP || IS_EQUIBOP)
+        require.main!.filename = join(dirname(injectorPath), "..", "..", "package.json");
+
+    // @ts-expect-error Untyped method? Dies from cringe
+    app.setAppPath(asarPath);
+}
 
 if (!IS_VANILLA) {
     const settings = RendererSettings.store;
@@ -48,7 +51,7 @@ if (!IS_VANILLA) {
      * re-apply the patch when discord ships a new host version. skipped
      * on vesktop and equibop because they manage their own updates.
      */
-    if (!IS_VESKTOP && !IS_EQUIBOP) {
+    if (!IS_CORE_INJECT && !IS_VESKTOP && !IS_EQUIBOP) {
         try {
             require("./hostUpdateHook").installHostUpdateHook();
         } catch (err) {
@@ -57,7 +60,7 @@ if (!IS_VANILLA) {
     }
 
     // Repatch after host updates on Windows and Linux
-    if (process.platform === "win32" || process.platform === "linux") {
+    if (!IS_CORE_INJECT && (process.platform === "win32" || process.platform === "linux")) {
         require("./persistAfterDiscordUpdates");
     }
 
@@ -168,5 +171,9 @@ if (!IS_VANILLA) {
     console.log("[Deadbolt] Running in vanilla mode. Not loading Equicord");
 }
 
-console.log("[Deadbolt] Loading original Discord app.asar");
-require(require.main!.filename);
+if (IS_CORE_INJECT) {
+    console.log("[Deadbolt] Core injection initialized");
+} else {
+    console.log("[Deadbolt] Loading original Discord app.asar");
+    require(require.main!.filename);
+}

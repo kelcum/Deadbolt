@@ -98,23 +98,35 @@ async function ensureBinary() {
 
 
 
-const installerBin = await ensureBinary();
-
-console.log("Now running Installer...");
-
 const argStart = process.argv.indexOf("--");
 const args = argStart === -1 ? [] : process.argv.slice(argStart + 1);
 
-try {
-    execFileSync(installerBin, args, {
-        stdio: "inherit",
-        env: {
-            ...process.env,
-            EQUICORD_USER_DATA_DIR: BASE_DIR,
-            EQUICORD_DIRECTORY: join(BASE_DIR, "dist/desktop"),
-            EQUICORD_DEV_INSTALL: "1"
-        }
-    });
-} catch {
-    console.error("Something went wrong. Please check the logs above.");
+if (process.platform === "darwin") {
+    const { runMacOSInstaller } = await import("./macosCoreInstaller.mjs");
+
+    try {
+        await runMacOSInstaller(args);
+    } catch (err) {
+        console.error(err instanceof Error ? err.message : err);
+        process.exitCode = 1;
+    }
+} else {
+    const installerBin = await ensureBinary();
+
+    console.log("Now running Installer...");
+
+    try {
+        execFileSync(installerBin, args, {
+            stdio: "inherit",
+            env: {
+                ...process.env,
+                EQUICORD_USER_DATA_DIR: BASE_DIR,
+                EQUICORD_DIRECTORY: join(BASE_DIR, "dist/desktop"),
+                EQUICORD_DEV_INSTALL: "1"
+            }
+        });
+    } catch {
+        console.error("Something went wrong. Please check the logs above.");
+        process.exitCode = 1;
+    }
 }
