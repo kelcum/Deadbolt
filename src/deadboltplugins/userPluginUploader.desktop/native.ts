@@ -75,7 +75,7 @@ export async function addUserPlugin(_: IpcMainInvokeEvent, folder: string, code:
         await rm(dir, { recursive: true });
 
     const cleanOutput = buildError
-        .replace(/\x1B\[[0-?]*[ -\/]*[@-~]/g, "")
+        .replace(/\x1B\[[0-?]*[ -/]*[@-~]/g, "")
         .trim();
 
     const maxLength = 1500;
