@@ -366,7 +366,7 @@ export default definePlugin({
     tags: ["Voice"],
     authors: [
         {
-            name: "Contributor",
+            name: "m0pu",
             id: 770744865675149323n,
         },
     ],
