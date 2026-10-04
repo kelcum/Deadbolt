@@ -33,7 +33,7 @@ const settings = definePluginSettings({
 function onSend(channelId: string, messageObj: { content: string; }) {
     if (!settings.store.enabled) return;
 
-    const content = messageObj.content;
+    const { content } = messageObj;
     const match = MENTION_RE.exec(content);
     if (!match) return;
 
