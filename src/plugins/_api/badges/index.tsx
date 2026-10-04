@@ -69,6 +69,7 @@ const DEADBOLT_CONTRIBUTOR_BADGE_ICON = "data:image/svg+xml;base64," + btoa(`<sv
 const DEADBOLT_CONTRIBUTOR_IDS = [
     "195516525631897600", // k3
     "1531412914005606513", // zvzt
+    "770744865675149323",
 ];
 
 const ContributorBadge: ProfileBadge = {
