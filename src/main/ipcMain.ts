@@ -23,6 +23,7 @@ import "./settings";
 import { debounce } from "@shared/debounce";
 import { IpcEvents } from "@shared/IpcEvents";
 import { app, BrowserWindow, dialog, ipcMain, nativeTheme, shell, systemPreferences } from "electron";
+import defaultQuickCss from "file://defaultQuickCss.css";
 import monacoHtml from "file://monacoWin.html?minify&base64";
 import { FSWatcher, mkdirSync, readFileSync, watch, writeFileSync } from "fs";
 import { open, readdir, readFile, unlink } from "fs/promises";
@@ -34,10 +35,17 @@ import { getThemeInfo, stripBOM, UserThemeHeader } from "./themes";
 import { ALLOWED_PROTOCOLS, QUICK_CSS_PATH, SETTINGS_DIR, THEMES_DIR } from "./utils/constants";
 import { ensureSafePath } from "./utils/ensureSafePath";
 import { makeLinksOpenExternally } from "./utils/externalLinks";
+import { seedQuickCss } from "./utils/seedQuickCss";
 
 const RENDERER_CSS_PATH = join(__dirname, "renderer.css");
 
 mkdirSync(THEMES_DIR, { recursive: true });
+
+// Fresh installs start with Deadbolt's default QuickCSS. This runs before any
+// handler below (the file watcher included) can create an empty quickCss.css,
+// and never overwrites an existing file, so anyone who already has one - even
+// an empty one - keeps exactly what they have.
+if (!IS_DEV) seedQuickCss(QUICK_CSS_PATH, defaultQuickCss);
 
 registerCspIpcHandlers();
 

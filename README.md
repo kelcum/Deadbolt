@@ -22,6 +22,7 @@ What sets this fork apart from vanilla Equicord:
 - **`/addplugin`** — add a plugin to Deadbolt from inside Discord itself: attach the file, Deadbolt saves it, rebuilds, and offers to reload. No editor, no terminal. See [Adding your own plugins](#adding-your-own-plugins).
 - **VSCodeActivity** — shows the real file/workspace you're editing in VS Code instead of Discord's generic "Playing Visual Studio Code", with an optional spoof mode that fakes a coding session (and can hide real game activity) on demand.
 - **A real macOS install, not a broken one** — macOS injects through Discord's external `discord_desktop_core` module instead of modifying the signed `app.asar`, so Discord's Apple code signature stays intact. See [macOS](#macos).
+- **A default look out of the box** — new installs start with a black, grayscale QuickCSS theme that also tidies away Nitro/gift, stickers, emoji, Discover and a few other buttons. See [Default look](#default-look).
 - **One-command recovery on Windows** — Discord's own updater periodically resets the icon, splash, and shortcuts (Canary *and* Stable); [`scripts/reapply-branding.ps1`](scripts/reapply-branding.ps1) puts it all back in one run, and [`scripts/auto-update.ps1`](scripts/auto-update.ps1) can do it on a schedule, unattended.
 
 ### Included Plugins
@@ -115,6 +116,16 @@ After building Deadbolt's web extension, locate the appropriate ZIP file in the 
 Note: Firefox extension zip requires Firefox for developers
 
 </details>
+
+## Default look
+
+A fresh Deadbolt install starts with a default [QuickCSS](src/main/defaultQuickCss.css): an all-black, grayscale theme (built on the T1 theme, which it loads from `eight-p.github.io`) that also hides the Nitro and gift buttons, stickers, the emoji button, apps/activities, Discover, the soundboard, noise-suppression buttons, back/forward, and the inbox and help buttons.
+
+It's only written when you have no QuickCSS yet, so it never replaces one you already have — including on updates. To change it, open the Themes tab in Deadbolt's settings and edit QuickCSS, or switch QuickCSS off there to go back to stock Discord. The file itself lives at:
+
+- Windows: `%APPDATA%\Deadbolt\settings\quickCss.css`
+- macOS: `~/Library/Application Support/Deadbolt/settings/quickCss.css`
+- Linux: `~/.config/Deadbolt/settings/quickCss.css`
 
 ## Adding your own plugins
 
