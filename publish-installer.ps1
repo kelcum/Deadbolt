@@ -1,3 +1,7 @@
+param(
+    [string]$Tag = "v1.0.0"
+)
+
 $ErrorActionPreference = "Stop"
 
 $cred = "protocol=https`nhost=github.com`n`n" | git credential fill
@@ -10,25 +14,25 @@ if (-not $token) {
 
 $headers = @{
     Authorization = "token $token"
-    "User-Agent"  = "wraithcord-release"
+    "User-Agent"  = "deadbolt-release"
 }
 
-Write-Host "Fetching release v1.0.0-wraithcord..."
-$release = Invoke-RestMethod -Uri "https://api.github.com/repos/kelcum/Wraithcord/releases/tags/v1.0.0-wraithcord" -Headers $headers
+Write-Host "Fetching release $Tag..."
+$release = Invoke-RestMethod -Uri "https://api.github.com/repos/kelcum/Deadbolt/releases/tags/$Tag" -Headers $headers
 
 $uploadUrl = $release.upload_url -replace "\{.*\}", ""
-$exePath = "$env:LOCALAPPDATA\Temp\WraithcordSetup.exe"
+$exePath = "$env:LOCALAPPDATA\Temp\DeadboltSetup.exe"
 
 if (-not (Test-Path $exePath)) {
-    Write-Error "Could not find $exePath - ask Claude to rebuild/copy it if missing."
+    Write-Error "Could not find $exePath - build it from installer/deadboltSetup.cjs first (npx @yao-pkg/pkg installer/deadboltSetup.cjs --targets node22-win-x64 --output DeadboltSetup.exe)."
     exit 1
 }
 
-Write-Host "Uploading WraithcordSetup.exe ($([math]::Round((Get-Item $exePath).Length / 1MB, 1)) MB)..."
+Write-Host "Uploading DeadboltSetup.exe ($([math]::Round((Get-Item $exePath).Length / 1MB, 1)) MB)..."
 $uploadHeaders = @{
     Authorization  = "token $token"
     "Content-Type" = "application/octet-stream"
 }
-$asset = Invoke-RestMethod -Uri "$uploadUrl`?name=WraithcordSetup.exe" -Method Post -Headers $uploadHeaders -InFile $exePath
+$asset = Invoke-RestMethod -Uri "$uploadUrl`?name=DeadboltSetup.exe" -Method Post -Headers $uploadHeaders -InFile $exePath
 
 Write-Host "Uploaded: $($asset.browser_download_url)"
