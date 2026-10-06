@@ -9,7 +9,7 @@
 
 Deadbolt is a personal fork of [Equicord](https://github.com/Equicord/Equicord) (itself a fork of [Vencord](https://github.com/Vendicated/Vencord)), focused on quality-of-life plugins.
 
-**[Windows](#windows) · [macOS](#macos) · [Linux](#linux)**
+**[Website](https://xan.gripe/deadbolt/) · [Windows](#windows) · [macOS](#macos) · [Linux](#linux)**
 
 </div>
 
