@@ -24,6 +24,13 @@
        found anything (that reset can happen independently of any
        Deadbolt-side change).
 
+    When a run can't finish the job - a merge conflict, a failed build, a
+    push that didn't go through, local changes blocking the update, a failed
+    branding reapply - it says so instead of failing quietly in the log: a
+    Windows notification, or a popup window if Windows notifications are
+    switched off (see stuck-alert.ps1). The same problem is only announced
+    once per 24 hours.
+
     Logs to auto-update.log next to this script, trimmed to the last 500
     lines each run so it can't grow unbounded.
 
@@ -43,6 +50,9 @@ function Log($msg) {
     Write-Host $line
     Add-Content -Path $LogFile -Value $line
 }
+
+# Send-StuckAlert / Clear-StuckAlert - needs Log and $LogFile from above.
+. (Join-Path $PSScriptRoot "stuck-alert.ps1")
 
 # Shared by both the origin fast-forward and the upstream merge below - only
 # ever called once a merge has actually landed something new on HEAD.
@@ -80,6 +90,7 @@ try {
     if ($status) {
         Log "Working tree isn't clean, skipping pull/build so nothing local gets clobbered:"
         Log ($status | Out-String)
+        Send-StuckAlert "dirty-tree" "Updates are paused: the Deadbolt folder has uncommitted changes. Commit or stash them and it carries on by itself."
     } else {
         # ── Phase 1: fast-forward from our own fork (origin/main) ──────────
         git fetch origin main 2>&1 | ForEach-Object { Log $_ }
@@ -91,6 +102,7 @@ try {
 
         if ($ahead -gt 0) {
             Log "Local main is $ahead commit(s) ahead of origin/main - not touching it, this needs a human to push or reset. Skipping the upstream sync too until that's sorted out."
+            Send-StuckAlert "unpushed" "Updates are paused: local main has commits that aren't pushed to GitHub. Push them (or reset) and it carries on by itself."
         } else {
             if ($behind -eq 0) {
                 Log "Already up to date with origin/main ($before)."
@@ -103,6 +115,7 @@ try {
                     Log "Updated $before -> $after. Installing and rebuilding..."
                     if (-not (Build-Repo)) {
                         Log "Leaving whatever dist/ produced - needs a human to look."
+                        Send-StuckAlert "build" "The build failed after pulling new commits, so Discord may be running an old or broken build."
                     }
                 }
             }
@@ -125,6 +138,7 @@ try {
                     if ($mergeExit -ne 0) {
                         Log "Merge from $upstreamRef conflicted - aborting and leaving it for a human (git log $upstreamRef for what's new)."
                         git merge --abort 2>&1 | ForEach-Object { Log $_ }
+                        Send-StuckAlert "conflict" "Merging upstream Equicord hit a conflict, so the fork is falling behind. It needs a manual merge."
                     } else {
                         $mergedSha = git rev-parse HEAD
                         Log "Merged $upstreamRef cleanly: $preMergeSha -> $mergedSha. Rebuilding to verify before pushing..."
@@ -133,12 +147,14 @@ try {
                             git push origin main 2>&1 | ForEach-Object { Log $_ }
                             if ($LASTEXITCODE -ne 0) {
                                 Log "git push failed (exit $LASTEXITCODE) - local main has the merge but origin doesn't yet. Needs a human (possible race with another push)."
+                                Send-StuckAlert "push" "The upstream merge worked locally but pushing it to GitHub failed. Run git push in the Deadbolt folder."
                             } else {
                                 Log "Pushed. Fork is now current with $upstreamRef."
                             }
                         } else {
                             Log "Build failed after merging $upstreamRef - reverting to $preMergeSha so nothing broken gets pushed. Needs a human to redo this merge properly."
                             git reset --hard $preMergeSha 2>&1 | ForEach-Object { Log $_ }
+                            Send-StuckAlert "merge-build" "Merging upstream broke the build, so it was rolled back. It needs a manual merge."
                         }
                     }
                 }
@@ -147,6 +163,11 @@ try {
     }
 } catch {
     Log "ERROR during git/build step: $_"
+    # A failed fetch is almost always the network being down (asleep, offline) and
+    # fixes itself - not worth interrupting anyone for.
+    if ("$_" -notmatch "git fetch") {
+        Send-StuckAlert "error" ("The update step failed: " + (("$_" -split "`r?`n")[0]))
+    }
 } finally {
     $ErrorActionPreference = $prevEap
 }
@@ -159,8 +180,17 @@ try {
     $reapplyScript = Join-Path $RepoRoot "scripts\reapply-branding.ps1"
     Log "Reapplying branding to Canary and Stable (only restarting whichever is already running)..."
     & powershell -ExecutionPolicy Bypass -File $reapplyScript -Restart *>&1 | ForEach-Object { Log $_ }
+    if ($LASTEXITCODE -ne 0) {
+        Send-StuckAlert "branding" "Re-applying Deadbolt to Discord failed, so Discord may be running without the mod."
+    }
 } catch {
     Log "ERROR during branding reapply: $_"
+    Send-StuckAlert "branding" "Re-applying Deadbolt to Discord failed, so Discord may be running without the mod."
 }
+
+# A run that got all the way through with nothing stuck: forget the last alert,
+# so the next problem is announced straight away instead of being treated as a
+# repeat of one that's already been fixed.
+if (-not $script:Stuck) { Clear-StuckAlert }
 
 Log "=== auto-update run finished ==="

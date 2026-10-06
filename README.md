@@ -174,6 +174,8 @@ By default this reapplies to both Canary and Stable; pass `-Clients Canary` or `
 
 Logs to `scripts/auto-update.log`, trimmed to the last 500 lines each run.
 
+When a run gets stuck (a merge conflict, a failed build or push, uncommitted changes in the checkout, a failed branding reapply) it tells you instead of failing quietly in the log: a Windows notification, or a popup window if Windows notifications are switched off for your account. Either one offers to open the log. The same problem is only announced once per 24 hours, and a run that finishes cleanly resets that, so the next one is announced straight away. The notification code is in [`scripts/stuck-alert.ps1`](scripts/stuck-alert.ps1).
+
 To run it automatically on a schedule (e.g. every 5 hours):
 
 ```powershell
