@@ -19,6 +19,7 @@
 import "./fixDiscordBadgePadding.css";
 import "./deadboltBadge.css";
 import "./nullCreatorBadge.css";
+import "./avoraCreatorBadge.css";
 
 import { _getBadges, BadgePosition, BadgeUserArgs, ProfileBadge } from "@api/Badges";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -30,6 +31,7 @@ import { Logger } from "@utils/Logger";
 import { shouldShowContributorBadge, shouldShowEquicordContributorBadge } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { ContextMenuApi, Menu, showToast, Tooltip, UserStore } from "@webpack/common";
+import avoraCreatorLogo from "file://avoraCreatorLogo.png?base64";
 import nullCreatorLogo from "file://nullCreatorLogo.png?base64";
 
 import Plugins, { PluginMeta } from "~plugins";
@@ -81,6 +83,13 @@ const DEADBOLT_CONTRIBUTOR_IDS = [
 const NULL_CREATOR_BADGE_ICON = `data:image/png;base64,${nullCreatorLogo}`;
 const NULL_CREATOR_IDS = [
     "1555246495840600183",
+    "814591199071567873",
+];
+
+// Avora's creator badge - the Avora star on its own, animated like the
+// Deadbolt Creator badge.
+const AVORA_CREATOR_BADGE_ICON = `data:image/png;base64,${avoraCreatorLogo}`;
+const AVORA_CREATOR_IDS = [
     "814591199071567873",
 ];
 
@@ -216,6 +225,42 @@ const NullCreatorBadge: ProfileBadge = {
     shouldShow: ({ userId }) => NULL_CREATOR_IDS.includes(userId),
 };
 
+function AnimatedAvoraCreatorBadge() {
+    const mask = `url("${AVORA_CREATOR_BADGE_ICON}")`;
+
+    return (
+        <Tooltip
+            text={
+                <div className="avora-creator-tip">
+                    <div className="avora-creator-tip-title">Avora Creator</div>
+                </div>
+            }
+        >
+            {({ onMouseEnter, onMouseLeave }) => (
+                <span
+                    className="avora-creator-badge"
+                    role="img"
+                    aria-label="Avora Creator"
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                >
+                    <img src={AVORA_CREATOR_BADGE_ICON} alt="" draggable={false} />
+                    <span className="avora-creator-shine" style={{ WebkitMaskImage: mask, maskImage: mask }} />
+                </span>
+            )}
+        </Tooltip>
+    );
+}
+
+const AvoraCreatorBadge: ProfileBadge = {
+    id: "avora_creator_badge",
+    description: "Avora Creator",
+    key: "Avora Creator",
+    component: AnimatedAvoraCreatorBadge,
+    position: BadgePosition.START,
+    shouldShow: ({ userId }) => AVORA_CREATOR_IDS.includes(userId),
+};
+
 const UserPluginContributorBadge: ProfileBadge = {
     id: "user_plugin_contributor_badge",
     description: "User Plugin Contributor",
@@ -343,8 +388,8 @@ export default definePlugin({
     // _getBadges() unshifts each START badge as it's processed, so whichever
     // is listed later here ends up rendered first - Contributor needs to
     // come before Creator in this array for Creator to show in front, and
-    // Null Creator after both so it leads if someone ever holds several.
-    userProfileBadges: [ContributorBadge, EquicordContributorBadge, DeadboltContributorBadge, DeadboltCreatorBadge, NullCreatorBadge, UserPluginContributorBadge],
+    // Null and Avora Creator after both so they lead if someone holds several.
+    userProfileBadges: [ContributorBadge, EquicordContributorBadge, DeadboltContributorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge, UserPluginContributorBadge],
 
     async start() {
         await loadAllBadges();
