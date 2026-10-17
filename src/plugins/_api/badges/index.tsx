@@ -74,7 +74,6 @@ const DEADBOLT_CONTRIBUTOR_BADGE_ICON = "data:image/svg+xml;base64," + btoa(`<sv
   <circle cx="29" cy="29" r="3" fill="#ffffff" fill-opacity="0.35"/>
 </svg>`);
 const DEADBOLT_CONTRIBUTOR_IDS = [
-    "195516525631897600", // k3
     "1531412914005606513", // zvzt
     "770744865675149323",
 ];
@@ -83,7 +82,6 @@ const DEADBOLT_CONTRIBUTOR_IDS = [
 // this list can change without touching either of those.
 const NULL_CREATOR_BADGE_ICON = `data:image/png;base64,${nullCreatorLogo}`;
 const NULL_CREATOR_IDS = [
-    "195516525631897600", // k3
     "1555246495840600183",
     "814591199071567873",
 ];
@@ -92,7 +90,6 @@ const NULL_CREATOR_IDS = [
 // Deadbolt Creator badge.
 const AVORA_CREATOR_BADGE_ICON = `data:image/png;base64,${avoraCreatorLogo}`;
 const AVORA_CREATOR_IDS = [
-    "195516525631897600", // k3
     "814591199071567873",
 ];
 
@@ -118,6 +115,7 @@ const PLUGIN_CREATOR_BADGE_ICON = "data:image/svg+xml;base64," + btoa(`<svg xmln
 // Discord ID -> the Deadbolt plugins (src/deadboltplugins) they're an author
 // of. Anyone in a shipped plugin's authors gets the Plugin Creator badge, so
 // adding someone's plugin to the repo is all it takes - no list to keep up.
+// Deadbolt Creators are skipped: that badge already outranks this one.
 // Built on first use; the bundled plugin list never changes at runtime.
 let deadboltPluginsByAuthor: Map<string, string[]> | undefined;
 
@@ -269,7 +267,7 @@ const PluginCreatorBadge: ProfileBadge = {
     key: "Plugin Creator",
     component: PluginCreatorBadgeComponent,
     position: BadgePosition.START,
-    shouldShow: ({ userId }) => getDeadboltPluginsBy(userId).length > 0,
+    shouldShow: ({ userId }) => !DEADBOLT_CREATOR_IDS.includes(userId) && getDeadboltPluginsBy(userId).length > 0,
 };
 
 function AnimatedNullCreatorBadge() {
