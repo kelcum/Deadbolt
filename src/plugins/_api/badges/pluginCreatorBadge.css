@@ -1,0 +1,96 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+/* Plugin Creator badge - a step below Contributor, so deliberately calmer:
+   same medallion shape, but no spinning highlight, just a slow slate glow
+   and a sheen that sweeps across now and then. */
+.deadbolt-plugin-creator-badge {
+    position: relative;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    overflow: hidden;
+    transform: scale(0.9);
+    vertical-align: middle;
+    line-height: 0;
+    isolation: isolate;
+    box-shadow: 0 0 0 1px rgb(179 187 198 / 12%), 0 1px 3px rgb(0 0 0 / 45%);
+    animation: deadbolt-plugin-creator-pulse 4.5s ease-in-out infinite;
+}
+
+.deadbolt-plugin-creator-badge img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.deadbolt-plugin-creator-badge::after {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    background: linear-gradient(
+        115deg,
+        transparent 42%,
+        rgb(230 236 244 / 70%) 50%,
+        transparent 58%
+    );
+    transform: translateX(-160%);
+    animation: deadbolt-plugin-creator-sheen 5s ease-in-out infinite;
+    mix-blend-mode: screen;
+    pointer-events: none;
+}
+
+/* Sweeps across, then rests for most of the cycle */
+@keyframes deadbolt-plugin-creator-sheen {
+    0% { transform: translateX(-160%); }
+    30%, 100% { transform: translateX(160%); }
+}
+
+@keyframes deadbolt-plugin-creator-pulse {
+    0%, 100% { box-shadow: 0 0 0 1px rgb(179 187 198 / 12%), 0 1px 3px rgb(0 0 0 / 45%); }
+    50% { box-shadow: 0 0 0 1px rgb(179 187 198 / 28%), 0 0 6px rgb(179 187 198 / 40%), 0 1px 3px rgb(0 0 0 / 45%); }
+}
+
+.deadbolt-plugin-creator-tip {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 4px;
+}
+
+.deadbolt-plugin-creator-tip-title {
+    font-weight: 700;
+    font-size: 14px;
+    background: linear-gradient(100deg, #dfe4ea, #8f98a4 45%, #f2f5f8 55%, #aab3be);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: deadbolt-plugin-creator-tip-sheen 4s linear infinite;
+}
+
+.deadbolt-plugin-creator-tip-sub {
+    font-size: 12px;
+    opacity: 0.72;
+}
+
+@keyframes deadbolt-plugin-creator-tip-sheen {
+    0% { background-position: 0% center; }
+    100% { background-position: 200% center; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .deadbolt-plugin-creator-badge,
+    .deadbolt-plugin-creator-badge::after,
+    .deadbolt-plugin-creator-tip-title {
+        animation: none;
+    }
+}

@@ -20,6 +20,7 @@ import "./fixDiscordBadgePadding.css";
 import "./deadboltBadge.css";
 import "./nullCreatorBadge.css";
 import "./avoraCreatorBadge.css";
+import "./pluginCreatorBadge.css";
 
 import { _getBadges, BadgePosition, BadgeUserArgs, ProfileBadge } from "@api/Badges";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -28,7 +29,7 @@ import { openContributorModal } from "@components/settings/tabs";
 import { Devs } from "@utils/constants";
 import { copyWithToast } from "@utils/discord";
 import { Logger } from "@utils/Logger";
-import { shouldShowContributorBadge, shouldShowEquicordContributorBadge } from "@utils/misc";
+import { pluralize, shouldShowContributorBadge, shouldShowEquicordContributorBadge } from "@utils/misc";
 import definePlugin from "@utils/types";
 import { ContextMenuApi, Menu, showToast, Tooltip, UserStore } from "@webpack/common";
 import avoraCreatorLogo from "file://avoraCreatorLogo.png?base64";
@@ -82,6 +83,7 @@ const DEADBOLT_CONTRIBUTOR_IDS = [
 // this list can change without touching either of those.
 const NULL_CREATOR_BADGE_ICON = `data:image/png;base64,${nullCreatorLogo}`;
 const NULL_CREATOR_IDS = [
+    "195516525631897600", // k3
     "1555246495840600183",
     "814591199071567873",
 ];
@@ -90,8 +92,51 @@ const NULL_CREATOR_IDS = [
 // Deadbolt Creator badge.
 const AVORA_CREATOR_BADGE_ICON = `data:image/png;base64,${avoraCreatorLogo}`;
 const AVORA_CREATOR_IDS = [
+    "195516525631897600", // k3
     "814591199071567873",
 ];
+
+// A slate-silver puzzle piece - a step below Contributor, so it's quieter:
+// no spinning highlight, just a slow glow and an occasional sheen.
+const PLUGIN_CREATOR_BADGE_ICON = "data:image/svg+xml;base64," + btoa(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <radialGradient id="pcbg" cx="35%" cy="30%" r="80%">
+      <stop offset="0%" stop-color="#2c3038"/>
+      <stop offset="100%" stop-color="#101115"/>
+    </radialGradient>
+    <linearGradient id="pcpiece" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#eef1f5"/>
+      <stop offset="50%" stop-color="#b3bbc6"/>
+      <stop offset="100%" stop-color="#6f7783"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" fill="url(#pcbg)"/>
+  <path transform="translate(32 32) scale(1.3) translate(-35 -35)" d="M18 24h8a6 6 0 1 1 12 0h8v8a6 6 0 1 1 0 12v8H18z" fill="url(#pcpiece)"/>
+  <path transform="translate(32 32) scale(1.3) translate(-35 -35)" d="M21 27h4.5M21 27v7" stroke="#fff" stroke-opacity="0.55" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+</svg>`);
+
+// Discord ID -> the Deadbolt plugins (src/deadboltplugins) they're an author
+// of. Anyone in a shipped plugin's authors gets the Plugin Creator badge, so
+// adding someone's plugin to the repo is all it takes - no list to keep up.
+// Built on first use; the bundled plugin list never changes at runtime.
+let deadboltPluginsByAuthor: Map<string, string[]> | undefined;
+
+function getDeadboltPluginsBy(userId: string) {
+    if (!deadboltPluginsByAuthor) {
+        deadboltPluginsByAuthor = new Map();
+        for (const plugin of Object.values(Plugins)) {
+            if (!PluginMeta[plugin.name]?.folderName.startsWith("src/deadboltplugins/")) continue;
+            for (const { id } of plugin.authors) {
+                const key = id.toString();
+                if (key === "0") continue;
+                const names = deadboltPluginsByAuthor.get(key) ?? [];
+                names.push(plugin.name);
+                deadboltPluginsByAuthor.set(key, names);
+            }
+        }
+    }
+    return deadboltPluginsByAuthor.get(userId) ?? [];
+}
 
 const ContributorBadge: ProfileBadge = {
     id: "vencord_contributor_badge",
@@ -187,6 +232,44 @@ const DeadboltContributorBadge: ProfileBadge = {
     component: AnimatedDeadboltContributorBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => DEADBOLT_CONTRIBUTOR_IDS.includes(userId),
+};
+
+function PluginCreatorBadgeComponent({ userId }: ProfileBadge & BadgeUserArgs) {
+    const count = getDeadboltPluginsBy(userId).length;
+
+    return (
+        <Tooltip
+            text={
+                <div className="deadbolt-plugin-creator-tip">
+                    <div className="deadbolt-plugin-creator-tip-title">Plugin Creator</div>
+                    <div className="deadbolt-plugin-creator-tip-sub">Made {pluralize(count, "Deadbolt plugin")} - click to see</div>
+                </div>
+            }
+        >
+            {({ onMouseEnter, onMouseLeave }) => (
+                <span
+                    className="deadbolt-plugin-creator-badge"
+                    role="img"
+                    aria-label="Plugin Creator"
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                    onClick={() => openContributorModal(UserStore.getUser(userId))}
+                    style={{ cursor: "pointer" }}
+                >
+                    <img src={PLUGIN_CREATOR_BADGE_ICON} alt="" draggable={false} />
+                </span>
+            )}
+        </Tooltip>
+    );
+}
+
+const PluginCreatorBadge: ProfileBadge = {
+    id: "deadbolt_plugin_creator_badge",
+    description: "Plugin Creator",
+    key: "Plugin Creator",
+    component: PluginCreatorBadgeComponent,
+    position: BadgePosition.START,
+    shouldShow: ({ userId }) => getDeadboltPluginsBy(userId).length > 0,
 };
 
 function AnimatedNullCreatorBadge() {
@@ -389,7 +472,8 @@ export default definePlugin({
     // is listed later here ends up rendered first - Contributor needs to
     // come before Creator in this array for Creator to show in front, and
     // Null and Avora Creator after both so they lead if someone holds several.
-    userProfileBadges: [ContributorBadge, EquicordContributorBadge, DeadboltContributorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge, UserPluginContributorBadge],
+    // Plugin Creator sits before Contributor so it renders just behind it.
+    userProfileBadges: [ContributorBadge, EquicordContributorBadge, PluginCreatorBadge, DeadboltContributorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge, UserPluginContributorBadge],
 
     async start() {
         await loadAllBadges();
