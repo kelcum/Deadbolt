@@ -9,12 +9,8 @@ fi
 DEADBOLT_DIR="${DEADBOLT_DIR:-$HOME/Deadbolt}"
 REPO_URL="https://github.com/kelcum/Deadbolt.git"
 
-# Package-manager hints per distro family - printed, never run automatically.
-# Keeps this script to "check, then tell you the one command to run", the
-# same minimal footprint as install-macos.sh, instead of silently running
-# sudo package-manager commands on your behalf.
 distro_hint() {
-    local pkg="$1"   # git | node | pnpm
+    local pkg="$1"
     local id="" id_like=""
     if [ -f /etc/os-release ]; then
         . /etc/os-release

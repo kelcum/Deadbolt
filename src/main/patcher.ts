@@ -97,9 +97,6 @@ if (!IS_VANILLA) {
             options.webPreferences.preload = join(__dirname, "preload.js");
             options.webPreferences.sandbox = false;
 
-            // Deadbolt: brand the window / taskbar icon with the crest.
-            // Applied to every modded window (not just the one titled "Discord")
-            // so it still lands if the main window's title differs per channel.
             const deadboltIcon = process.platform === "win32"
                 ? join(__dirname, "..", "..", "browser", "deadbolt.ico")
                 : null;
@@ -135,7 +132,6 @@ if (!IS_VANILLA) {
 
             super(options);
 
-            // Re-assert the Deadbolt icon after creation in case Discord set its own
             if (deadboltIcon) {
                 try { this.setIcon(deadboltIcon); } catch { }
             }

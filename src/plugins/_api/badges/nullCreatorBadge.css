@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-/* Null Creator badge - the Null "N" shown as itself, not inside a medallion.
-   The logo is a chrome ribbon with soft alpha edges, so it reads on dark
-   surfaces; the light-theme rule at the bottom flips it to graphite. */
 .null-creator-badge {
     position: relative;
     display: inline-block;
@@ -26,8 +23,6 @@
     animation: null-creator-glow 3.2s ease-in-out infinite;
 }
 
-/* The sheen is masked with the logo's own alpha, so the moving band only ever
-   shows inside the letter and never as a square. */
 .null-creator-sheen {
     position: absolute;
     inset: 0;
@@ -55,7 +50,6 @@
     animation: null-creator-sheen 3.4s ease-in-out infinite;
 }
 
-/* Sweeps across, then rests for the back half of the cycle */
 @keyframes null-creator-sheen {
     0% { transform: translateX(-160%); }
     45%, 100% { transform: translateX(160%); }
@@ -66,7 +60,6 @@
     50% { filter: drop-shadow(0 0 4px rgb(255 255 255 / 40%)) brightness(1.18); }
 }
 
-/* Rich hover card, silver like the logo */
 .null-creator-tip {
     display: flex;
     flex-direction: column;
@@ -91,7 +84,6 @@
     100% { background-position: 200% center; }
 }
 
-/* Silver on a white card is invisible - darken it to graphite there */
 .theme-light .null-creator-badge img {
     animation: none;
     filter: brightness(0.32) contrast(1.15) drop-shadow(0 0 1px rgb(0 0 0 / 35%));

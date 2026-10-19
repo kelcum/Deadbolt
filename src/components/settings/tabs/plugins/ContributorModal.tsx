@@ -45,11 +45,6 @@ function ContributorModal({ user, modalProps }: { user: User; modalProps: Render
         const allPlugins = Object.values(Plugins);
         const dev = VencordDevsById[user.id] || EquicordDevsById[user.id];
 
-        // Matches by numeric author id on *any* plugin (not just ones
-        // registered in the shared Vencord/Equicord Devs list, and not just
-        // /addplugin uploads) so a Deadbolt-only contributor's own plugins
-        // - like anything under src/deadboltplugins - show up here too,
-        // without needing to be added to that upstream registry.
         const pluginsByAuthor = allPlugins.filter(p =>
             (dev && p.authors.includes(dev))
             || p.authors.some(a => a.id.toString() === user.id)

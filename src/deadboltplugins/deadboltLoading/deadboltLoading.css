@@ -4,8 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-/* Give Discord's loading / "Did you know" text a brushed-chrome look,
-   in case the full-screen overlay below is turned off. */
 [class*="loadingText_"] {
     background: linear-gradient(
         100deg,
@@ -30,8 +28,6 @@
     0% { background-position: 0% center; }
     100% { background-position: 220% center; }
 }
-
-/* ── Full-screen splash that covers Discord's own connecting screen ── */
 
 .deadbolt-splash-overlay {
     position: fixed;

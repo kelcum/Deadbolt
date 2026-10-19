@@ -1,39 +1,3 @@
-<#
-.SYNOPSIS
-    Reapplies Deadbolt's Windows-side branding (patcher injection, taskbar/
-    shortcut icons, boot splash logo) after Discord Canary or Stable auto-update.
-
-.DESCRIPTION
-    Discord's own Squirrel-based updater prunes old app-X.Y.Z version folders
-    and replaces app.ico / Start Menu shortcuts on every update, which
-    silently undoes everything this script reapplies. None of this touches
-    Deadbolt's actual mod code or your settings/QuickCSS (those live in
-    %APPDATA%\Deadbolt, untouched by any of this) - it's purely the injection
-    stub + a few cosmetic OS-level files living inside each client's own
-    install tree, which the updater owns and periodically resets.
-
-    Handles both Discord Canary and Discord Stable by default - pass
-    -Clients to restrict it to just one.
-
-    Run this any time a client crashes on launch with a "Cannot find module
-    ...patcher.js" error, or whenever the taskbar/splash branding reverts to
-    stock Discord after an update.
-
-.PARAMETER Restart
-    Also kill and relaunch each client this run touched, but only the ones
-    that were already running before this script started - it never launches
-    a client that wasn't already open.
-
-.PARAMETER Clients
-    Which client(s) to reapply to. Defaults to both Canary and Stable.
-
-.EXAMPLE
-    powershell -ExecutionPolicy Bypass -File scripts\reapply-branding.ps1 -Restart
-
-.EXAMPLE
-    powershell -ExecutionPolicy Bypass -File scripts\reapply-branding.ps1 -Clients Stable
-#>
-
 param(
     [switch]$Restart,
     [ValidateSet("Canary", "Stable")]
@@ -97,7 +61,6 @@ foreach ($clientName in $Clients) {
     }
     $touchedClients += $clientName
 
-    # ── 1. Version folders: injection stub, per-version app.ico, splash logo ──
     $versionDirs = Get-ChildItem -Path $ClientRoot -Directory -Filter "app-*" -ErrorAction SilentlyContinue
     if (-not $versionDirs) {
         Write-Warn2 "No app-* version folders found under $ClientRoot"
@@ -106,9 +69,6 @@ foreach ($clientName in $Clients) {
     foreach ($verDir in $versionDirs) {
         Write-Step "Version folder: $($verDir.Name)"
 
-        # Discord sometimes ships resources/app.asar as a real packed archive
-        # rather than the unpacked directory we can write index.js into
-        # directly - unpack it in place (same path, now a directory) first.
         $appAsar = Join-Path $verDir.FullName "resources\app.asar"
         if ((Test-Path $appAsar) -and -not (Get-Item $appAsar).PSIsContainer) {
             Write-Step "app.asar is a packed archive here, unpacking it first..."
@@ -143,7 +103,6 @@ foreach ($clientName in $Clients) {
         }
     }
 
-    # ── 2. Root app.ico ──
     Write-Step "Root app.ico"
     $rootIco = Join-Path $ClientRoot "app.ico"
     if (Test-Path $rootIco) {
@@ -153,7 +112,6 @@ foreach ($clientName in $Clients) {
         Write-Ok "$rootIco"
     }
 
-    # ── 3. Shortcuts (Discord's installer re-touches these on update too) ──
     Write-Step "Shortcuts"
     $shortcutPaths = foreach ($lnkName in $client.ShortcutNames) {
         Join-Path $env:APPDATA "Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\$lnkName"

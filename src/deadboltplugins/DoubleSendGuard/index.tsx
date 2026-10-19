@@ -28,12 +28,8 @@ interface LastSent {
     at: number;
 }
 
-// Last thing actually sent per channel, so we can tell "you just sent this"
-// apart from "you're saying the same thing again an hour later".
 const lastSentByChannel = new Map<string, LastSent>();
 
-// `${channelId}:${content}` the user already got warned about once. Sending
-// the identical content again while it's armed means they meant it.
 const armed = new Set<string>();
 const ARM_WINDOW_MS = 15_000;
 

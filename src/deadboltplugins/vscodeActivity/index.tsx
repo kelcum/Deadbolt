@@ -16,11 +16,6 @@ const Native = VencordNative.pluginHelpers.VSCodeActivity as PluginNative<typeof
 
 const logger = new Logger("VSCodeActivity");
 
-// Placeholder used when no real application ID is configured. Discord has
-// no registered "detectable game" entry for VS Code at all (checked the
-// public applications/detectable list), so without an app you own with an
-// uploaded Rich Presence asset there's no icon to show - this just needs
-// to be a syntactically valid id.
 const PLACEHOLDER_APPLICATION_ID = "1000000000000000000";
 const SOCKET_ID = "DeadboltVSCodeActivity";
 
@@ -56,9 +51,6 @@ function parseTitle(rawTitle: string): ParsedTitle {
     if (parts.length === 0) return { dirty };
 
     if (parts.length === 1) {
-        // Ambiguous on its own: VS Code's title is either just the open
-        // file or just the open folder here. Filenames always carry a
-        // short extension; folder names almost never do.
         if (/\.[a-zA-Z0-9]{1,10}$/.test(parts[0])) return { file: parts[0], dirty };
         return { workspace: parts[0], dirty };
     }
@@ -175,11 +167,6 @@ function advanceSpoof() {
     spoofPoll();
 }
 
-// ── Hide real games while spoofing, using Discord's own native per-game
-// detection toggle (the same thing right-clicking "Disable Activity"
-// does) rather than a webpack patch, so it plays nicely with whatever
-// IgnoreActivities is separately configured to do. ──
-
 const suppressedGames = new Map<string, RunningGame>();
 
 function gameKey(game: RunningGame) {
@@ -217,9 +204,6 @@ function syncRealGameSuppression() {
     else restoreRealGames();
 }
 
-// Some settings (icon, display toggles) don't change the file/workspace
-// key pushActivity() dedupes on, so changing them alone would otherwise
-// sit there unapplied until the next natural rotation/poll. Force it.
 function refreshNow() {
     lastKey = "";
     if (settings.store.spoofMode) spoofPoll(); else poll();

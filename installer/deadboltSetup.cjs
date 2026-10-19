@@ -15,26 +15,21 @@ const ZIP_PATH = path.join(INSTALL_DIR, "deadbolt-dist.zip");
 const EQUILOTL_PATH = path.join(INSTALL_DIR, "EquilotlCli.exe");
 const LOG_PATH = path.join(INSTALL_DIR, "setup.log");
 
-// Seconds the window stays up if stdin isn't interactive (so "Press Enter"
-// can't be answered) - long enough to read, instead of closing instantly.
 const STDIN_CLOSED_LINGER_MS = 60_000;
 
 try {
     fs.mkdirSync(INSTALL_DIR, { recursive: true });
-} catch { /* reported properly by main() if this is actually a problem */ }
+} catch { }
 
-// Everything printed is also written to setup.log, so even if the window
-// does get closed, there's a record of what happened.
 function log(msg) {
     console.log(msg);
     try {
         fs.appendFileSync(LOG_PATH, `${msg}\n`);
-    } catch { /* logging must never be the thing that breaks setup */ }
+    } catch { }
 }
 
 let exiting = false;
 
-// Keeps the window open until Enter is pressed, no matter how setup ended.
 function waitAndExit(code) {
     if (exiting) return;
     exiting = true;
@@ -50,8 +45,6 @@ function waitAndExit(code) {
         process.exit(code);
     });
 
-    // stdin already closed / not interactive - don't let the window vanish
-    // before it can be read.
     rl.on("close", () => {
         if (!answered) setTimeout(() => process.exit(code), STDIN_CLOSED_LINGER_MS);
     });
@@ -63,9 +56,6 @@ function fail(err) {
     waitAndExit(1);
 }
 
-// A crash anywhere (a dropped connection mid-download, etc.) used to kill
-// the process outright, taking the window with it before anything could be
-// read. Route every one of them through the same keep-the-window-open path.
 process.on("uncaughtException", fail);
 process.on("unhandledRejection", fail);
 
@@ -158,9 +148,6 @@ async function main() {
     log("Make sure Discord is fully closed (check your system tray) before continuing.");
     log("");
 
-    // EQUICORD_DEV_INSTALL=1 is what tells Equilotl to patch Discord to load
-    // the build in EQUICORD_DIRECTORY (Deadbolt) instead of downloading and
-    // installing stock Equicord's own desktop.asar over it.
     const result = spawnSync(EQUILOTL_PATH, ["--install"], {
         stdio: "inherit",
         env: {

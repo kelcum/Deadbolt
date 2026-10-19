@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-/* Plugin Creator badge - a step below Contributor, so deliberately calmer:
-   same medallion shape, but no spinning highlight, just a slow slate glow
-   and a sheen that sweeps across now and then. */
 .deadbolt-plugin-creator-badge {
     position: relative;
     display: inline-block;
@@ -46,7 +43,6 @@
     pointer-events: none;
 }
 
-/* Sweeps across, then rests for most of the cycle */
 @keyframes deadbolt-plugin-creator-sheen {
     0% { transform: translateX(-160%); }
     30%, 100% { transform: translateX(160%); }

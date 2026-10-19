@@ -1,43 +1,3 @@
-<#
-.SYNOPSIS
-    Keeps a local Deadbolt checkout current, unattended: pulls new commits
-    (both from your own fork and from upstream Equicord), rebuilds if
-    anything changed, and reapplies the Windows-side injection/branding so
-    Discord Canary/Stable always have the latest build actually loaded.
-
-.DESCRIPTION
-    Meant to run on a schedule (Task Scheduler), not interactively. It only
-    restarts a Discord client (Canary or Stable) if it's already running
-    when this fires - it will never launch either one on its own.
-
-    This handles three separate kinds of staleness:
-    1. New commits already pushed to origin/main (your own fork, e.g. from
-       another machine) - fast-forwarded only, never rebased/force-pulled.
-    2. New commits on upstream Equicord/Equicord:main - merged in (a real
-       merge, since this fork has diverged) only when it comes back clean;
-       a conflict aborts the merge and leaves it for a human instead of
-       guessing at a resolution. A clean merge is rebuilt and verified
-       before being pushed to origin/main - never pushed if the build fails.
-    3. Discord's own updater (Canary or Stable) resetting the injection
-       stub / icon / splash / shortcuts - reapplied every run via
-       reapply-branding.ps1 for both clients, regardless of whether 1/2
-       found anything (that reset can happen independently of any
-       Deadbolt-side change).
-
-    When a run can't finish the job - a merge conflict, a failed build, a
-    push that didn't go through, local changes blocking the update, a failed
-    branding reapply - it says so instead of failing quietly in the log: a
-    Windows notification, or a popup window if Windows notifications are
-    switched off (see stuck-alert.ps1). The same problem is only announced
-    once per 24 hours.
-
-    Logs to auto-update.log next to this script, trimmed to the last 500
-    lines each run so it can't grow unbounded.
-
-.EXAMPLE
-    powershell -ExecutionPolicy Bypass -File scripts\auto-update.ps1
-#>
-
 $ErrorActionPreference = "Stop"
 
 $RepoRoot = Split-Path -Parent $PSScriptRoot
@@ -51,11 +11,8 @@ function Log($msg) {
     Add-Content -Path $LogFile -Value $line
 }
 
-# Send-StuckAlert / Clear-StuckAlert - needs Log and $LogFile from above.
 . (Join-Path $PSScriptRoot "stuck-alert.ps1")
 
-# Shared by both the origin fast-forward and the upstream merge below - only
-# ever called once a merge has actually landed something new on HEAD.
 function Build-Repo() {
     pnpm install --config.confirmModulesPurge=false 2>&1 | ForEach-Object { Log $_ }
     $installExit = $LASTEXITCODE
@@ -76,11 +33,6 @@ if (Test-Path $LogFile) {
 
 Log "=== auto-update run starting ==="
 
-# Native git/pnpm commands write ordinary progress info to stderr (e.g.
-# git fetch's "From https://..." line); with $ErrorActionPreference =
-# "Stop" that can otherwise get misread as a terminating error even on
-# success. Run this block with it relaxed and check $LASTEXITCODE
-# explicitly instead.
 $prevEap = $ErrorActionPreference
 $ErrorActionPreference = "Continue"
 try {
@@ -92,7 +44,6 @@ try {
         Log ($status | Out-String)
         Send-StuckAlert "dirty-tree" "Updates are paused: the Deadbolt folder has uncommitted changes. Commit or stash them and it carries on by itself."
     } else {
-        # ── Phase 1: fast-forward from our own fork (origin/main) ──────────
         git fetch origin main 2>&1 | ForEach-Object { Log $_ }
         if ($LASTEXITCODE -ne 0) { throw "git fetch origin failed (exit $LASTEXITCODE)" }
 
@@ -120,7 +71,6 @@ try {
                 }
             }
 
-            # ── Phase 2: merge in new commits from upstream Equicord ────────
             git fetch $UpstreamRemote $UpstreamBranch 2>&1 | ForEach-Object { Log $_ }
             if ($LASTEXITCODE -ne 0) {
                 Log "git fetch $UpstreamRemote failed (exit $LASTEXITCODE) - skipping upstream sync this run."
@@ -163,8 +113,6 @@ try {
     }
 } catch {
     Log "ERROR during git/build step: $_"
-    # A failed fetch is almost always the network being down (asleep, offline) and
-    # fixes itself - not worth interrupting anyone for.
     if ("$_" -notmatch "git fetch") {
         Send-StuckAlert "error" ("The update step failed: " + (("$_" -split "`r?`n")[0]))
     }
@@ -172,10 +120,6 @@ try {
     $ErrorActionPreference = $prevEap
 }
 
-# Reapply branding/injection every run regardless of the above - Discord's
-# own updater can reset this independently of any Deadbolt-side change.
-# Covers both Canary and Stable; reapply-branding.ps1 only restarts whichever
-# client(s) were already running, and never launches one that wasn't.
 try {
     $reapplyScript = Join-Path $RepoRoot "scripts\reapply-branding.ps1"
     Log "Reapplying branding to Canary and Stable (only restarting whichever is already running)..."
@@ -188,9 +132,6 @@ try {
     Send-StuckAlert "branding" "Re-applying Deadbolt to Discord failed, so Discord may be running without the mod."
 }
 
-# A run that got all the way through with nothing stuck: forget the last alert,
-# so the next problem is announced straight away instead of being treated as a
-# repeat of one that's already been fixed.
 if (-not $script:Stuck) { Clear-StuckAlert }
 
 Log "=== auto-update run finished ==="

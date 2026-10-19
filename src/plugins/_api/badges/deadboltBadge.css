@@ -25,12 +25,9 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    /* constant liquid-chrome shimmer on the crest itself */
     animation: deadbolt-badge-breathe 2.6s ease-in-out infinite;
 }
 
-/* Continuously rotating specular highlight sweeping around the crest -
-   this is what reads as a real, always-on animation rather than a glint. */
 .deadbolt-creator-badge::before {
     content: "";
     position: absolute;
@@ -52,7 +49,6 @@
     z-index: 1;
 }
 
-/* A second, faster diagonal sheen band that never fully stops */
 .deadbolt-creator-badge::after {
     content: "";
     position: absolute;
@@ -89,7 +85,6 @@
     50% { box-shadow: 0 0 0 1px rgb(255 255 255 / 24%), 0 0 7px rgb(200 220 255 / 50%), 0 1px 3px rgb(0 0 0 / 45%); }
 }
 
-/* Rich hover card (Nitro-badge style) */
 .deadbolt-creator-tip {
     display: flex;
     flex-direction: column;
@@ -120,8 +115,6 @@
     100% { background-position: 200% center; }
 }
 
-/* Contributor badge - same animation mechanics as Creator, recolored to the
-   violet/indigo accent (#7C6FF0) so the two read as distinct at a glance. */
 .deadbolt-contributor-badge {
     position: relative;
     display: inline-block;

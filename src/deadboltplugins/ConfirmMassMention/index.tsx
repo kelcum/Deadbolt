@@ -10,16 +10,10 @@ import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Alerts } from "@webpack/common";
 
-// How long a confirmed send stays "armed" - press send again within this
-// window with the exact same content and it goes through untouched.
 const CONFIRM_WINDOW_MS = 15_000;
 
 const MENTION_RE = /(?:^|[^\w@])@(everyone|here)\b/;
 
-// Keyed by `${channelId}:${content}` - a message that already triggered the
-// prompt once. If the *same* content comes through again for that channel
-// within the window, that's the user re-sending on purpose: let it through
-// without asking twice.
 const armed = new Set<string>();
 
 const settings = definePluginSettings({

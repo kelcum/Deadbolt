@@ -11,7 +11,7 @@ import definePlugin from "@utils/types";
 function slugify(text: string): string {
     return text
         .normalize("NFKD")
-        .replace(/[̀-ͯ]/g, "") // strip accents
+        .replace(/[̀-ͯ]/g, "")
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/^-+|-+$/g, "");

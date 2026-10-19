@@ -71,8 +71,6 @@ export const Devs = /* #__PURE__*/ Object.freeze({
     K3: {
         name: "k3",
         id: 195516525631897600n,
-        // The Deadbolt Contributor badge (clickable, same plugin-list modal)
-        // replaces this one for Deadbolt's own contributors.
         badge: false
     },
     Ven: {

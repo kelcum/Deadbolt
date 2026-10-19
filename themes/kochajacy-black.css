@@ -7,7 +7,6 @@
 :root {
   --T1Fv: 11;
 
-  /* Keep only the server bar layout from the original theme */
   --serverBar-FolderStyle: 1;
   --serverBar-Spacing: 17px;
   --serverBar-IconSize: 100;
@@ -15,7 +14,6 @@
   --background-server: url ("");
 }
 
-/* Black theme and grayscale colors */
 html.theme-dark:root,
 html.theme-darker:root,
 html.theme-midnight:root,
@@ -101,7 +99,6 @@ html.theme-midnight:root,
   --scrollbar-thumb-hover: #2a2a2a;
 }
 
-/* Profile backgrounds */
 html.theme-dark:root,
 #app-mount .theme-dark {
   --profile-gradient-overlay-color: #000000;
@@ -110,12 +107,10 @@ html.theme-dark:root,
   --profile-body-background-color: #000000;
 }
 
-/* Hide profile/banner videos */
 #app-mount video[class*="banner"] {
   display: none !important;
 }
 
-/* Hide Nitro and gift buttons */
 [aria-label*="Nitro" i],
 [aria-label*="Gift" i],
 [title*="Nitro" i],
@@ -124,34 +119,29 @@ button:has(path[d^=" M7,-6 C7,-7.6570000648498535 5.6570000648498535,-9 4,-9 C4,
   display: none !important;
 }
 
-/* Hide stickers */
 .expression-picker-chat-input-button:has(path[d^=" M-6,-10 C-6,-10 6,-10 6,-10 C8.208999633789062,-10 10"]),
 button[aria-label*="Sticker" i] {
   display: none !important;
 }
 
-/* Hide emoji */
 .expression-picker-chat-input-button:has(.emojiButton__04eed),
 button[aria-label*="Emoji" i],
 button[aria-label*="emoji" i] {
   display: none !important;
 }
 
-/* Hide apps and activities */
 .app-launcher-entrypoint,
 button[aria-label*="Apps" i],
 button[aria-label*="Activities" i] {
   display: none !important;
 }
 
-/* Hide Nitro navigation */
 [data-list-item-id*="nitro" i],
 a[aria-label="Nitro Home" i],
 div[aria-label="Nitro Home" i] {
   display: none !important;
 }
 
-/* Hide Discover */
 [data-list-item-id*="discover" i],
 button[aria-label*="Explore Discoverable Servers" i],
 button[aria-label*="Discover" i],
@@ -164,7 +154,6 @@ li:has(button[aria-label*="Discover" i]),
   visibility: hidden !important;
 }
 
-/* Hide noise suppression and Krisp */
 button[aria-label*="Noise Suppression" i],
 button[aria-label*="Krisp" i],
 [title*="Noise Suppression" i],
@@ -172,13 +161,11 @@ button[aria-label*="Krisp" i],
   display: none !important;
 }
 
-/* Hide activities */
 button[aria-label*="Activities" i],
 button[aria-label="Activities" i] {
   display: none !important;
 }
 
-/* Hide soundboard */
 button[aria-label*="Soundboard" i],
 span:has(> div > button[aria-label*="Soundboard" i]),
 span:has(> div > button[aria-label*="Soundboard" i]) > div {
@@ -187,14 +174,12 @@ span:has(> div > button[aria-label*="Soundboard" i]) > div {
   visibility: hidden !important;
 }
 
-/* Hide back and forward buttons */
 [aria-label="Go back" i],
 [aria-label="Go forward" i],
 .backForwardButtons__63abb {
   display: none !important;
 }
 
-/* Hide inbox, help, and trailing buttons */
 [aria-label="Inbox" i],
 [aria-label="Help" i],
 .trailing_c38106 {

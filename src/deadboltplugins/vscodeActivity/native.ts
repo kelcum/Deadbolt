@@ -9,16 +9,6 @@ import { promisify } from "util";
 
 const exec = promisify(execFile);
 
-/**
- * Ask the OS for VS Code's own window title. VS Code keeps this up to
- * date with the current file / folder / unsaved-changes state itself, so
- * this reads nothing more than what's already visible in your taskbar/
- * title bar - no file contents, no workspace paths beyond the folder
- * name VS Code already puts in its own title. Windows and macOS only -
- * Linux window-title access varies too much by window manager/compositor
- * to do reliably the same way, so it just returns null there (spoof mode
- * still works everywhere regardless).
- */
 export async function getVSCodeWindowTitle(): Promise<string | null> {
     if (process.platform === "win32") return getWindowsTitle();
     if (process.platform === "darwin") return getMacTitle();
@@ -44,10 +34,6 @@ async function getWindowsTitle(): Promise<string | null> {
 }
 
 async function getMacTitle(): Promise<string | null> {
-    // Reads VS Code's front window title via System Events. Like any
-    // AppleScript that inspects another app's UI, macOS will prompt for
-    // Accessibility permission the first time this runs - it has to be
-    // granted once for this to work at all.
     const script =
         'tell application "System Events"\n' +
         'if not (exists process "Code") then return ""\n' +

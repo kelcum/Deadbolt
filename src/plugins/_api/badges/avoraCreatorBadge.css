@@ -4,10 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-/* Avora Creator badge - the Avora star shown as itself, no medallion, with
-   the Deadbolt Creator badge's animation set (rotating highlight, diagonal
-   sheen, breathing glow) in the star's ivory. The light-theme rule at the
-   bottom darkens it, since ivory on a white card is invisible. */
 .avora-creator-badge {
     position: relative;
     display: inline-block;
@@ -27,8 +23,6 @@
     animation: avora-creator-glow 3s ease-in-out infinite;
 }
 
-/* Both moving highlights live in here, masked with the logo's own alpha so
-   they only ever show inside the star and never as a square. */
 .avora-creator-shine {
     position: absolute;
     inset: 0;
@@ -42,7 +36,6 @@
     mask-position: center;
 }
 
-/* Continuously rotating specular highlight */
 .avora-creator-shine::before {
     content: "";
     position: absolute;
@@ -61,7 +54,6 @@
     animation: avora-creator-spin 3.1s linear infinite;
 }
 
-/* A second, faster diagonal sheen band that never fully stops */
 .avora-creator-shine::after {
     content: "";
     position: absolute;
@@ -90,7 +82,6 @@
     50% { filter: drop-shadow(0 0 4px rgb(240 222 186 / 50%)) brightness(1.12); }
 }
 
-/* Rich hover card, ivory like the star */
 .avora-creator-tip {
     display: flex;
     flex-direction: column;
@@ -115,7 +106,6 @@
     100% { background-position: 200% center; }
 }
 
-/* Ivory on a white card is invisible - darken it to a warm graphite there */
 .theme-light .avora-creator-badge img {
     animation: none;
     filter: brightness(0.3) sepia(0.35) contrast(1.15) drop-shadow(0 0 1px rgb(0 0 0 / 30%));

@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-/* Vesper Creator badge - Vesper's night sky in the Deadbolt Creator medallion,
-   with the same rotating highlight, sheen and pulse in Vesper's lavender, and
-   the evening star twinkling where it sits in the icon. */
 .vesper-creator-badge {
     position: relative;
     display: inline-block;
@@ -69,7 +66,6 @@
     z-index: 2;
 }
 
-/* A four-pointed glint over the icon's star, fading out along its arms */
 .vesper-creator-star {
     position: absolute;
     left: 65%;

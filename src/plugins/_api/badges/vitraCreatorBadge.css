@@ -4,9 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-/* Vitra Creator badge - the colour-shifting cube Vitra's owner wears next to
-   their name in Minecraft, shown as itself like the Avora star. Its 16 frames
-   sit side by side in one image and play at the game's 75 ms a frame. */
 .vitra-creator-badge {
     display: inline-block;
     width: 22px;
@@ -22,7 +19,6 @@
     to { background-position: -352px 0; }
 }
 
-/* Every colour the cube passes through, flowing across the title */
 .vitra-creator-tip-title {
     font-weight: 700;
     font-size: 14px;

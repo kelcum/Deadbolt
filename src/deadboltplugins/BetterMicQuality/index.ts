@@ -4,26 +4,6 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-/*
- * betterMicQuality
- *
- * Improves microphone audio quality by disabling software-based mic processing,
- * requesting stereo and high-resolution capture, and tuning Discord's Opus
- * encoding settings. Supports configurable bitrate, packet duration, DTX, CBR,
- * FEC, and sample rate, while patching WebRTC audio constraints, SDP negotiation,
- * and sender parameters to keep the selected settings applied during calls.
- * Includes optional protection against same-device audio track replacement.
- *
- * HONEST LIMITS, read before assuming this makes your audio "lossless":
- *   - Discord's WebRTC voice pipeline transmits Opus. Opus is a lossy codec,
- *     so no client-side setting can turn Discord voice into PCM/FLAC-lossless.
- *   - The bitrate setting is a client-side target. Discord's voice servers can
- *     negotiate or cap the bitrate they accept, so requesting 512kbps does not
- *     guarantee that 512kbps is actually transmitted.
- *   - Microphone processing performed by Windows or your hardware/driver before
- *     the browser receives the audio cannot be removed by this plugin.
- */
-
 import { definePluginSettings } from "@api/Settings";
 import definePlugin, { OptionType } from "@utils/types";
 
@@ -303,9 +283,6 @@ function enforceBitrateNow(): void {
 }
 
 function buildPatchedRTCPeerConnection(): typeof RTCPeerConnection {
-    // lib.dom still types createOffer/createAnswer with the legacy
-    // callback overloads, which our promise-only overrides can't satisfy -
-    // extend it untyped, the final cast below restores the public type.
     return class PatchedRTCPeerConnection extends (originalRTCPeerConnection as any) {
         constructor(config?: RTCConfiguration) {
             super(config);
