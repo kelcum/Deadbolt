@@ -21,6 +21,8 @@ import "./deadboltBadge.css";
 import "./nullCreatorBadge.css";
 import "./avoraCreatorBadge.css";
 import "./pluginCreatorBadge.css";
+import "./vesperCreatorBadge.css";
+import "./vitraCreatorBadge.css";
 
 import { _getBadges, BadgePosition, BadgeUserArgs, ProfileBadge } from "@api/Badges";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -34,6 +36,8 @@ import definePlugin from "@utils/types";
 import { ContextMenuApi, Menu, showToast, Tooltip, UserStore } from "@webpack/common";
 import avoraCreatorLogo from "file://avoraCreatorLogo.png?base64";
 import nullCreatorLogo from "file://nullCreatorLogo.png?base64";
+import vesperCreatorLogo from "file://vesperCreatorLogo.png?base64";
+import vitraCreatorCube from "file://vitraCreatorCube.png?base64";
 
 import Plugins, { PluginMeta } from "~plugins";
 
@@ -91,6 +95,20 @@ const NULL_CREATOR_IDS = [
 const AVORA_CREATOR_BADGE_ICON = `data:image/png;base64,${avoraCreatorLogo}`;
 const AVORA_CREATOR_IDS = [
     "814591199071567873",
+];
+
+// Vesper's creator badge - Vesper's night sky in the Deadbolt Creator
+// medallion, with the star twinkling.
+const VESPER_CREATOR_BADGE_ICON = `data:image/png;base64,${vesperCreatorLogo}`;
+const VESPER_CREATOR_IDS = [
+    "195516525631897600", // k3
+];
+
+// Vitra's creator badge - the colour-shifting cube Vitra's owner wears in
+// Minecraft, all 16 frames side by side.
+const VITRA_CREATOR_BADGE_ICON = `data:image/png;base64,${vitraCreatorCube}`;
+const VITRA_CREATOR_IDS = [
+    "195516525631897600", // k3
 ];
 
 // A slate-silver puzzle piece - a step below Contributor, so it's quieter:
@@ -195,6 +213,78 @@ const DeadboltCreatorBadge: ProfileBadge = {
     component: AnimatedDeadboltCreatorBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => DEADBOLT_CREATOR_IDS.includes(userId),
+};
+
+// When Vesper and Vitra came into existence (edit freely).
+const VESPER_CREATED = "October 7, 2026";
+const VITRA_CREATED = "October 7, 2026";
+
+function AnimatedVesperCreatorBadge() {
+    return (
+        <Tooltip
+            text={
+                <div className="deadbolt-creator-tip">
+                    <div className="vesper-creator-tip-title">Vesper Creator</div>
+                    <div className="deadbolt-creator-tip-sub">Rose {VESPER_CREATED}</div>
+                </div>
+            }
+        >
+            {({ onMouseEnter, onMouseLeave }) => (
+                <span
+                    className="vesper-creator-badge"
+                    role="img"
+                    aria-label="Vesper Creator"
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                >
+                    <img src={VESPER_CREATOR_BADGE_ICON} alt="" draggable={false} />
+                    <span className="vesper-creator-star" />
+                </span>
+            )}
+        </Tooltip>
+    );
+}
+
+const VesperCreatorBadge: ProfileBadge = {
+    id: "vesper_creator_badge",
+    description: "Vesper Creator",
+    key: "Vesper Creator",
+    component: AnimatedVesperCreatorBadge,
+    position: BadgePosition.START,
+    shouldShow: ({ userId }) => VESPER_CREATOR_IDS.includes(userId),
+};
+
+function AnimatedVitraCreatorBadge() {
+    return (
+        <Tooltip
+            text={
+                <div className="deadbolt-creator-tip">
+                    <div className="vitra-creator-tip-title">Vitra Creator</div>
+                    <div className="deadbolt-creator-tip-sub">Crafted {VITRA_CREATED}</div>
+                </div>
+            }
+        >
+            {({ onMouseEnter, onMouseLeave }) => (
+                <span
+                    className="vitra-creator-badge"
+                    role="img"
+                    aria-label="Vitra Creator"
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                    style={{ backgroundImage: `url("${VITRA_CREATOR_BADGE_ICON}")` }}
+                />
+            )}
+        </Tooltip>
+    );
+}
+
+const VitraCreatorBadge: ProfileBadge = {
+    id: "vitra_creator_badge",
+    description: "Vitra Creator",
+    key: "Vitra Creator",
+    component: AnimatedVitraCreatorBadge,
+    position: BadgePosition.START,
+    shouldShow: ({ userId }) => VITRA_CREATOR_IDS.includes(userId),
 };
 
 function AnimatedDeadboltContributorBadge({ userId }: ProfileBadge & BadgeUserArgs) {
@@ -471,7 +561,8 @@ export default definePlugin({
     // come before Creator in this array for Creator to show in front, and
     // Null and Avora Creator after both so they lead if someone holds several.
     // Plugin Creator sits before Contributor so it renders just behind it.
-    userProfileBadges: [ContributorBadge, EquicordContributorBadge, PluginCreatorBadge, DeadboltContributorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge, UserPluginContributorBadge],
+    // Vitra and Vesper Creator sit just before Deadbolt Creator so they follow it.
+    userProfileBadges: [ContributorBadge, EquicordContributorBadge, PluginCreatorBadge, DeadboltContributorBadge, VitraCreatorBadge, VesperCreatorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge, UserPluginContributorBadge],
 
     async start() {
         await loadAllBadges();

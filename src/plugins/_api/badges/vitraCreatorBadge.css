@@ -1,0 +1,42 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+/* Vitra Creator badge - the colour-shifting cube Vitra's owner wears next to
+   their name in Minecraft, shown as itself like the Avora star. Its 16 frames
+   sit side by side in one image and play at the game's 75 ms a frame. */
+.vitra-creator-badge {
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    vertical-align: middle;
+    background-size: 352px 22px;
+    background-repeat: no-repeat;
+    animation: vitra-creator-cube 1.2s steps(16) infinite;
+}
+
+@keyframes vitra-creator-cube {
+    from { background-position: 0 0; }
+    to { background-position: -352px 0; }
+}
+
+/* Every colour the cube passes through, flowing across the title */
+.vitra-creator-tip-title {
+    font-weight: 700;
+    font-size: 14px;
+    background: linear-gradient(100deg, #9be7ff, #b9a6ff 20%, #ff9ccf 40%, #ffcf8a 60%, #a6f0a0 80%, #9be7ff);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: deadbolt-tip-sheen 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vitra-creator-badge,
+    .vitra-creator-tip-title {
+        animation: none;
+    }
+}

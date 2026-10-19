@@ -1,0 +1,142 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+/* Vesper Creator badge - Vesper's night sky in the Deadbolt Creator medallion,
+   with the same rotating highlight, sheen and pulse in Vesper's lavender, and
+   the evening star twinkling where it sits in the icon. */
+.vesper-creator-badge {
+    position: relative;
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    overflow: hidden;
+    transform: scale(0.9);
+    vertical-align: middle;
+    line-height: 0;
+    isolation: isolate;
+    box-shadow: 0 0 0 1px rgb(165 150 255 / 15%), 0 1px 3px rgb(0 0 0 / 45%);
+    animation: vesper-creator-pulse 3s ease-in-out infinite;
+}
+
+.vesper-creator-badge img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    animation: vesper-creator-breathe 2.6s ease-in-out infinite;
+}
+
+.vesper-creator-badge::before {
+    content: "";
+    position: absolute;
+    inset: -45%;
+    background: conic-gradient(
+        from 0deg,
+        rgb(165 150 255 / 0%) 0deg,
+        rgb(228 222 255 / 55%) 35deg,
+        rgb(165 150 255 / 12%) 85deg,
+        rgb(165 150 255 / 0%) 140deg,
+        rgb(228 222 255 / 50%) 205deg,
+        rgb(165 150 255 / 12%) 260deg,
+        rgb(165 150 255 / 0%) 320deg,
+        rgb(165 150 255 / 0%) 360deg
+    );
+    animation: vesper-creator-spin 3.1s linear infinite;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.vesper-creator-badge::after {
+    content: "";
+    position: absolute;
+    inset: -30%;
+    background: linear-gradient(
+        115deg,
+        transparent 42%,
+        rgb(236 232 255 / 80%) 50%,
+        transparent 58%
+    );
+    transform: translateX(-160%);
+    animation: vesper-creator-sheen 1.9s linear infinite;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 2;
+}
+
+/* A four-pointed glint over the icon's star, fading out along its arms */
+.vesper-creator-star {
+    position: absolute;
+    left: 65%;
+    top: 27%;
+    width: 10px;
+    height: 10px;
+    margin: -5px 0 0 -5px;
+    background:
+        radial-gradient(circle, rgb(255 255 255) 0 10%, rgb(214 206 255 / 60%) 22%, transparent 48%),
+        linear-gradient(90deg, transparent 45%, rgb(255 255 255 / 90%) 50%, transparent 55%),
+        linear-gradient(0deg, transparent 45%, rgb(255 255 255 / 90%) 50%, transparent 55%);
+    mask-image: radial-gradient(circle, black 25%, transparent 70%);
+    mix-blend-mode: screen;
+    pointer-events: none;
+    z-index: 3;
+    animation: vesper-creator-twinkle 2.4s ease-in-out infinite;
+}
+
+@keyframes vesper-creator-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes vesper-creator-sheen {
+    0% { transform: translateX(-160%); }
+    100% { transform: translateX(160%); }
+}
+
+@keyframes vesper-creator-breathe {
+    0%, 100% { filter: brightness(1) saturate(1); }
+    50% { filter: brightness(1.25) saturate(1.12); }
+}
+
+@keyframes vesper-creator-pulse {
+    0%, 100% { box-shadow: 0 0 0 1px rgb(165 150 255 / 15%), 0 1px 3px rgb(0 0 0 / 45%); }
+    50% { box-shadow: 0 0 0 1px rgb(165 150 255 / 35%), 0 0 7px rgb(165 150 255 / 55%), 0 1px 3px rgb(0 0 0 / 45%); }
+}
+
+@keyframes vesper-creator-twinkle {
+    0%, 100% {
+        opacity: 0.45;
+        transform: scale(0.4) rotate(0deg);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1) rotate(45deg);
+    }
+}
+
+.vesper-creator-tip-title {
+    font-weight: 700;
+    font-size: 14px;
+    background: linear-gradient(100deg, #e4defe, #a596ff 45%, #fff 55%, #8f7dff);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: deadbolt-tip-sheen 3s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vesper-creator-badge,
+    .vesper-creator-badge::before,
+    .vesper-creator-badge::after,
+    .vesper-creator-badge img,
+    .vesper-creator-star,
+    .vesper-creator-tip-title {
+        animation: none;
+    }
+}
