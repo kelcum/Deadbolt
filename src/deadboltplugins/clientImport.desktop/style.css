@@ -1,0 +1,109 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-client-import-body {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.vc-client-import-sources {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vc-client-import-source {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+    border-radius: 10px;
+    background: var(--background-mod-subtle, rgb(255 255 255 / 3%));
+    color: var(--text-default, var(--text-normal, #dbdee1));
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.15s, background-color 0.15s;
+}
+
+.vc-client-import-source:hover {
+    background: var(--background-mod-normal, rgb(255 255 255 / 6%));
+}
+
+.vc-client-import-source-on,
+.vc-client-import-source-on:hover {
+    border-color: var(--brand-500, #5865f2);
+    background: color-mix(in srgb, var(--brand-500, #5865f2) 12%, transparent);
+}
+
+.vc-client-import-radio {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    margin-top: 2px;
+    border: 2px solid var(--interactive-normal, #b5bac1);
+    border-radius: 50%;
+    box-sizing: border-box;
+}
+
+.vc-client-import-source-on .vc-client-import-radio {
+    border: 5px solid var(--brand-500, #5865f2);
+}
+
+.vc-client-import-source-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.vc-client-import-source-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-strong, var(--header-primary, #f2f3f5));
+}
+
+.vc-client-import-source-meta {
+    font-size: 13px;
+    color: var(--text-default, var(--text-normal, #dbdee1));
+}
+
+.vc-client-import-source-path {
+    overflow: hidden;
+    font-family: var(--font-code, monospace);
+    font-size: 11px;
+    color: var(--text-muted, #949ba4);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-client-import-note {
+    font-size: 13px;
+    color: var(--text-muted, #949ba4);
+}
+
+.vc-client-import-options {
+    display: flex;
+    flex-direction: column;
+}
+
+.vc-client-import-result-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 0 0 12px;
+    padding-left: 18px;
+    list-style: disc;
+    color: var(--text-default, var(--text-normal, #dbdee1));
+}
+
+.vc-client-import-missing {
+    margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--text-muted, #949ba4);
+}

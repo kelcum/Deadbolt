@@ -12,7 +12,7 @@ import { Button } from "@components/Button";
 import { Divider } from "@components/Divider";
 import { FormSwitch } from "@components/FormSwitch";
 import { Heading } from "@components/Heading";
-import { FolderIcon, GithubIcon, LogIcon, PaintbrushIcon, RestartIcon } from "@components/Icons";
+import { BackupRestoreIcon, FolderIcon, GithubIcon, LogIcon, PaintbrushIcon, RestartIcon } from "@components/Icons";
 import { Notice } from "@components/Notice";
 import { Paragraph } from "@components/Paragraph";
 import { openContributorModal, openPluginModal, SettingsTab, wrapTab } from "@components/settings";
@@ -28,6 +28,8 @@ import { isAnyPluginDev } from "@utils/misc";
 import { relaunch } from "@utils/native";
 import { promptToRestart } from "@utils/promptToRestart";
 import { GuildMemberStore, React, UserStore } from "@webpack/common";
+
+import Plugins from "~plugins";
 
 import { BadgeRequestCard } from "./BadgeRequestCard";
 import { DonateButtonComponent } from "./DonateButton";
@@ -223,6 +225,13 @@ function EquicordSettings() {
                         Icon={FolderIcon}
                         text="Open Settings Folder"
                         action={() => VencordNative.settings.openFolder()}
+                    />
+                )}
+                {!IS_WEB && (
+                    <QuickAction
+                        Icon={BackupRestoreIcon}
+                        text="Import from Another Mod"
+                        action={() => (Plugins.ClientImport as any)?.openImportModal?.()}
                     />
                 )}
                 <QuickAction
