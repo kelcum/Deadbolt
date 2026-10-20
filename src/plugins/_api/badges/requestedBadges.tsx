@@ -7,7 +7,7 @@
 import "./requestedBadges.css";
 
 import { BadgePosition, ProfileBadge } from "@api/Badges";
-import { BadgeDesign, BadgePreview } from "@components/settings/tabs/vencord/BadgeDesigner";
+import { BadgeDesign, BadgeName, BadgePreview } from "@components/settings/tabs/vencord/BadgeDesigner";
 import { Tooltip } from "@webpack/common";
 
 import { requestedBadges } from "./requested/badges";
@@ -22,7 +22,7 @@ export interface RequestedBadgeEntry {
 
 function makeBadge(entry: RequestedBadgeEntry): ProfileBadge {
     const Component = () => (
-        <Tooltip text={<div className="vc-requested-badge-tip">{entry.name}</div>}>
+        <Tooltip text={<div className="vc-requested-badge-tip"><BadgeName name={entry.name} colors={entry.design.colors} /></div>}>
             {({ onMouseEnter, onMouseLeave }) => (
                 <span
                     className="vc-requested-badge"

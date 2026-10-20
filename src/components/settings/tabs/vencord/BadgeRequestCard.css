@@ -55,15 +55,15 @@
     gap: 12px 16px;
 }
 
-.vc-badge-request-row > .vc-badge-request-field {
-    flex: 1 1 180px;
-}
-
 .vc-badge-request-field {
     display: flex;
     flex-direction: column;
     gap: 8px;
     min-width: 0;
+}
+
+.vc-badge-request-row > .vc-badge-request-field {
+    flex: 1 1 180px;
 }
 
 .vc-badge-request-field-disabled {
@@ -396,8 +396,22 @@
     box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
     color: #f2f3f5;
     font-size: 13px;
-    font-weight: 600;
+    font-weight: 700;
     overflow-wrap: anywhere;
+}
+
+.vc-badge-request-name {
+    background: var(--name-gradient, currentcolor);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    filter: drop-shadow(0 0 0.6px rgb(255 255 255 / 35%));
+    animation: vc-badge-request-name-sheen 3s linear infinite;
+}
+
+@keyframes vc-badge-request-name-sheen {
+    to { background-position: 200% center; }
 }
 
 .vc-badge-request-float {
@@ -599,7 +613,8 @@
     .vc-badge-request-glint,
     .vc-badge-request-shine,
     .vc-badge-request-art-shine,
-    .vc-badge-request-art-glint {
+    .vc-badge-request-art-glint,
+    .vc-badge-request-name {
         animation: none !important;
     }
 }

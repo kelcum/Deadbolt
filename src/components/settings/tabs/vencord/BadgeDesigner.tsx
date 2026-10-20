@@ -68,6 +68,21 @@ const FIT_DEFAULTS = { zoom: 1, x: 0, y: 0, rotate: 0 };
 export const toHex = (n: number) => "#" + (n >>> 0).toString(16).padStart(6, "0").slice(-6);
 const clamp = (v: number, min: number, max: number) => Math.min(max, Math.max(min, v));
 
+export function nameGradient(colors: number[]) {
+    const c = colors.map(toHex);
+    if (!c.length) return undefined;
+    const stops = c.length === 1 ? [c[0], `color-mix(in srgb, ${c[0]} 45%, white)`, c[0]] : [...c, c[0]];
+    return `linear-gradient(100deg, ${stops.join(", ")})`;
+}
+
+export function BadgeName({ name, colors }: { name: string; colors: number[]; }) {
+    return (
+        <span className={cl("name")} style={{ "--name-gradient": nameGradient(colors) } as React.CSSProperties}>
+            {name}
+        </span>
+    );
+}
+
 export function backgroundCss(d: BadgeDesign) {
     const c = d.colors.map(toHex);
     if (d.background === "none" || !c.length) return "transparent";
@@ -435,7 +450,7 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
                             </div>
                         </div>
                     </div>
-                    <div className={cl("tooltip")}>{state.badge.trim() || "Badge name"}</div>
+                    <div className={cl("tooltip")}><BadgeName name={state.badge.trim() || "Badge name"} colors={design.colors} /></div>
                 </div>
             </aside>
         </div>
