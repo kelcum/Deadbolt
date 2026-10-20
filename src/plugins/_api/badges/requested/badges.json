@@ -1,1 +1,36 @@
-[]
+[
+  {
+    "id": "166fe28fc2c180a4",
+    "users": [
+      "195516525631897600"
+    ],
+    "name": "llama",
+    "colors": [
+      "#d97af0",
+      "#0b33b3",
+      "#6031b5",
+      "#35343d"
+    ],
+    "image": "166fe28fc2c180a4.png",
+    "imageType": "image/png",
+    "design": {
+      "shape": "none",
+      "background": "none",
+      "effects": [
+        "shine",
+        "glint",
+        "pulse"
+      ],
+      "speed": 1,
+      "zoom": 1,
+      "x": 0,
+      "y": 0,
+      "rotate": 0
+    },
+    "request": {
+      "badge": "llama",
+      "for": "xanax.pl",
+      "details": "ts tuff"
+    }
+  }
+]

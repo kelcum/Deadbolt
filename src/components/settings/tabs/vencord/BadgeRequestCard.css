@@ -436,6 +436,9 @@
 .vc-badge-request-shape-circle,
 .vc-badge-request-shape-rounded {
     overflow: hidden;
+}
+
+.vc-badge-request-filled {
     background: var(--bg);
     box-shadow: 0 0 0 1px rgb(255 255 255 / 10%), 0 calc(var(--size) * 0.06) calc(var(--size) * 0.2) rgb(0 0 0 / 45%);
 }
@@ -540,12 +543,11 @@
     animation: vc-badge-request-turn calc(4s / var(--speed)) linear infinite;
 }
 
-.vc-badge-request-fx-pulse.vc-badge-request-shape-circle,
-.vc-badge-request-fx-pulse.vc-badge-request-shape-rounded {
+.vc-badge-request-fx-pulse.vc-badge-request-filled {
     animation: vc-badge-request-pulse calc(3.2s / var(--speed)) ease-in-out infinite;
 }
 
-.vc-badge-request-fx-pulse.vc-badge-request-shape-none .vc-badge-request-art {
+.vc-badge-request-fx-pulse:not(.vc-badge-request-filled) .vc-badge-request-art {
     animation: vc-badge-request-glow calc(3.2s / var(--speed)) ease-in-out infinite;
 }
 

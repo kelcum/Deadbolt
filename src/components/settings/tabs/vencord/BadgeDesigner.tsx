@@ -167,7 +167,7 @@ export function BadgePreview({ design, image, size, onAdjust }: PreviewProps) {
     latest.current = { design, onAdjust, image };
     const drag = useRef<{ px: number; py: number; x: number; y: number; } | null>(null);
     const fx = new Set(design.effects);
-    const framed = design.shape !== "none";
+    const filled = design.shape !== "none" && design.background !== "none";
     const canMove = !!(onAdjust && image);
 
     useEffect(() => {
@@ -192,9 +192,10 @@ export function BadgePreview({ design, image, size, onAdjust }: PreviewProps) {
                 className={cl(
                     "medal",
                     `shape-${design.shape}`,
+                    filled && "filled",
                     design.effects.map(f => `fx-${f}`),
                     canMove && "movable",
-                    !image && (design.background === "none" || !framed) && "empty"
+                    !image && !filled && "empty"
                 )}
                 style={{ "--glow": toHex(design.colors[0] ?? 0xffffff), "--bg": backgroundCss(design) } as React.CSSProperties}
                 onPointerDown={e => {
@@ -216,12 +217,12 @@ export function BadgePreview({ design, image, size, onAdjust }: PreviewProps) {
                 {image && (
                     <div className={cl("art")} style={{ transform: artTransform(design) }}>
                         <img className={cl("art-img")} src={image} alt="" draggable={false} />
-                        {!framed && fx.has("glint") && <span className={cl("art-glint")} style={mask} />}
-                        {!framed && fx.has("shine") && <span className={cl("art-shine")} style={mask} />}
+                        {!filled && fx.has("glint") && <span className={cl("art-glint")} style={mask} />}
+                        {!filled && fx.has("shine") && <span className={cl("art-shine")} style={mask} />}
                     </div>
                 )}
-                {framed && fx.has("glint") && <span className={cl("glint")} />}
-                {framed && fx.has("shine") && <span className={cl("shine")} />}
+                {filled && fx.has("glint") && <span className={cl("glint")} />}
+                {filled && fx.has("shine") && <span className={cl("shine")} />}
             </div>
         </div>
     );
