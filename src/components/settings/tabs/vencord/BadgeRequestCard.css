@@ -1,0 +1,88 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-badge-request-button {
+    overflow: visible !important;
+    margin-top: 1em;
+    color: black;
+    background-color: color-mix(in srgb, #b3abf7 45%, white);
+}
+
+.vc-badge-request-button:hover {
+    color: black;
+    background-color: color-mix(in srgb, #b3abf7 70%, white);
+}
+
+.vc-badge-request-icon {
+    width: 20px;
+    height: 20px;
+    flex-shrink: 0;
+    margin-right: 0.5em;
+    transition: transform 0.3s;
+}
+
+.vc-badge-request-button:hover .vc-badge-request-icon {
+    transform: rotate(-12deg) scale(1.1);
+}
+
+.vc-badge-request-grow {
+    flex: 1;
+    min-width: 0;
+}
+
+.vc-badge-request-colors {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.vc-badge-request-color {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 8px 4px 4px;
+    border-radius: 8px;
+    background: var(--background-mod-subtle, rgb(0 0 0 / 8%));
+}
+
+.vc-badge-request-hex {
+    font-size: 13px;
+    color: var(--text-default, var(--text-normal));
+}
+
+.vc-badge-request-remove {
+    display: grid;
+    place-items: center;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: transparent;
+    color: var(--text-muted);
+    font-size: 16px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.vc-badge-request-remove:hover {
+    background: var(--background-mod-strong, rgb(0 0 0 / 15%));
+    color: var(--text-default, var(--text-normal));
+}
+
+.vc-badge-request-file {
+    max-width: 240px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--text-default, var(--text-normal));
+}
+
+.vc-badge-request-hint {
+    font-size: 13px;
+    color: var(--text-muted);
+}
