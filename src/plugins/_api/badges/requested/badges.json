@@ -29,8 +29,38 @@
     },
     "request": {
       "badge": "llama",
-      "for": "xanax.pl",
-      "details": "ts tuff"
+      "for": "xanax.pl"
+    }
+  },
+  {
+    "id": "eba83c3c42fe5637",
+    "users": [
+      "720465317226086413"
+    ],
+    "name": "BT-7274",
+    "colors": [
+      "#000000",
+      "#ffffff"
+    ],
+    "image": "eba83c3c42fe5637.jpg",
+    "imageType": "image/jpeg",
+    "design": {
+      "shape": "circle",
+      "background": "gradient",
+      "effects": [
+        "pulse",
+        "shine",
+        "glint"
+      ],
+      "speed": 1,
+      "zoom": 2,
+      "x": 0.243,
+      "y": -0.07,
+      "rotate": 0
+    },
+    "request": {
+      "badge": "BT-7274",
+      "for": "dxcoy"
     }
   }
 ]
