@@ -4,23 +4,15 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./BadgeRequestCard.css";
-
 import { Button } from "@components/Button";
-import { Flex } from "@components/Flex";
-import { HeadingSecondary } from "@components/Heading";
 import { Paragraph } from "@components/Paragraph";
 import { SpecialCard } from "@components/settings/SpecialCard";
-import { classNameFactory } from "@utils/css";
 import { RenderModalProps } from "@vencord/discord-types";
-import { ColorPicker, Modal, openModal, React, TextArea, TextInput, useRef, UserStore, useState } from "@webpack/common";
+import { Modal, openModal, UserStore, useState } from "@webpack/common";
 
-const cl = classNameFactory("vc-badge-request-");
+import { BadgeDesigner, BadgePreview, cl, renderBadgePng, toHex, useBadgeForm } from "./BadgeDesigner";
 
 const API = "https://api.xan.gripe/v1/badge-requests";
-const MAX_COLORS = 4;
-const MAX_IMAGE_BYTES = 1_000_000;
-const IMAGE_TYPES = ["image/png", "image/jpeg", "image/gif", "image/webp"];
 const CARD_COLOR = "#b3abf7";
 
 const CREST = "data:image/svg+xml;base64," + btoa(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 15 160 160">
@@ -52,8 +44,6 @@ const PATTERN = "data:image/svg+xml;base64," + btoa(`<svg xmlns="http://www.w3.o
     sparkle(30, 120, 11, 0.22),
 ].join("")}</svg>`);
 
-const toHex = (n: number) => "#" + (n >>> 0).toString(16).padStart(6, "0").slice(-6);
-
 function BadgeIcon() {
     return (
         <svg className={cl("icon")} viewBox="0 0 24 24" aria-hidden="true">
@@ -63,59 +53,34 @@ function BadgeIcon() {
     );
 }
 
-function readImage(file: File) {
-    return new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(String(reader.result).replace(/^data:[^,]*,/, ""));
-        reader.onerror = () => reject(reader.error);
-        reader.readAsDataURL(file);
-    });
-}
-
 function BadgeRequestModal({ modalProps }: { modalProps: RenderModalProps; }) {
     const me = UserStore.getCurrentUser();
-    const [discordId, setDiscordId] = useState(me?.id ?? "");
-    const [name, setName] = useState(me?.username ?? "");
-    const [badge, setBadge] = useState("");
-    const [colors, setColors] = useState<number[]>([0x7c6ff0]);
-    const [details, setDetails] = useState("");
-    const [image, setImage] = useState<{ name: string; data: string; } | null>(null);
+    const form = useBadgeForm(me?.id ?? "", me?.username ?? "");
+    const { state } = form;
     const [error, setError] = useState<string | null>(null);
     const [sending, setSending] = useState(false);
     const [sent, setSent] = useState(false);
-    const fileInput = useRef<HTMLInputElement>(null);
 
-    const idValid = /^\d{17,20}$/.test(discordId.trim());
-    const ready = idValid && !!name.trim() && !!badge.trim() && colors.length > 0;
-
-    async function pickImage(e: React.ChangeEvent<HTMLInputElement>) {
-        const file = e.currentTarget.files?.[0];
-        e.currentTarget.value = "";
-        if (!file) return;
-        if (!IMAGE_TYPES.includes(file.type)) return setError("The image has to be a PNG, JPG, GIF or WebP.");
-        if (file.size > MAX_IMAGE_BYTES) return setError("That image is too big. Keep it under 1 MB.");
-        try {
-            setImage({ name: file.name, data: await readImage(file) });
-            setError(null);
-        } catch {
-            setError("Couldn't read that image. Try another one.");
-        }
-    }
+    const ready = /^\d{17,20}$/.test(state.discordId.trim()) && !!state.name.trim() && !!state.badge.trim() && state.design.colors.length > 0;
 
     async function submit() {
         setSending(true);
         setError(null);
         try {
+            const { colors, ...design } = state.design;
+            const preview = await renderBadgePng(state.design, state.image?.url ?? null).catch(() => undefined);
             const res = await fetch(API, {
                 method: "POST",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify({
-                    discordId: discordId.trim(),
-                    name: name.trim(),
-                    badge: badge.trim(),
+                    discordId: state.discordId.trim(),
+                    name: state.name.trim(),
+                    badge: state.badge.trim(),
                     colors: colors.map(toHex),
-                    details: details.trim(),
-                    image: image?.data,
+                    details: state.details.trim(),
+                    image: state.image?.url.replace(/^data:[^,]*,/, ""),
+                    design,
+                    preview,
                     source: "deadbolt"
                 })
             });
@@ -137,9 +102,14 @@ function BadgeRequestModal({ modalProps }: { modalProps: RenderModalProps; }) {
                 subtitle="Thanks for the idea!"
                 actions={[{ text: "Close", variant: "primary", onClick: modalProps.onClose }]}
             >
-                <Paragraph>
-                    Your idea for <b>{badge.trim()}</b> went straight to Deadbolt's owner. If it gets made, it shows up on your profile for everyone on Deadbolt after the next update.
-                </Paragraph>
+                <div className={cl("sent")}>
+                    <div className={cl("stage", "stage-dark")}>
+                        <BadgePreview design={state.design} image={state.image?.url ?? null} size={96} />
+                    </div>
+                    <Paragraph>
+                        Your design for <b>{state.badge.trim()}</b> went straight to Deadbolt's owner. If it gets made, it shows up on your profile for everyone on Deadbolt after the next update.
+                    </Paragraph>
+                </div>
             </Modal>
         );
     }
@@ -147,97 +117,16 @@ function BadgeRequestModal({ modalProps }: { modalProps: RenderModalProps; }) {
     return (
         <Modal
             {...modalProps}
-            title="Request a badge"
-            subtitle="Tell us what you'd like and it goes straight to Deadbolt's owner."
+            size="lg"
+            title="Design a badge"
+            subtitle="Put together how you want it to look. It goes straight to Deadbolt's owner, who makes the real thing."
             actions={[
                 { text: "Cancel", variant: "secondary", onClick: modalProps.onClose },
                 { text: "Send request", variant: "primary", onClick: submit, loading: sending, disabled: !ready || sending }
             ]}
             notice={error ? { message: error, type: "critical" } : undefined}
         >
-            <Flex flexDirection="column" gap={16}>
-                <Flex gap={12}>
-                    <section className={cl("grow")}>
-                        <HeadingSecondary>Discord ID</HeadingSecondary>
-                        <TextInput
-                            value={discordId}
-                            onChange={v => setDiscordId(v.replace(/\D/g, ""))}
-                            placeholder="195516525631897600"
-                            maxLength={20}
-                            error={discordId && !idValid ? "That's not a Discord ID." : undefined}
-                        />
-                    </section>
-                    <section className={cl("grow")}>
-                        <HeadingSecondary>Username</HeadingSecondary>
-                        <TextInput value={name} onChange={setName} placeholder="your.name" maxLength={32} />
-                    </section>
-                </Flex>
-
-                <section>
-                    <HeadingSecondary>Badge name</HeadingSecondary>
-                    <TextInput value={badge} onChange={setBadge} placeholder="What it says when someone hovers it" maxLength={40} />
-                </section>
-
-                <section>
-                    <HeadingSecondary>Colors</HeadingSecondary>
-                    <div className={cl("colors")}>
-                        {colors.map((c, i) => (
-                            <div className={cl("color")} key={i}>
-                                <ColorPicker
-                                    color={c}
-                                    showEyeDropper={false}
-                                    onChange={v => setColors(colors.map((old, j) => j === i ? v ?? old : old))}
-                                />
-                                <code className={cl("hex")}>{toHex(c)}</code>
-                                {colors.length > 1 && (
-                                    <button
-                                        type="button"
-                                        className={cl("remove")}
-                                        aria-label={`Remove ${toHex(c)}`}
-                                        onClick={() => setColors(colors.filter((_, j) => j !== i))}
-                                    >
-                                        ×
-                                    </button>
-                                )}
-                            </div>
-                        ))}
-                        {colors.length < MAX_COLORS && (
-                            <Button variant="secondary" size="small" onClick={() => setColors([...colors, 0xffffff])}>
-                                Add color
-                            </Button>
-                        )}
-                    </div>
-                </section>
-
-                <section>
-                    <HeadingSecondary>Anything else?</HeadingSecondary>
-                    <TextArea
-                        value={details}
-                        onChange={setDetails}
-                        placeholder="Animated or still, the style you want, what it should show..."
-                        maxLength={1000}
-                        rows={4}
-                    />
-                </section>
-
-                <section>
-                    <HeadingSecondary>Reference image</HeadingSecondary>
-                    <Flex alignItems="center" gap={10}>
-                        <Button variant="secondary" size="small" onClick={() => fileInput.current?.click()}>
-                            {image ? "Change image" : "Choose image"}
-                        </Button>
-                        {image
-                            ? (
-                                <>
-                                    <span className={cl("file")}>{image.name}</span>
-                                    <button type="button" className={cl("remove")} aria-label="Remove image" onClick={() => setImage(null)}>×</button>
-                                </>
-                            )
-                            : <span className={cl("hint")}>Optional. A logo or picture to base it on, up to 1 MB.</span>}
-                    </Flex>
-                    <input ref={fileInput} type="file" accept={IMAGE_TYPES.join(",")} hidden onChange={pickImage} />
-                </section>
-            </Flex>
+            <BadgeDesigner form={form} avatar={me?.getAvatarURL?.(void 0, 64, false)} onError={setError} />
         </Modal>
     );
 }
@@ -251,14 +140,14 @@ export function BadgeRequestCard() {
         <SpecialCard
             title="Custom Badges"
             subtitle="Want a badge of your own?"
-            description="Send in an idea for a profile badge. If it gets made, everyone on Deadbolt sees it next to your name."
+            description="Design a profile badge and send it in. If it gets made, everyone on Deadbolt sees it next to your name."
             cardImage={CREST}
             backgroundImage={PATTERN}
             backgroundColor={CARD_COLOR}
         >
             <Button variant="none" size="medium" type="button" onClick={openBadgeRequestModal} className={cl("button")}>
                 <BadgeIcon />
-                Request a badge
+                Design a badge
             </Button>
         </SpecialCard>
     );

@@ -4,6 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+@property --vc-badge-request-angle {
+    syntax: "<angle>";
+    inherits: false;
+    initial-value: 0deg;
+}
+
 .vc-badge-request-button {
     overflow: visible !important;
     margin-top: 1em;
@@ -28,16 +34,212 @@
     transform: rotate(-12deg) scale(1.1);
 }
 
-.vc-badge-request-grow {
-    flex: 1;
+.vc-badge-request-designer {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 236px;
+    gap: 24px;
+    align-items: start;
+    padding-bottom: 8px;
+}
+
+.vc-badge-request-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
     min-width: 0;
+}
+
+.vc-badge-request-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 16px;
+}
+
+.vc-badge-request-row > .vc-badge-request-field {
+    flex: 1 1 180px;
+}
+
+.vc-badge-request-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-width: 0;
+}
+
+.vc-badge-request-field-disabled {
+    opacity: 0.45;
+    pointer-events: none;
+}
+
+.vc-badge-request-label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.2;
+    color: var(--text-strong, var(--header-primary, #f2f3f5));
+}
+
+.vc-badge-request-label-action {
+    margin-left: auto;
+}
+
+.vc-badge-request-label-hint,
+.vc-badge-request-hint {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--text-muted, #949ba4);
+}
+
+.vc-badge-request-segmented {
+    display: inline-flex;
+    align-self: flex-start;
+    gap: 2px;
+    padding: 3px;
+    border-radius: 10px;
+    border: 1px solid var(--border-subtle, rgb(255 255 255 / 6%));
+    background: var(--background-mod-subtle, rgb(0 0 0 / 18%));
+}
+
+.vc-badge-request-segment {
+    padding: 7px 12px;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    color: var(--text-muted, #949ba4);
+    font: 600 13px/1 var(--font-primary, inherit);
+    cursor: pointer;
+    transition: background-color 0.15s, color 0.15s;
+}
+
+.vc-badge-request-segment:hover {
+    color: var(--text-default, var(--text-normal, #dbdee1));
+}
+
+.vc-badge-request-segment-on,
+.vc-badge-request-segment-on:hover {
+    background: var(--background-mod-strong, rgb(255 255 255 / 12%));
+    color: var(--text-strong, var(--header-primary, #f2f3f5));
+    box-shadow: 0 1px 2px rgb(0 0 0 / 25%);
+}
+
+.vc-badge-request-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.vc-badge-request-chip {
+    padding: 7px 14px;
+    border: 1px solid var(--border-subtle, rgb(255 255 255 / 10%));
+    border-radius: 999px;
+    background: transparent;
+    color: var(--text-muted, #949ba4);
+    font: 600 13px/1 var(--font-primary, inherit);
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.vc-badge-request-chip:hover {
+    color: var(--text-default, var(--text-normal, #dbdee1));
+    border-color: var(--border-strong, rgb(255 255 255 / 20%));
+}
+
+.vc-badge-request-chip-on,
+.vc-badge-request-chip-on:hover {
+    border-color: var(--brand-500, #5865f2);
+    background: color-mix(in srgb, var(--brand-500, #5865f2) 22%, transparent);
+    color: var(--text-strong, var(--header-primary, #f2f3f5));
+}
+
+.vc-badge-request-pill-button {
+    padding: 8px 12px;
+    border: 1px solid var(--border-subtle, rgb(255 255 255 / 10%));
+    border-radius: 8px;
+    background: var(--background-mod-subtle, rgb(255 255 255 / 4%));
+    color: var(--text-default, var(--text-normal, #dbdee1));
+    font: 600 13px/1 var(--font-primary, inherit);
+    cursor: pointer;
+    transition: background-color 0.15s;
+}
+
+.vc-badge-request-pill-button:hover {
+    background: var(--background-mod-normal, rgb(255 255 255 / 9%));
+}
+
+.vc-badge-request-text-button {
+    align-self: flex-start;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: var(--text-link, #00a8fc);
+    font: 500 13px/1.2 var(--font-primary, inherit);
+    cursor: pointer;
+}
+
+.vc-badge-request-text-button:hover {
+    text-decoration: underline;
+}
+
+.vc-badge-request-sliders {
+    display: grid;
+    gap: 4px;
+}
+
+.vc-badge-request-slider {
+    display: grid;
+    grid-template-columns: 88px minmax(0, 1fr) 46px;
+    align-items: center;
+    gap: 10px;
+}
+
+.vc-badge-request-slider-label {
+    font-size: 13px;
+    color: var(--text-muted, #949ba4);
+}
+
+.vc-badge-request-slider input[type="range"] {
+    width: 100%;
+    margin: 6px 0;
+    accent-color: var(--brand-500, #5865f2);
+    cursor: pointer;
+}
+
+.vc-badge-request-slider-value {
+    font: 500 12px/1 var(--font-code, monospace);
+    text-align: right;
+    color: var(--text-default, var(--text-normal, #dbdee1));
+}
+
+.vc-badge-request-textarea {
+    width: 100%;
+    min-height: 76px;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid var(--input-border, var(--border-subtle, rgb(255 255 255 / 8%)));
+    border-radius: 8px;
+    outline: none;
+    background: var(--input-background, var(--background-tertiary, rgb(0 0 0 / 25%)));
+    color: var(--text-default, var(--text-normal, #dbdee1));
+    font: 400 14px/1.4 var(--font-primary, inherit);
+    resize: vertical;
+}
+
+.vc-badge-request-textarea::placeholder {
+    color: var(--text-muted, #949ba4);
+}
+
+.vc-badge-request-textarea:focus {
+    border-color: var(--brand-500, #5865f2);
 }
 
 .vc-badge-request-colors {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .vc-badge-request-color {
@@ -51,7 +253,7 @@
 
 .vc-badge-request-hex {
     font-size: 13px;
-    color: var(--text-default, var(--text-normal));
+    color: var(--text-default, var(--text-normal, #dbdee1));
 }
 
 .vc-badge-request-remove {
@@ -63,7 +265,7 @@
     border: 0;
     border-radius: 50%;
     background: transparent;
-    color: var(--text-muted);
+    color: var(--text-muted, #949ba4);
     font-size: 16px;
     line-height: 1;
     cursor: pointer;
@@ -71,18 +273,333 @@
 
 .vc-badge-request-remove:hover {
     background: var(--background-mod-strong, rgb(0 0 0 / 15%));
-    color: var(--text-default, var(--text-normal));
+    color: var(--text-default, var(--text-normal, #dbdee1));
 }
 
 .vc-badge-request-file {
-    max-width: 240px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+}
+
+.vc-badge-request-file-name {
+    max-width: 220px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    color: var(--text-default, var(--text-normal));
+    font-size: 14px;
+    color: var(--text-default, var(--text-normal, #dbdee1));
 }
 
-.vc-badge-request-hint {
+.vc-badge-request-preview-panel {
+    position: sticky;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.vc-badge-request-preview-panel > .vc-badge-request-segmented {
+    align-self: center;
+}
+
+.vc-badge-request-stage {
+    display: grid;
+    place-items: center;
+    height: 196px;
+    border: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+    border-radius: 12px;
+    background-image: radial-gradient(circle at 50% 45%, rgb(255 255 255 / 7%), transparent 65%);
+}
+
+.vc-badge-request-stage-dark {
+    background-color: #111214;
+}
+
+.vc-badge-request-stage-light {
+    background-color: #f2f3f5;
+}
+
+.vc-badge-request-profile {
+    padding: 12px;
+    border: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+    border-radius: 12px;
+}
+
+.vc-badge-request-profile-label {
+    margin-bottom: 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #949ba4;
+}
+
+.vc-badge-request-profile-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vc-badge-request-avatar {
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border-radius: 50%;
+}
+
+.vc-badge-request-profile-text {
+    min-width: 0;
+}
+
+.vc-badge-request-profile-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.vc-badge-request-stage-dark .vc-badge-request-profile-name {
+    color: #f2f3f5;
+}
+
+.vc-badge-request-stage-light .vc-badge-request-profile-name {
+    color: #060607;
+}
+
+.vc-badge-request-profile-badges {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    margin-top: 4px;
+    padding: 3px 5px;
+    border-radius: 6px;
+}
+
+.vc-badge-request-stage-dark .vc-badge-request-profile-badges {
+    background: rgb(255 255 255 / 6%);
+}
+
+.vc-badge-request-stage-light .vc-badge-request-profile-badges {
+    background: rgb(0 0 0 / 6%);
+}
+
+.vc-badge-request-tooltip {
+    width: fit-content;
+    max-width: 100%;
+    margin-top: 10px;
+    padding: 6px 10px;
+    border-radius: 6px;
+    background: #18191c;
+    box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+    color: #f2f3f5;
     font-size: 13px;
-    color: var(--text-muted);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.vc-badge-request-float {
+    width: var(--size);
+    height: var(--size);
+    flex: none;
+}
+
+.vc-badge-request-fx-float {
+    animation: vc-badge-request-bob calc(3s / var(--speed)) ease-in-out infinite;
+}
+
+.vc-badge-request-medal {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    isolation: isolate;
+    touch-action: none;
+    user-select: none;
+}
+
+.vc-badge-request-shape-circle,
+.vc-badge-request-shape-rounded {
+    overflow: hidden;
+    background: var(--bg);
+    box-shadow: 0 0 0 1px rgb(255 255 255 / 10%), 0 calc(var(--size) * 0.06) calc(var(--size) * 0.2) rgb(0 0 0 / 45%);
+}
+
+.vc-badge-request-shape-circle {
+    border-radius: 50%;
+}
+
+.vc-badge-request-shape-rounded {
+    border-radius: 28%;
+}
+
+.vc-badge-request-empty {
+    border-radius: 50%;
+    outline: 1px dashed rgb(128 128 128 / 55%);
+    outline-offset: -1px;
+}
+
+.vc-badge-request-movable {
+    cursor: grab;
+}
+
+.vc-badge-request-movable:active {
+    cursor: grabbing;
+}
+
+.vc-badge-request-art {
+    position: absolute;
+    inset: 0;
+    transform-origin: center;
+}
+
+.vc-badge-request-art-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.vc-badge-request-fx-spin .vc-badge-request-art-img {
+    animation: vc-badge-request-spin calc(6s / var(--speed)) linear infinite;
+}
+
+.vc-badge-request-glint {
+    position: absolute;
+    inset: -45%;
+    z-index: 1;
+    pointer-events: none;
+    mix-blend-mode: soft-light;
+    background: conic-gradient(
+        from 0deg,
+        rgb(255 255 255 / 0%) 0deg,
+        rgb(255 255 255 / 60%) 35deg,
+        rgb(255 255 255 / 10%) 85deg,
+        rgb(255 255 255 / 0%) 140deg,
+        rgb(255 255 255 / 50%) 205deg,
+        rgb(255 255 255 / 10%) 260deg,
+        rgb(255 255 255 / 0%) 320deg
+    );
+    animation: vc-badge-request-spin calc(4s / var(--speed)) linear infinite;
+}
+
+.vc-badge-request-shine {
+    position: absolute;
+    inset: -30%;
+    z-index: 2;
+    pointer-events: none;
+    mix-blend-mode: screen;
+    background: linear-gradient(115deg, transparent 42%, rgb(255 255 255 / 70%) 50%, transparent 58%);
+    transform: translateX(-160%);
+    animation: vc-badge-request-sheen calc(2.6s / var(--speed)) ease-in-out infinite;
+}
+
+.vc-badge-request-art-shine,
+.vc-badge-request-art-glint {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+}
+
+.vc-badge-request-art-shine {
+    mix-blend-mode: screen;
+    background: linear-gradient(115deg, transparent 40%, rgb(255 255 255 / 80%) 50%, transparent 60%);
+    background-size: 300% 100%;
+    animation: vc-badge-request-mask-sheen calc(2.6s / var(--speed)) ease-in-out infinite;
+}
+
+.vc-badge-request-art-glint {
+    mix-blend-mode: soft-light;
+    background: conic-gradient(
+        from var(--vc-badge-request-angle),
+        rgb(255 255 255 / 0%) 0deg,
+        rgb(255 255 255 / 70%) 40deg,
+        rgb(255 255 255 / 0%) 120deg,
+        rgb(255 255 255 / 60%) 220deg,
+        rgb(255 255 255 / 0%) 300deg
+    );
+    animation: vc-badge-request-turn calc(4s / var(--speed)) linear infinite;
+}
+
+.vc-badge-request-fx-pulse.vc-badge-request-shape-circle,
+.vc-badge-request-fx-pulse.vc-badge-request-shape-rounded {
+    animation: vc-badge-request-pulse calc(3.2s / var(--speed)) ease-in-out infinite;
+}
+
+.vc-badge-request-fx-pulse.vc-badge-request-shape-none .vc-badge-request-art {
+    animation: vc-badge-request-glow calc(3.2s / var(--speed)) ease-in-out infinite;
+}
+
+@keyframes vc-badge-request-spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes vc-badge-request-turn {
+    to { --vc-badge-request-angle: 360deg; }
+}
+
+@keyframes vc-badge-request-sheen {
+    0% { transform: translateX(-160%); }
+    55%, 100% { transform: translateX(160%); }
+}
+
+@keyframes vc-badge-request-mask-sheen {
+    0% { background-position: 100% 0; }
+    55%, 100% { background-position: 0% 0; }
+}
+
+@keyframes vc-badge-request-bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(calc(var(--size) * -0.08)); }
+}
+
+@keyframes vc-badge-request-pulse {
+    0%, 100% { box-shadow: 0 0 0 1px color-mix(in srgb, var(--glow) 35%, transparent), 0 0 0 transparent; }
+    50% { box-shadow: 0 0 0 1px color-mix(in srgb, var(--glow) 80%, white), 0 0 calc(var(--size) * 0.35) color-mix(in srgb, var(--glow) 70%, transparent); }
+}
+
+@keyframes vc-badge-request-glow {
+    0%, 100% { filter: drop-shadow(0 0 0 transparent); }
+    50% { filter: drop-shadow(0 0 calc(var(--size) * 0.12) var(--glow)); }
+}
+
+.vc-badge-request-sent {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+}
+
+.vc-badge-request-sent .vc-badge-request-stage {
+    width: 140px;
+    height: 140px;
+    flex: none;
+}
+
+@media (width <= 760px) {
+    .vc-badge-request-designer {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .vc-badge-request-preview-panel {
+        position: static;
+        order: -1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .vc-badge-request-float,
+    .vc-badge-request-medal,
+    .vc-badge-request-art,
+    .vc-badge-request-art-img,
+    .vc-badge-request-glint,
+    .vc-badge-request-shine,
+    .vc-badge-request-art-shine,
+    .vc-badge-request-art-glint {
+        animation: none !important;
+    }
 }
