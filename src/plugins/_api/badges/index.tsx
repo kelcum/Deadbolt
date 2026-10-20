@@ -23,6 +23,7 @@ import "./avoraCreatorBadge.css";
 import "./pluginCreatorBadge.css";
 import "./vesperCreatorBadge.css";
 import "./vitraCreatorBadge.css";
+import "./ruinednzBadge.css";
 
 import { _getBadges, BadgePosition, BadgeUserArgs, ProfileBadge } from "@api/Badges";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -36,6 +37,7 @@ import definePlugin from "@utils/types";
 import { ContextMenuApi, Menu, showToast, Tooltip, UserStore } from "@webpack/common";
 import avoraCreatorLogo from "file://avoraCreatorLogo.png?base64";
 import nullCreatorLogo from "file://nullCreatorLogo.png?base64";
+import ruinednzBadge from "file://ruinednzBadge.png?base64";
 import vesperCreatorLogo from "file://vesperCreatorLogo.png?base64";
 import vitraCreatorCube from "file://vitraCreatorCube.png?base64";
 
@@ -97,6 +99,11 @@ const VESPER_CREATOR_IDS = [
 const VITRA_CREATOR_BADGE_ICON = `data:image/png;base64,${vitraCreatorCube}`;
 const VITRA_CREATOR_IDS = [
     "195516525631897600",
+];
+
+const RUINEDNZ_BADGE_ICON = `data:image/png;base64,${ruinednzBadge}`;
+const RUINEDNZ_IDS = [
+    "587048736719503381",
 ];
 
 const PLUGIN_CREATOR_BADGE_ICON = "data:image/svg+xml;base64," + btoa(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
@@ -264,6 +271,39 @@ const VitraCreatorBadge: ProfileBadge = {
     component: AnimatedVitraCreatorBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => VITRA_CREATOR_IDS.includes(userId),
+};
+
+function AnimatedRuinednzBadge() {
+    return (
+        <Tooltip
+            text={
+                <div className="ruinednz-tip">
+                    <div className="ruinednz-tip-title">ruinednz</div>
+                </div>
+            }
+        >
+            {({ onMouseEnter, onMouseLeave }) => (
+                <span
+                    className="ruinednz-badge"
+                    role="img"
+                    aria-label="ruinednz"
+                    onMouseEnter={onMouseEnter}
+                    onMouseLeave={onMouseLeave}
+                >
+                    <img src={RUINEDNZ_BADGE_ICON} alt="" draggable={false} />
+                </span>
+            )}
+        </Tooltip>
+    );
+}
+
+const RuinednzBadge: ProfileBadge = {
+    id: "ruinednz_badge",
+    description: "ruinednz",
+    key: "ruinednz",
+    component: AnimatedRuinednzBadge,
+    position: BadgePosition.START,
+    shouldShow: ({ userId }) => RUINEDNZ_IDS.includes(userId),
 };
 
 function AnimatedDeadboltContributorBadge({ userId }: ProfileBadge & BadgeUserArgs) {
@@ -535,7 +575,7 @@ export default definePlugin({
         }
     },
 
-    userProfileBadges: [ContributorBadge, EquicordContributorBadge, PluginCreatorBadge, DeadboltContributorBadge, VitraCreatorBadge, VesperCreatorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge, UserPluginContributorBadge],
+    userProfileBadges: [ContributorBadge, EquicordContributorBadge, PluginCreatorBadge, DeadboltContributorBadge, RuinednzBadge, VitraCreatorBadge, VesperCreatorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge, UserPluginContributorBadge],
 
     async start() {
         await loadAllBadges();
