@@ -5,6 +5,7 @@
  */
 
 import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
+import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
 import img_eba83c3c42fe5637 from "file://eba83c3c42fe5637.jpg?base64";
 
 import type { RequestedBadgeEntry } from "../requestedBadges";
@@ -23,5 +24,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "BT-7274",
         image: `data:image/jpeg;base64,${img_eba83c3c42fe5637}`,
         design: { shape: "circle", background: "gradient", colors: [0x000000, 0xffffff], effects: ["pulse", "shine", "glint"], speed: 1, zoom: 2, x: 0.243, y: -0.07, rotate: 0 },
+    },
+    {
+        id: "67334176be871a31",
+        users: ["1537438364607840287"],
+        name: "immortal",
+        image: `data:image/gif;base64,${img_67334176be871a31}`,
+        design: { shape: "circle", background: "gradient", colors: [0x000000, 0x6a6970], effects: ["shine", "glint", "spin", "pulse"], speed: 0.7, zoom: 1.77, x: 0, y: 0, rotate: 0 },
     },
 ];

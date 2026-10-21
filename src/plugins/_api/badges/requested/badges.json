@@ -62,5 +62,37 @@
       "badge": "BT-7274",
       "for": "dxcoy"
     }
+  },
+  {
+    "id": "67334176be871a31",
+    "users": [
+      "1537438364607840287"
+    ],
+    "name": "immortal",
+    "colors": [
+      "#000000",
+      "#6a6970"
+    ],
+    "image": "67334176be871a31.gif",
+    "imageType": "image/gif",
+    "design": {
+      "shape": "circle",
+      "background": "gradient",
+      "effects": [
+        "shine",
+        "glint",
+        "spin",
+        "pulse"
+      ],
+      "speed": 0.7,
+      "zoom": 1.77,
+      "x": 0,
+      "y": 0,
+      "rotate": 0
+    },
+    "request": {
+      "badge": "immortal",
+      "for": "9va6"
+    }
   }
 ]
