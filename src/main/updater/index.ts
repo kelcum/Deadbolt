@@ -6,6 +6,8 @@
 
 import { IpcEvents } from "@shared/IpcEvents";
 import { ipcMain } from "electron";
+import { existsSync } from "fs";
+import { join } from "path";
 
 import gitRemote from "~git-remote";
 
@@ -20,6 +22,17 @@ export interface Updater {
     applyUpdate(): Promise<boolean>;
 }
 
+function isSourceCheckout() {
+    const root = join(__dirname, "../../");
+    return existsSync(join(root, ".git")) && existsSync(join(root, "scripts/build/build.mjs"));
+}
+
+function pickUpdater(): Updater {
+    if (IS_STANDALONE) return require("./http").default;
+    if (isSourceCheckout()) return require("./git").default;
+    return require("./release").default;
+}
+
 const updater: Updater = IS_UPDATER_DISABLED
     ? {
         getRepo: async () => `https://github.com/${gitRemote}`,
@@ -27,7 +40,7 @@ const updater: Updater = IS_UPDATER_DISABLED
         fetchUpdate: async () => false,
         applyUpdate: async () => false,
     }
-    : require(IS_STANDALONE ? "./http" : "./git").default;
+    : pickUpdater();
 
 ipcMain.handle(IpcEvents.UPDATER_GET_REPO, serializeErrors(updater.getRepo));
 ipcMain.handle(IpcEvents.UPDATER_LIST_UPDATES, serializeErrors(updater.listUpdates));

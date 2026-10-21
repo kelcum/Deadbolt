@@ -44,7 +44,7 @@ import vitraCreatorCube from "file://vitraCreatorCube.png?base64";
 import Plugins, { PluginMeta } from "~plugins";
 
 import { EquicordDonorModal, EquicordTranslatorModal, VencordDonorModal } from "./modals";
-import { RequestedBadges } from "./requestedBadges";
+import { loadRequestedBadges, RequestedBadges } from "./requestedBadges";
 
 const CONTRIBUTOR_BADGE = "https://cdn.discordapp.com/emojis/1092089799109775453.png?size=64";
 const EQUICORD_CONTRIBUTOR_BADGE = "https://equicord.org/assets/favicon.png";
@@ -571,17 +571,21 @@ export default definePlugin({
 
     toolboxActions: {
         async "Refetch Badges"() {
-            await loadAllBadges(true);
+            await Promise.all([loadAllBadges(true), loadRequestedBadges()]);
             showToast({ text: "Successfully refetched badges!", variant: "success" });
         }
     },
 
-    userProfileBadges: [ContributorBadge, EquicordContributorBadge, PluginCreatorBadge, DeadboltContributorBadge, ...RequestedBadges, RuinednzBadge, VitraCreatorBadge, VesperCreatorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge, UserPluginContributorBadge],
+    userProfileBadges: [ContributorBadge, EquicordContributorBadge, PluginCreatorBadge, DeadboltContributorBadge, RequestedBadges, RuinednzBadge, VitraCreatorBadge, VesperCreatorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge, UserPluginContributorBadge],
 
     async start() {
-        await loadAllBadges();
+        loadRequestedBadges();
         clearInterval(intervalId);
-        intervalId = setInterval(loadAllBadges, 1000 * 60 * 30); // 30 minutes
+        intervalId = setInterval(() => {
+            loadRequestedBadges();
+            loadAllBadges();
+        }, 1000 * 60 * 30); // 30 minutes
+        await loadAllBadges();
     },
 
     async stop() {

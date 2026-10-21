@@ -61,6 +61,16 @@ export interface ProfileBadge {
 }
 
 const Badges = new Set<ProfileBadge>();
+const wrappedComponents = new WeakMap<NonNullable<ProfileBadge["component"]>, NonNullable<ProfileBadge["component"]>>();
+
+function wrapOnce(component: NonNullable<ProfileBadge["component"]>) {
+    let wrapped = wrappedComponents.get(component);
+    if (!wrapped) {
+        wrapped = ErrorBoundary.wrap(component, { noop: true });
+        wrappedComponents.set(component, wrapped);
+    }
+    return wrapped;
+}
 
 /**
  * Register a new badge with the Badges API
@@ -94,7 +104,7 @@ export function _getBadges(args: BadgeUserArgs) {
             ? badge.getBadges(args).map(badge => ({
                 ...args,
                 ...badge,
-                component: badge.component && ErrorBoundary.wrap(badge.component, { noop: true })
+                component: badge.component && wrapOnce(badge.component)
             }))
             : [{ ...args, ...badge }];
 
