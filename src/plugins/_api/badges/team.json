@@ -1,0 +1,59 @@
+[
+  {
+    "key": "deadbolt_creator",
+    "name": "Deadbolt Creator",
+    "users": ["195516525631897600"],
+    "colors": ["#e9eef4", "#a7b1bd"],
+    "icon": "deadboltCreatorLogo.png"
+  },
+  {
+    "key": "vesper_creator",
+    "name": "Vesper Creator",
+    "users": ["195516525631897600"],
+    "colors": ["#a596ff", "#e4defe"],
+    "icon": "vesperCreatorLogo.png"
+  },
+  {
+    "key": "vitra_creator",
+    "name": "Vitra Creator",
+    "users": ["195516525631897600"],
+    "colors": ["#ff9ccf", "#9be7ff"],
+    "icon": "roleIcons/vitraCreator.png"
+  },
+  {
+    "key": "null_creator",
+    "name": "Null Creator",
+    "users": ["1555246495840600183", "814591199071567873"],
+    "colors": ["#e9eef4", "#9aa3ae"],
+    "icon": "nullCreatorLogo.png"
+  },
+  {
+    "key": "avora_creator",
+    "name": "Avora Creator",
+    "users": ["814591199071567873"],
+    "colors": ["#f4efe6", "#c9b896"],
+    "icon": "avoraCreatorLogo.png"
+  },
+  {
+    "key": "ruinednz",
+    "name": "ruinednz",
+    "users": ["587048736719503381"],
+    "colors": ["#d9d9d9", "#6b6b6b"],
+    "icon": "ruinednzBadge.png"
+  },
+  {
+    "key": "deadbolt_contributor",
+    "name": "Deadbolt Contributor",
+    "users": ["1531412914005606513", "770744865675149323"],
+    "colors": ["#c9c0ff", "#7c6ff0"],
+    "icon": "roleIcons/deadboltContributor.png"
+  },
+  {
+    "key": "plugin_creator",
+    "name": "Plugin Creator",
+    "users": [],
+    "fromPlugins": true,
+    "colors": ["#dfe4ea", "#8f98a4"],
+    "icon": "roleIcons/pluginCreator.png"
+  }
+]
