@@ -44,11 +44,17 @@ import vitraCreatorCube from "file://vitraCreatorCube.png?base64";
 
 import Plugins, { PluginMeta } from "~plugins";
 
+import { isBadgeHidden, loadHiddenBadges } from "./hiddenBadges";
 import { EquicordDonorModal, EquicordTranslatorModal, VencordDonorModal } from "./modals";
 import { loadRequestedBadges, RequestedBadges } from "./requestedBadges";
 import team from "./team.json";
 
 const teamUsers = (key: string) => team.find(b => b.key === key)?.users ?? [];
+
+const hideable = (badge: ProfileBadge): ProfileBadge => ({
+    ...badge,
+    shouldShow: args => !isBadgeHidden(args.userId) && (badge.shouldShow?.(args) ?? true),
+});
 
 const DEADBOLT_CREATOR_BADGE_ICON = `data:image/png;base64,${deadboltCreatorLogo}`;
 const DEADBOLT_CREATOR_IDS = teamUsers("deadbolt_creator");
@@ -488,6 +494,7 @@ async function loadAllBadges(noCache = false) {
 }
 
 let intervalId: any;
+let hiddenIntervalId: any;
 
 function toDirectoryBadge(b: ProfileBadge, userId: string): DirectoryBadge {
     const id = `vc-${userId}-${b.id}`;
@@ -603,15 +610,23 @@ export default definePlugin({
 
     toolboxActions: {
         async "Refetch Badges"() {
-            await Promise.all([loadAllBadges(true), loadRequestedBadges()]);
+            await Promise.all([loadAllBadges(true), loadRequestedBadges(), loadHiddenBadges()]);
             showToast({ text: "Successfully refetched badges!", variant: "success" });
         }
     },
 
-    userProfileBadges: [ContributorBadge, EquicordContributorBadge, PluginCreatorBadge, DeadboltContributorBadge, RequestedBadges, RuinednzBadge, VitraCreatorBadge, VesperCreatorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge, UserPluginContributorBadge],
+    userProfileBadges: [
+        ContributorBadge,
+        EquicordContributorBadge,
+        ...[PluginCreatorBadge, DeadboltContributorBadge, RequestedBadges, RuinednzBadge, VitraCreatorBadge, VesperCreatorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge].map(hideable),
+        UserPluginContributorBadge
+    ],
 
     async start() {
         loadRequestedBadges();
+        loadHiddenBadges();
+        clearInterval(hiddenIntervalId);
+        hiddenIntervalId = setInterval(loadHiddenBadges, 1000 * 60 * 5);
         clearInterval(intervalId);
         intervalId = setInterval(() => {
             loadRequestedBadges();
@@ -622,6 +637,7 @@ export default definePlugin({
 
     async stop() {
         clearInterval(intervalId);
+        clearInterval(hiddenIntervalId);
         DirectoryBadges = {};
     },
 

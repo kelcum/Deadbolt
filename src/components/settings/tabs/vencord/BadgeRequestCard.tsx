@@ -7,8 +7,12 @@
 import { Button } from "@components/Button";
 import { Paragraph } from "@components/Paragraph";
 import { SpecialCard } from "@components/settings/SpecialCard";
+import { isBadgeHidden, setHiddenBadgeUsers } from "@plugins/_api/badges/hiddenBadges";
+import team from "@plugins/_api/badges/team.json";
+import { useAwaiter } from "@utils/react";
+import { PluginNative } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Modal, openModal, UserStore, useState } from "@webpack/common";
+import { Modal, openModal, showToast, UserStore, useState } from "@webpack/common";
 
 import { BadgeDesigner, BadgePreview, cl, renderBadgePng, toHex, useBadgeForm } from "./BadgeDesigner";
 
@@ -135,7 +139,42 @@ export function openBadgeRequestModal() {
     openModal(modalProps => <BadgeRequestModal modalProps={modalProps} />);
 }
 
+const Visibility = VencordNative.pluginHelpers.BadgeVisibility as PluginNative<typeof import("../../../../deadboltplugins/badgeVisibility.desktop/native")>;
+const BADGE_OWNERS = team.find(b => b.key === "deadbolt_creator")?.users ?? [];
+
+function BadgeVisibilityButton({ userId }: { userId: string; }) {
+    const [allowed] = useAwaiter(() => Visibility.canToggle(), { fallbackValue: false });
+    const [hidden, setHidden] = useState(() => isBadgeHidden(userId));
+    const [busy, setBusy] = useState(false);
+
+    if (!allowed) return null;
+
+    async function toggle() {
+        setBusy(true);
+        try {
+            const users = await Visibility.setHidden(!hidden);
+            setHiddenBadgeUsers(users);
+            const now = users.includes(userId);
+            setHidden(now);
+            showToast({ text: now ? "Your Deadbolt badges are hidden for everyone." : "Your Deadbolt badges are showing again.", variant: "success" });
+        } catch (e) {
+            showToast({ text: `Couldn't change your badges: ${e instanceof Error ? e.message : e}`, variant: "critical" });
+        } finally {
+            setBusy(false);
+        }
+    }
+
+    return (
+        <Button variant="none" size="medium" type="button" onClick={toggle} disabled={busy} className={cl("button")}>
+            {hidden ? "Show my badges" : "Hide my badges"}
+        </Button>
+    );
+}
+
 export function BadgeRequestCard() {
+    const userId = UserStore.getCurrentUser()?.id;
+    const owner = !IS_WEB && !!userId && BADGE_OWNERS.includes(userId);
+
     return (
         <SpecialCard
             title="Custom Badges"
@@ -149,6 +188,7 @@ export function BadgeRequestCard() {
                 <BadgeIcon />
                 Design a badge
             </Button>
+            {owner && <BadgeVisibilityButton userId={userId} />}
         </SpecialCard>
     );
 }
