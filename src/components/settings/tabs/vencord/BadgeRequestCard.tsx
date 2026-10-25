@@ -5,6 +5,7 @@
  */
 
 import { Button } from "@components/Button";
+import ErrorBoundary from "@components/ErrorBoundary";
 import { Paragraph } from "@components/Paragraph";
 import { SpecialCard } from "@components/settings/SpecialCard";
 import { isBadgeHidden, setHiddenBadgeUsers } from "@plugins/_api/badges/hiddenBadges";
@@ -139,11 +140,12 @@ export function openBadgeRequestModal() {
     openModal(modalProps => <BadgeRequestModal modalProps={modalProps} />);
 }
 
-const Visibility = VencordNative.pluginHelpers.BadgeVisibility as PluginNative<typeof import("../../../../deadboltplugins/badgeVisibility.desktop/native")>;
+type VisibilityNative = PluginNative<typeof import("../../../../deadboltplugins/badgeVisibility.desktop/native")>;
+const visibility = () => VencordNative.pluginHelpers?.BadgeVisibility as VisibilityNative | undefined;
 const BADGE_OWNERS = team.find(b => b.key === "deadbolt_creator")?.users ?? [];
 
-function BadgeVisibilityButton({ userId }: { userId: string; }) {
-    const [allowed] = useAwaiter(() => Visibility.canToggle(), { fallbackValue: false });
+const BadgeVisibilityButton = ErrorBoundary.wrap(({ userId }: { userId: string; }) => {
+    const [allowed] = useAwaiter(async () => !!await visibility()?.canToggle().catch(() => false), { fallbackValue: false });
     const [hidden, setHidden] = useState(() => isBadgeHidden(userId));
     const [busy, setBusy] = useState(false);
 
@@ -152,7 +154,9 @@ function BadgeVisibilityButton({ userId }: { userId: string; }) {
     async function toggle() {
         setBusy(true);
         try {
-            const users = await Visibility.setHidden(!hidden);
+            const native = visibility();
+            if (!native) throw new Error("fully restart Discord first");
+            const users = await native.setHidden(!hidden);
             setHiddenBadgeUsers(users);
             const now = users.includes(userId);
             setHidden(now);
@@ -169,7 +173,7 @@ function BadgeVisibilityButton({ userId }: { userId: string; }) {
             {hidden ? "Show my badges" : "Hide my badges"}
         </Button>
     );
-}
+}, { noop: true });
 
 export function BadgeRequestCard() {
     const userId = UserStore.getCurrentUser()?.id;
