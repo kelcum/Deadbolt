@@ -8,10 +8,8 @@ import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Paragraph } from "@components/Paragraph";
 import { SpecialCard } from "@components/settings/SpecialCard";
-import { isBadgeHidden, setHiddenBadgeUsers } from "@plugins/_api/badges/hiddenBadges";
-import team from "@plugins/_api/badges/team.json";
-import { useAwaiter } from "@utils/react";
-import { PluginNative } from "@utils/types";
+import { deadboltBadgesOf } from "@plugins/_api/badges";
+import { BADGE_OWNERS, hiddenBadgesOf, isTestMode, saveHiddenBadges, setTestMode } from "@plugins/_api/badges/hiddenBadges";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal, openModal, showToast, UserStore, useState } from "@webpack/common";
 
@@ -140,44 +138,70 @@ export function openBadgeRequestModal() {
     openModal(modalProps => <BadgeRequestModal modalProps={modalProps} />);
 }
 
-type VisibilityNative = PluginNative<typeof import("../../../../deadboltplugins/badgeVisibility.desktop/native")>;
-const visibility = () => VencordNative.pluginHelpers?.BadgeVisibility as VisibilityNative | undefined;
-const BADGE_OWNERS = team.find(b => b.key === "deadbolt_creator")?.users ?? [];
+const YourBadges = ErrorBoundary.wrap(({ userId }: { userId: string; }) => {
+    const [, refresh] = useState(0);
+    const [busy, setBusy] = useState<string | null>(null);
+    const owner = BADGE_OWNERS.includes(userId);
+    const badges = deadboltBadgesOf(userId);
+    const hidden = new Set(hiddenBadgesOf(userId));
 
-const BadgeVisibilityButton = ErrorBoundary.wrap(({ userId }: { userId: string; }) => {
-    const [allowed] = useAwaiter(async () => !!await visibility()?.canToggle().catch(() => false), { fallbackValue: false });
-    const [hidden, setHidden] = useState(() => isBadgeHidden(userId));
-    const [busy, setBusy] = useState(false);
+    if (!badges.length && !owner) return null;
 
-    if (!allowed) return null;
-
-    async function toggle() {
-        setBusy(true);
+    async function toggle(id: string) {
+        const showing = !hidden.has(id);
+        setBusy(id);
         try {
-            const native = visibility();
-            if (!native) throw new Error("fully restart Discord first");
-            const users = await native.setHidden(!hidden);
-            setHiddenBadgeUsers(users);
-            const now = users.includes(userId);
-            setHidden(now);
-            showToast({ text: now ? "Your Deadbolt badges are hidden for everyone." : "Your Deadbolt badges are showing again.", variant: "success" });
+            await saveHiddenBadges(userId, showing ? [...hidden, id] : [...hidden].filter(h => h !== id));
+            showToast({ text: showing ? "Hidden. Nobody on Deadbolt sees that badge on you now." : "That badge is showing again.", variant: "success" });
         } catch (e) {
-            showToast({ text: `Couldn't change your badges: ${e instanceof Error ? e.message : e}`, variant: "critical" });
+            showToast({ text: `Couldn't save that: ${e instanceof Error ? e.message : e}`, variant: "critical" });
         } finally {
-            setBusy(false);
+            setBusy(null);
+            refresh(n => n + 1);
         }
     }
 
     return (
-        <Button variant="none" size="medium" type="button" onClick={toggle} disabled={busy} className={cl("button")}>
-            {hidden ? "Show my badges" : "Hide my badges"}
-        </Button>
+        <div className={cl("yours")}>
+            <Paragraph className={cl("yours-title")}>Your badges</Paragraph>
+            <Paragraph className={cl("yours-hint")}>Click a badge to hide it from everyone on Deadbolt, click again to bring it back.</Paragraph>
+            <div className={cl("yours-list")}>
+                {badges.map(badge => {
+                    const Badge = badge.component!;
+                    const off = hidden.has(badge.id);
+                    return (
+                        <button
+                            key={badge.id}
+                            type="button"
+                            disabled={busy === badge.id}
+                            onClick={() => toggle(badge.id)}
+                            aria-pressed={!off}
+                            className={cl("yours-badge", { "yours-off": off })}
+                        >
+                            <span className={cl("yours-art")}><Badge {...badge} userId={userId} guildId="" /></span>
+                            <span className={cl("yours-name")}>{badge.description}</span>
+                            <span className={cl("yours-state")}>{off ? "Hidden" : "Showing"}</span>
+                        </button>
+                    );
+                })}
+            </div>
+            {owner && (
+                <Button
+                    variant="none"
+                    size="small"
+                    type="button"
+                    className={cl("yours-test")}
+                    onClick={() => { setTestMode(!isTestMode()); refresh(n => n + 1); }}
+                >
+                    {isTestMode() ? "Test mode on: you have every badge (only you see this)" : "Test mode: give me every badge (only I see it)"}
+                </Button>
+            )}
+        </div>
     );
 }, { noop: true });
 
 export function BadgeRequestCard() {
     const userId = UserStore.getCurrentUser()?.id;
-    const owner = !IS_WEB && !!userId && BADGE_OWNERS.includes(userId);
 
     return (
         <SpecialCard
@@ -192,7 +216,7 @@ export function BadgeRequestCard() {
                 <BadgeIcon />
                 Design a badge
             </Button>
-            {owner && <BadgeVisibilityButton userId={userId} />}
+            {userId && <YourBadges userId={userId} />}
         </SpecialCard>
     );
 }

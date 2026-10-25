@@ -44,16 +44,18 @@ import vitraCreatorCube from "file://vitraCreatorCube.png?base64";
 
 import Plugins, { PluginMeta } from "~plugins";
 
-import { isBadgeHidden, loadHiddenBadges } from "./hiddenBadges";
+import { holdsEveryBadge, isBadgeHidden, loadHiddenBadges } from "./hiddenBadges";
 import { EquicordDonorModal, EquicordTranslatorModal, VencordDonorModal } from "./modals";
-import { loadRequestedBadges, RequestedBadges } from "./requestedBadges";
+import { loadRequestedBadges, RequestedBadges, requestedBadgesOf } from "./requestedBadges";
 import team from "./team.json";
 
 const teamUsers = (key: string) => team.find(b => b.key === key)?.users ?? [];
 
+const owns = (badge: ProfileBadge, args: BadgeUserArgs) => holdsEveryBadge(args.userId) || (badge.shouldShow?.(args) ?? true);
+
 const hideable = (badge: ProfileBadge): ProfileBadge => ({
     ...badge,
-    shouldShow: args => !isBadgeHidden(args.userId) && (badge.shouldShow?.(args) ?? true),
+    shouldShow: args => owns(badge, args) && !isBadgeHidden(args.userId, badge.id),
 });
 
 const DEADBOLT_CREATOR_BADGE_ICON = `data:image/png;base64,${deadboltCreatorLogo}`;
@@ -449,6 +451,13 @@ const AvoraCreatorBadge: ProfileBadge = {
     shouldShow: ({ userId }) => AVORA_CREATOR_IDS.includes(userId),
 };
 
+const DEADBOLT_BADGES = [PluginCreatorBadge, DeadboltContributorBadge, RuinednzBadge, VitraCreatorBadge, VesperCreatorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge];
+
+export function deadboltBadgesOf(userId: string): ProfileBadge[] {
+    const args = { userId, guildId: "" };
+    return [...requestedBadgesOf(userId), ...DEADBOLT_BADGES.filter(b => owns(b, args)).reverse()];
+}
+
 const UserPluginContributorBadge: ProfileBadge = {
     id: "user_plugin_contributor_badge",
     description: "User Plugin Contributor",
@@ -618,7 +627,9 @@ export default definePlugin({
     userProfileBadges: [
         ContributorBadge,
         EquicordContributorBadge,
-        ...[PluginCreatorBadge, DeadboltContributorBadge, RequestedBadges, RuinednzBadge, VitraCreatorBadge, VesperCreatorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge].map(hideable),
+        ...[PluginCreatorBadge, DeadboltContributorBadge].map(hideable),
+        RequestedBadges,
+        ...[RuinednzBadge, VitraCreatorBadge, VesperCreatorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge].map(hideable),
         UserPluginContributorBadge
     ],
 

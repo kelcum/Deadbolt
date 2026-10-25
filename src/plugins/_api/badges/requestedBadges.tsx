@@ -12,6 +12,7 @@ import { BadgeDesign, BadgeName, BadgePreview } from "@components/settings/tabs/
 import { Logger } from "@utils/Logger";
 import { Tooltip } from "@webpack/common";
 
+import { holdsEveryBadge, isBadgeHidden } from "./hiddenBadges";
 import { requestedBadges } from "./requested/badges";
 
 export interface RequestedBadgeEntry {
@@ -81,11 +82,18 @@ function getBadge(entry: RequestedBadgeEntry) {
     return badge;
 }
 
+export function requestedBadgesOf(userId: string) {
+    const all = holdsEveryBadge(userId);
+    return entries.filter(e => all || e.users.includes(userId)).map(getBadge);
+}
+
+const shown = (userId: string) => requestedBadgesOf(userId).filter(b => !isBadgeHidden(userId, b.id));
+
 export const RequestedBadges: ProfileBadge = {
     id: "requested_badges",
     position: BadgePosition.START,
-    shouldShow: ({ userId }) => entries.some(e => e.users.includes(userId)),
-    getBadges: ({ userId }) => entries.filter(e => e.users.includes(userId)).map(getBadge),
+    shouldShow: ({ userId }) => shown(userId).length > 0,
+    getBadges: ({ userId }) => shown(userId),
 };
 
 async function fetchImage(file: string, type: string | null) {
