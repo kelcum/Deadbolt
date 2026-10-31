@@ -80,6 +80,8 @@ export const CspPolicies: PolicyMap = {
     "equicord.org": ImageSrc,
     "*.equicord.org": ImageSrc,
 
+    "api.xan.gripe": ConnectSrc,
+
     "fonts.gstatic.com": [...ConnectSrc, ...CssSrc],
     "fonts.google.com": ConnectSrc,
     "images-ext-1.discordapp.net": ImageSrc,
