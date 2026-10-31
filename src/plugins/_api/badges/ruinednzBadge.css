@@ -99,7 +99,6 @@
     letter-spacing: 0.04em;
     background: linear-gradient(100deg, #fff, #6b6b6b 45%, #fff 55%, #a8a8a8);
     background-size: 200% auto;
-    -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;

@@ -28,11 +28,8 @@
     inset: 0;
     overflow: hidden;
     pointer-events: none;
-    -webkit-mask-size: contain;
     mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
-    -webkit-mask-position: center;
     mask-position: center;
 }
 
@@ -70,9 +67,8 @@
 .null-creator-tip-title {
     font-weight: 700;
     font-size: 14px;
-    background: linear-gradient(100deg, #e9eef4, #9aa3ae 45%, #ffffff 55%, #c3ccd6);
+    background: linear-gradient(100deg, #e9eef4, #9aa3ae 45%, #fff 55%, #c3ccd6);
     background-size: 200% auto;
-    -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;

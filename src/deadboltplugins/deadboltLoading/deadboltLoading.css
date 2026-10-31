@@ -9,13 +9,12 @@
         100deg,
         #e9eef4 0%,
         #a7b1bd 22%,
-        #ffffff 40%,
+        #fff 40%,
         #757f8b 58%,
         #c3ccd6 78%,
         #e9eef4 100%
     );
     background-size: 220% auto;
-    -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
@@ -91,9 +90,8 @@
     font-weight: 800;
     font-size: 22px;
     letter-spacing: 0.32em;
-    background: linear-gradient(100deg, #e9eef4, #a7b1bd 40%, #ffffff 52%, #c3ccd6);
+    background: linear-gradient(100deg, #e9eef4, #a7b1bd 40%, #fff 52%, #c3ccd6);
     background-size: 220% auto;
-    -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;

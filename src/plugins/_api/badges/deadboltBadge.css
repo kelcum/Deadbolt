@@ -96,9 +96,8 @@
 .deadbolt-creator-tip-title {
     font-weight: 700;
     font-size: 14px;
-    background: linear-gradient(100deg, #e9eef4, #a7b1bd 45%, #ffffff 55%, #c3ccd6);
+    background: linear-gradient(100deg, #e9eef4, #a7b1bd 45%, #fff 55%, #c3ccd6);
     background-size: 200% auto;
-    -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
@@ -215,7 +214,6 @@
     font-size: 14px;
     background: linear-gradient(100deg, #c9c0ff, #7c6ff0 45%, #e4defe 55%, #9b8ef5);
     background-size: 200% auto;
-    -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;

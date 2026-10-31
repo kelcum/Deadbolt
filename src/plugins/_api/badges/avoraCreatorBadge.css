@@ -28,11 +28,8 @@
     inset: 0;
     overflow: hidden;
     pointer-events: none;
-    -webkit-mask-size: contain;
     mask-size: contain;
-    -webkit-mask-repeat: no-repeat;
     mask-repeat: no-repeat;
-    -webkit-mask-position: center;
     mask-position: center;
 }
 
@@ -94,7 +91,6 @@
     font-size: 14px;
     background: linear-gradient(100deg, #f4efe6, #c9b896 45%, #fffaf0 55%, #dccdb0);
     background-size: 200% auto;
-    -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
