@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
 import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
 import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
 import img_eba83c3c42fe5637 from "file://eba83c3c42fe5637.jpg?base64";
@@ -31,5 +32,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "immortal",
         image: `data:image/gif;base64,${img_67334176be871a31}`,
         design: { shape: "circle", background: "gradient", colors: [0x000000, 0x6a6970], effects: ["shine", "glint", "spin", "pulse"], speed: 0.7, zoom: 1.77, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "3b7a05876fba5c07",
+        users: ["1510759328372494506"],
+        name: "Fuck idk",
+        image: `data:image/png;base64,${img_3b7a05876fba5c07}`,
+        design: { shape: "circle", background: "gradient", colors: [0xff0000, 0x07ff00], effects: ["shine", "glint", "pulse", "float"], speed: 1, zoom: 1.33, x: 0, y: 0.16, rotate: 0 },
     },
 ];
