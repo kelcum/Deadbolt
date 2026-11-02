@@ -1,0 +1,64 @@
+name: Deadbolt Release
+on:
+    workflow_run:
+        workflows: [Test]
+        types: [completed]
+        branches: [main]
+    workflow_dispatch:
+
+permissions:
+    contents: write
+
+concurrency:
+    group: deadbolt-release
+    cancel-in-progress: false
+
+jobs:
+    release:
+        name: Publish deadbolt-dist.zip
+        if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
+        runs-on: ubuntu-latest
+        env:
+            SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+            GH_TOKEN: ${{ github.token }}
+            REPO: ${{ github.repository }}
+
+        steps:
+            - name: Check this is still the newest commit
+              id: tip
+              run: |
+                  tip=$(gh api "repos/$REPO/commits/main" --jq .sha)
+                  if [ "$tip" = "$SHA" ]; then echo "latest=true" >> "$GITHUB_OUTPUT"; else echo "main moved on to $tip, skipping $SHA"; echo "latest=false" >> "$GITHUB_OUTPUT"; fi
+
+            - name: Checkout repository
+              if: steps.tip.outputs.latest == 'true'
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  ref: ${{ env.SHA }}
+
+            - name: Setup PNPM
+              if: steps.tip.outputs.latest == 'true'
+              uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e # v3.1.2
+              with:
+                  runtime: node@v24
+                  require-lockfile: true
+
+            - name: Build
+              if: steps.tip.outputs.latest == 'true'
+              run: pnpm build
+
+            - name: Zip
+              if: steps.tip.outputs.latest == 'true'
+              run: |
+                  test "$(git rev-parse HEAD)" = "$SHA"
+                  grep -q "$SHA" dist/desktop/renderer.js
+                  cd dist/desktop
+                  zip -X "$GITHUB_WORKSPACE/deadbolt-dist.zip" package.json patcher.js preload.js renderer.css renderer.js
+                  unzip -l "$GITHUB_WORKSPACE/deadbolt-dist.zip"
+
+            - name: Upload to the latest release
+              if: steps.tip.outputs.latest == 'true'
+              run: |
+                  tag=$(gh release view -R "$REPO" --json tagName --jq .tagName)
+                  gh release upload "$tag" "deadbolt-dist.zip#deadbolt-dist.zip (build $SHA)" -R "$REPO" --clobber
+                  gh api "repos/$REPO/releases/latest" --jq '.assets[] | select(.name == "deadbolt-dist.zip") | "\(.label) \(.size) bytes"'
