@@ -5,6 +5,7 @@
  */
 
 import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
+import img_17b954e0cb2b20b8 from "file://17b954e0cb2b20b8.jpg?base64";
 import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
 import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
 import img_eba83c3c42fe5637 from "file://eba83c3c42fe5637.jpg?base64";
@@ -46,5 +47,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Zot",
         image: null,
         design: { shape: "rounded", background: "gradient", colors: [0x000000, 0x191919], effects: ["shine", "glint"], speed: 1.15, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "17b954e0cb2b20b8",
+        users: ["1388196102229987328"],
+        name: "fuck you k3",
+        image: `data:image/jpeg;base64,${img_17b954e0cb2b20b8}`,
+        design: { shape: "none", background: "gradient", colors: [0xff0004, 0x000000], effects: [], speed: 1, zoom: 1.5, x: 0, y: 0, rotate: 0 },
     },
 ];
