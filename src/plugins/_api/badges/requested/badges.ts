@@ -40,4 +40,11 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         image: `data:image/png;base64,${img_3b7a05876fba5c07}`,
         design: { shape: "circle", background: "gradient", colors: [0xff0000, 0x07ff00], effects: ["shine", "glint", "pulse", "float"], speed: 1, zoom: 1.33, x: 0, y: 0.16, rotate: 0 },
     },
+    {
+        id: "5ff6b2b93ec7f7b5",
+        users: ["1531412914005606513"],
+        name: "Zot",
+        image: null,
+        design: { shape: "rounded", background: "gradient", colors: [0x000000, 0x191919], effects: ["shine", "glint"], speed: 1.15, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
 ];

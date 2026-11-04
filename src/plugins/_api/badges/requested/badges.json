@@ -130,5 +130,35 @@
       "for": "4raxi"
     },
     "imageHash": "1293085f1f1cf0f5"
+  },
+  {
+    "id": "5ff6b2b93ec7f7b5",
+    "users": [
+      "1531412914005606513"
+    ],
+    "name": "Zot",
+    "colors": [
+      "#000000",
+      "#191919"
+    ],
+    "image": null,
+    "imageType": null,
+    "design": {
+      "shape": "rounded",
+      "background": "gradient",
+      "effects": [
+        "shine",
+        "glint"
+      ],
+      "speed": 1.15,
+      "zoom": 1,
+      "x": 0,
+      "y": 0,
+      "rotate": 0
+    },
+    "request": {
+      "badge": "Zot",
+      "for": "byezxt"
+    }
   }
 ]
