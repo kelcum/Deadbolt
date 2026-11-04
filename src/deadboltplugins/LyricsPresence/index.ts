@@ -37,7 +37,6 @@ let retryTimer: ReturnType<typeof setTimeout> | undefined;
 
 function isSong(activity: Activity): activity is SongActivity {
     return activity.type === ActivityType.LISTENING
-        && activity.application_id != null
         && activity.timestamps?.start != null
         && !!activity.details
         && !!activity.state;
@@ -134,7 +133,7 @@ function reset() {
 
 export default definePlugin({
     name: "LyricsPresence",
-    description: "Puts the lyrics of the current song in your status while a music app like Uprising shows Rich Presence, or the song title if it has no synced lyrics. It doesn't work with Discord's own Spotify connection. Your status changes about every 4 seconds and everyone can see the lyrics, explicit ones included. Song names are sent to lrclib.net to find them.",
+    description: "Puts the lyrics of the current song in your status while you listen on Spotify or a music app that shows Rich Presence, or the song title if it has no synced lyrics. Your status changes about every 4 seconds and everyone can see the lyrics, explicit ones included. Song names are sent to lrclib.net to find them.",
     authors: [Devs.K3],
 
     patches: [
