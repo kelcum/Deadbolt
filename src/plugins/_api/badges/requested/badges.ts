@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import img_2e9aa52581c65bcc from "file://2e9aa52581c65bcc.jpg?base64";
 import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
 import img_17b954e0cb2b20b8 from "file://17b954e0cb2b20b8.jpg?base64";
 import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
@@ -54,5 +55,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "fuck you k3",
         image: `data:image/jpeg;base64,${img_17b954e0cb2b20b8}`,
         design: { shape: "none", background: "gradient", colors: [0xff0004, 0x000000], effects: [], speed: 1, zoom: 1.5, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "2e9aa52581c65bcc",
+        users: ["1193711027456589864"],
+        name: "lamb",
+        image: `data:image/jpeg;base64,${img_2e9aa52581c65bcc}`,
+        design: { shape: "rounded", background: "gradient", colors: [0x2c2c2c, 0x838383], effects: ["glint", "shine", "pulse"], speed: 0.7, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];
