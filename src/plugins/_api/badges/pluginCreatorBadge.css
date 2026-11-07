@@ -15,7 +15,9 @@
     vertical-align: middle;
     line-height: 0;
     isolation: isolate;
-    box-shadow: 0 0 0 1px rgb(179 187 198 / 12%), 0 1px 3px rgb(0 0 0 / 45%);
+    box-shadow:
+        0 0 0 1px rgb(179 187 198 / 12%),
+        0 1px 3px rgb(0 0 0 / 45%);
     animation: deadbolt-plugin-creator-pulse 4.5s ease-in-out infinite;
 }
 
@@ -44,13 +46,28 @@
 }
 
 @keyframes deadbolt-plugin-creator-sheen {
-    0% { transform: translateX(-160%); }
-    30%, 100% { transform: translateX(160%); }
+    0% {
+        transform: translateX(-160%);
+    }
+    30%,
+    100% {
+        transform: translateX(160%);
+    }
 }
 
 @keyframes deadbolt-plugin-creator-pulse {
-    0%, 100% { box-shadow: 0 0 0 1px rgb(179 187 198 / 12%), 0 1px 3px rgb(0 0 0 / 45%); }
-    50% { box-shadow: 0 0 0 1px rgb(179 187 198 / 28%), 0 0 6px rgb(179 187 198 / 40%), 0 1px 3px rgb(0 0 0 / 45%); }
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 1px rgb(179 187 198 / 12%),
+            0 1px 3px rgb(0 0 0 / 45%);
+    }
+    50% {
+        box-shadow:
+            0 0 0 1px rgb(179 187 198 / 28%),
+            0 0 6px rgb(179 187 198 / 40%),
+            0 1px 3px rgb(0 0 0 / 45%);
+    }
 }
 
 .deadbolt-plugin-creator-tip {
@@ -78,8 +95,12 @@
 }
 
 @keyframes deadbolt-plugin-creator-tip-sheen {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

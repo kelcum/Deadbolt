@@ -48,13 +48,23 @@
 }
 
 @keyframes null-creator-sheen {
-    0% { transform: translateX(-160%); }
-    45%, 100% { transform: translateX(160%); }
+    0% {
+        transform: translateX(-160%);
+    }
+    45%,
+    100% {
+        transform: translateX(160%);
+    }
 }
 
 @keyframes null-creator-glow {
-    0%, 100% { filter: drop-shadow(0 0 2px rgb(255 255 255 / 15%)) brightness(1); }
-    50% { filter: drop-shadow(0 0 4px rgb(255 255 255 / 40%)) brightness(1.18); }
+    0%,
+    100% {
+        filter: drop-shadow(0 0 2px rgb(255 255 255 / 15%)) brightness(1);
+    }
+    50% {
+        filter: drop-shadow(0 0 4px rgb(255 255 255 / 40%)) brightness(1.18);
+    }
 }
 
 .null-creator-tip {
@@ -76,8 +86,12 @@
 }
 
 @keyframes null-creator-tip-sheen {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
 }
 
 .theme-light .null-creator-badge img {

@@ -15,7 +15,9 @@
     vertical-align: middle;
     line-height: 0;
     isolation: isolate;
-    box-shadow: 0 0 0 1px rgb(165 150 255 / 15%), 0 1px 3px rgb(0 0 0 / 45%);
+    box-shadow:
+        0 0 0 1px rgb(165 150 255 / 15%),
+        0 1px 3px rgb(0 0 0 / 45%);
     animation: vesper-creator-pulse 3s ease-in-out infinite;
 }
 
@@ -74,7 +76,12 @@
     height: 10px;
     margin: -5px 0 0 -5px;
     background:
-        radial-gradient(circle, rgb(255 255 255) 0 10%, rgb(214 206 255 / 60%) 22%, transparent 48%),
+        radial-gradient(
+            circle,
+            rgb(255 255 255) 0 10%,
+            rgb(214 206 255 / 60%) 22%,
+            transparent 48%
+        ),
         linear-gradient(90deg, transparent 45%, rgb(255 255 255 / 90%) 50%, transparent 55%),
         linear-gradient(0deg, transparent 45%, rgb(255 255 255 / 90%) 50%, transparent 55%);
     mask-image: radial-gradient(circle, black 25%, transparent 70%);
@@ -85,26 +92,48 @@
 }
 
 @keyframes vesper-creator-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes vesper-creator-sheen {
-    0% { transform: translateX(-160%); }
-    100% { transform: translateX(160%); }
+    0% {
+        transform: translateX(-160%);
+    }
+    100% {
+        transform: translateX(160%);
+    }
 }
 
 @keyframes vesper-creator-breathe {
-    0%, 100% { filter: brightness(1) saturate(1); }
-    50% { filter: brightness(1.25) saturate(1.12); }
+    0%,
+    100% {
+        filter: brightness(1) saturate(1);
+    }
+    50% {
+        filter: brightness(1.25) saturate(1.12);
+    }
 }
 
 @keyframes vesper-creator-pulse {
-    0%, 100% { box-shadow: 0 0 0 1px rgb(165 150 255 / 15%), 0 1px 3px rgb(0 0 0 / 45%); }
-    50% { box-shadow: 0 0 0 1px rgb(165 150 255 / 35%), 0 0 7px rgb(165 150 255 / 55%), 0 1px 3px rgb(0 0 0 / 45%); }
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 1px rgb(165 150 255 / 15%),
+            0 1px 3px rgb(0 0 0 / 45%);
+    }
+    50% {
+        box-shadow:
+            0 0 0 1px rgb(165 150 255 / 35%),
+            0 0 7px rgb(165 150 255 / 55%),
+            0 1px 3px rgb(0 0 0 / 45%);
+    }
 }
 
 @keyframes vesper-creator-twinkle {
-    0%, 100% {
+    0%,
+    100% {
         opacity: 0.45;
         transform: scale(0.4) rotate(0deg);
     }

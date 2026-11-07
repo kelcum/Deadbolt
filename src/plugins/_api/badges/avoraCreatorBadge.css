@@ -66,17 +66,28 @@
 }
 
 @keyframes avora-creator-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes avora-creator-sheen {
-    0% { transform: translateX(-160%); }
-    100% { transform: translateX(160%); }
+    0% {
+        transform: translateX(-160%);
+    }
+    100% {
+        transform: translateX(160%);
+    }
 }
 
 @keyframes avora-creator-glow {
-    0%, 100% { filter: drop-shadow(0 0 2px rgb(240 226 196 / 15%)) brightness(1); }
-    50% { filter: drop-shadow(0 0 4px rgb(240 222 186 / 50%)) brightness(1.12); }
+    0%,
+    100% {
+        filter: drop-shadow(0 0 2px rgb(240 226 196 / 15%)) brightness(1);
+    }
+    50% {
+        filter: drop-shadow(0 0 4px rgb(240 222 186 / 50%)) brightness(1.12);
+    }
 }
 
 .avora-creator-tip {
@@ -98,8 +109,12 @@
 }
 
 @keyframes avora-creator-tip-sheen {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
 }
 
 .theme-light .avora-creator-badge img {

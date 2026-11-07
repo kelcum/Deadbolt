@@ -24,8 +24,12 @@
 }
 
 @keyframes deadbolt-loading-sheen {
-    0% { background-position: 0% center; }
-    100% { background-position: 220% center; }
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 220% center;
+    }
 }
 
 .deadbolt-splash-overlay {
@@ -54,7 +58,9 @@
     border-radius: 26px;
     overflow: hidden;
     isolation: isolate;
-    box-shadow: 0 16px 44px rgb(0 0 0 / 55%), 0 0 0 1px rgb(255 255 255 / 6%);
+    box-shadow:
+        0 16px 44px rgb(0 0 0 / 55%),
+        0 0 0 1px rgb(255 255 255 / 6%);
 }
 
 .deadbolt-splash-crest img {
@@ -121,27 +127,46 @@
 }
 
 @keyframes deadbolt-splash-fade-in {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes deadbolt-splash-fade-out {
-    from { opacity: 1; }
-    to { opacity: 0; }
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
 }
 
 @keyframes deadbolt-splash-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes deadbolt-splash-breathe {
-    0%, 100% { filter: brightness(1) contrast(1); }
-    50% { filter: brightness(1.28) contrast(1.12) saturate(1.05); }
+    0%,
+    100% {
+        filter: brightness(1) contrast(1);
+    }
+    50% {
+        filter: brightness(1.28) contrast(1.12) saturate(1.05);
+    }
 }
 
 @keyframes deadbolt-splash-sheen {
-    0% { background-position: 0% center; }
-    100% { background-position: 220% center; }
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 220% center;
+    }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -1,224 +1,162 @@
 [
-  {
-    "id": "166fe28fc2c180a4",
-    "users": [
-      "195516525631897600"
-    ],
-    "name": "llama",
-    "colors": [
-      "#d97af0",
-      "#0b33b3",
-      "#6031b5",
-      "#35343d"
-    ],
-    "image": "166fe28fc2c180a4.png",
-    "imageType": "image/png",
-    "design": {
-      "shape": "none",
-      "background": "none",
-      "effects": [
-        "shine",
-        "glint",
-        "pulse"
-      ],
-      "speed": 1,
-      "zoom": 1,
-      "x": 0,
-      "y": 0,
-      "rotate": 0
+    {
+        "id": "166fe28fc2c180a4",
+        "users": ["195516525631897600"],
+        "name": "llama",
+        "colors": ["#d97af0", "#0b33b3", "#6031b5", "#35343d"],
+        "image": "166fe28fc2c180a4.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "none",
+            "background": "none",
+            "effects": ["shine", "glint", "pulse"],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "llama",
+            "for": "xanax.pl"
+        },
+        "imageHash": "eb850070c513baee"
     },
-    "request": {
-      "badge": "llama",
-      "for": "xanax.pl"
+    {
+        "id": "eba83c3c42fe5637",
+        "users": ["720465317226086413"],
+        "name": "BT-7274",
+        "colors": ["#000000", "#ffffff"],
+        "image": "eba83c3c42fe5637.jpg",
+        "imageType": "image/jpeg",
+        "design": {
+            "shape": "circle",
+            "background": "gradient",
+            "effects": ["pulse", "shine", "glint"],
+            "speed": 1,
+            "zoom": 2,
+            "x": 0.243,
+            "y": -0.07,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "BT-7274",
+            "for": "dxcoy"
+        },
+        "imageHash": "1245c91c8528fe9a"
     },
-    "imageHash": "eb850070c513baee"
-  },
-  {
-    "id": "eba83c3c42fe5637",
-    "users": [
-      "720465317226086413"
-    ],
-    "name": "BT-7274",
-    "colors": [
-      "#000000",
-      "#ffffff"
-    ],
-    "image": "eba83c3c42fe5637.jpg",
-    "imageType": "image/jpeg",
-    "design": {
-      "shape": "circle",
-      "background": "gradient",
-      "effects": [
-        "pulse",
-        "shine",
-        "glint"
-      ],
-      "speed": 1,
-      "zoom": 2,
-      "x": 0.243,
-      "y": -0.07,
-      "rotate": 0
+    {
+        "id": "67334176be871a31",
+        "users": ["1537438364607840287"],
+        "name": "immortal",
+        "colors": ["#000000", "#6a6970"],
+        "image": "67334176be871a31.gif",
+        "imageType": "image/gif",
+        "design": {
+            "shape": "circle",
+            "background": "gradient",
+            "effects": ["shine", "glint", "spin", "pulse"],
+            "speed": 0.7,
+            "zoom": 1.77,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "immortal",
+            "for": "9va6"
+        },
+        "imageHash": "fc335e7247c1189a"
     },
-    "request": {
-      "badge": "BT-7274",
-      "for": "dxcoy"
+    {
+        "id": "3b7a05876fba5c07",
+        "users": ["1510759328372494506"],
+        "name": "Fuck idk",
+        "colors": ["#ff0000", "#07ff00"],
+        "image": "3b7a05876fba5c07.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "circle",
+            "background": "gradient",
+            "effects": ["shine", "glint", "pulse", "float"],
+            "speed": 1,
+            "zoom": 1.33,
+            "x": 0,
+            "y": 0.16,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Fuck idk",
+            "for": "4raxi"
+        },
+        "imageHash": "1293085f1f1cf0f5"
     },
-    "imageHash": "1245c91c8528fe9a"
-  },
-  {
-    "id": "67334176be871a31",
-    "users": [
-      "1537438364607840287"
-    ],
-    "name": "immortal",
-    "colors": [
-      "#000000",
-      "#6a6970"
-    ],
-    "image": "67334176be871a31.gif",
-    "imageType": "image/gif",
-    "design": {
-      "shape": "circle",
-      "background": "gradient",
-      "effects": [
-        "shine",
-        "glint",
-        "spin",
-        "pulse"
-      ],
-      "speed": 0.7,
-      "zoom": 1.77,
-      "x": 0,
-      "y": 0,
-      "rotate": 0
+    {
+        "id": "5ff6b2b93ec7f7b5",
+        "users": ["1531412914005606513"],
+        "name": "Zot",
+        "colors": ["#000000", "#191919"],
+        "image": null,
+        "imageType": null,
+        "design": {
+            "shape": "rounded",
+            "background": "gradient",
+            "effects": ["shine", "glint"],
+            "speed": 1.15,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Zot",
+            "for": "byezxt"
+        }
     },
-    "request": {
-      "badge": "immortal",
-      "for": "9va6"
+    {
+        "id": "17b954e0cb2b20b8",
+        "users": ["1388196102229987328"],
+        "name": "fuck you k3",
+        "colors": ["#ff0004", "#000000"],
+        "image": "17b954e0cb2b20b8.jpg",
+        "imageType": "image/jpeg",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1.5,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "fuck you k3",
+            "for": "QWICS"
+        },
+        "imageHash": "65c2a3eabe0b6cb7"
     },
-    "imageHash": "fc335e7247c1189a"
-  },
-  {
-    "id": "3b7a05876fba5c07",
-    "users": [
-      "1510759328372494506"
-    ],
-    "name": "Fuck idk",
-    "colors": [
-      "#ff0000",
-      "#07ff00"
-    ],
-    "image": "3b7a05876fba5c07.png",
-    "imageType": "image/png",
-    "design": {
-      "shape": "circle",
-      "background": "gradient",
-      "effects": [
-        "shine",
-        "glint",
-        "pulse",
-        "float"
-      ],
-      "speed": 1,
-      "zoom": 1.33,
-      "x": 0,
-      "y": 0.16,
-      "rotate": 0
-    },
-    "request": {
-      "badge": "Fuck idk",
-      "for": "4raxi"
-    },
-    "imageHash": "1293085f1f1cf0f5"
-  },
-  {
-    "id": "5ff6b2b93ec7f7b5",
-    "users": [
-      "1531412914005606513"
-    ],
-    "name": "Zot",
-    "colors": [
-      "#000000",
-      "#191919"
-    ],
-    "image": null,
-    "imageType": null,
-    "design": {
-      "shape": "rounded",
-      "background": "gradient",
-      "effects": [
-        "shine",
-        "glint"
-      ],
-      "speed": 1.15,
-      "zoom": 1,
-      "x": 0,
-      "y": 0,
-      "rotate": 0
-    },
-    "request": {
-      "badge": "Zot",
-      "for": "byezxt"
+    {
+        "id": "2e9aa52581c65bcc",
+        "users": ["1193711027456589864"],
+        "name": "lamb",
+        "colors": ["#2c2c2c", "#838383"],
+        "image": "2e9aa52581c65bcc.jpg",
+        "imageType": "image/jpeg",
+        "design": {
+            "shape": "rounded",
+            "background": "gradient",
+            "effects": ["glint", "shine", "pulse"],
+            "speed": 0.7,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "lamb",
+            "for": "inmymaws"
+        },
+        "imageHash": "f5cd5b86cbc40567"
     }
-  },
-  {
-    "id": "17b954e0cb2b20b8",
-    "users": [
-      "1388196102229987328"
-    ],
-    "name": "fuck you k3",
-    "colors": [
-      "#ff0004",
-      "#000000"
-    ],
-    "image": "17b954e0cb2b20b8.jpg",
-    "imageType": "image/jpeg",
-    "design": {
-      "shape": "none",
-      "background": "gradient",
-      "effects": [],
-      "speed": 1,
-      "zoom": 1.5,
-      "x": 0,
-      "y": 0,
-      "rotate": 0
-    },
-    "request": {
-      "badge": "fuck you k3",
-      "for": "QWICS"
-    },
-    "imageHash": "65c2a3eabe0b6cb7"
-  },
-  {
-    "id": "2e9aa52581c65bcc",
-    "users": [
-      "1193711027456589864"
-    ],
-    "name": "lamb",
-    "colors": [
-      "#2c2c2c",
-      "#838383"
-    ],
-    "image": "2e9aa52581c65bcc.jpg",
-    "imageType": "image/jpeg",
-    "design": {
-      "shape": "rounded",
-      "background": "gradient",
-      "effects": [
-        "glint",
-        "shine",
-        "pulse"
-      ],
-      "speed": 0.7,
-      "zoom": 1,
-      "x": 0,
-      "y": 0,
-      "rotate": 0
-    },
-    "request": {
-      "badge": "lamb",
-      "for": "inmymaws"
-    },
-    "imageHash": "f5cd5b86cbc40567"
-  }
 ]

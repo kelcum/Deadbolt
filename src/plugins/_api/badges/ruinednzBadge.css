@@ -15,7 +15,9 @@
     vertical-align: middle;
     line-height: 0;
     isolation: isolate;
-    box-shadow: 0 0 0 1px rgb(255 255 255 / 10%), 0 1px 3px rgb(0 0 0 / 50%);
+    box-shadow:
+        0 0 0 1px rgb(255 255 255 / 10%),
+        0 1px 3px rgb(0 0 0 / 50%);
     animation: ruinednz-pulse 3.4s ease-in-out infinite;
 }
 
@@ -68,22 +70,44 @@
 }
 
 @keyframes ruinednz-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes ruinednz-sheen {
-    0% { transform: translateX(-160%); }
-    55%, 100% { transform: translateX(160%); }
+    0% {
+        transform: translateX(-160%);
+    }
+    55%,
+    100% {
+        transform: translateX(160%);
+    }
 }
 
 @keyframes ruinednz-breathe {
-    0%, 100% { filter: grayscale(1) brightness(1) contrast(1); }
-    50% { filter: grayscale(1) brightness(1.12) contrast(1.18); }
+    0%,
+    100% {
+        filter: grayscale(1) brightness(1) contrast(1);
+    }
+    50% {
+        filter: grayscale(1) brightness(1.12) contrast(1.18);
+    }
 }
 
 @keyframes ruinednz-pulse {
-    0%, 100% { box-shadow: 0 0 0 1px rgb(255 255 255 / 10%), 0 1px 3px rgb(0 0 0 / 50%); }
-    50% { box-shadow: 0 0 0 1px rgb(255 255 255 / 30%), 0 0 7px rgb(255 255 255 / 40%), 0 1px 3px rgb(0 0 0 / 50%); }
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 1px rgb(255 255 255 / 10%),
+            0 1px 3px rgb(0 0 0 / 50%);
+    }
+    50% {
+        box-shadow:
+            0 0 0 1px rgb(255 255 255 / 30%),
+            0 0 7px rgb(255 255 255 / 40%),
+            0 1px 3px rgb(0 0 0 / 50%);
+    }
 }
 
 .ruinednz-tip {
@@ -106,12 +130,18 @@
 }
 
 @keyframes ruinednz-tip-sheen {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
 }
 
 .theme-light .ruinednz-badge {
-    box-shadow: 0 0 0 1px rgb(0 0 0 / 30%), 0 1px 3px rgb(0 0 0 / 30%);
+    box-shadow:
+        0 0 0 1px rgb(0 0 0 / 30%),
+        0 1px 3px rgb(0 0 0 / 30%);
     animation: none;
 }
 

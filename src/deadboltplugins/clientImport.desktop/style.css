@@ -28,7 +28,9 @@
     color: var(--text-default, var(--text-normal, #dbdee1));
     text-align: left;
     cursor: pointer;
-    transition: border-color 0.15s, background-color 0.15s;
+    transition:
+        border-color 0.15s,
+        background-color 0.15s;
 }
 
 .vc-client-import-source:hover {

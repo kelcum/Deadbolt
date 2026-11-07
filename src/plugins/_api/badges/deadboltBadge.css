@@ -15,7 +15,9 @@
     vertical-align: middle;
     line-height: 0;
     isolation: isolate;
-    box-shadow: 0 0 0 1px rgb(255 255 255 / 8%), 0 1px 3px rgb(0 0 0 / 45%);
+    box-shadow:
+        0 0 0 1px rgb(255 255 255 / 8%),
+        0 1px 3px rgb(0 0 0 / 45%);
     animation: deadbolt-badge-pulse 3s ease-in-out infinite;
 }
 
@@ -67,22 +69,43 @@
 }
 
 @keyframes deadbolt-badge-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes deadbolt-badge-sheen {
-    0% { transform: translateX(-160%); }
-    100% { transform: translateX(160%); }
+    0% {
+        transform: translateX(-160%);
+    }
+    100% {
+        transform: translateX(160%);
+    }
 }
 
 @keyframes deadbolt-badge-breathe {
-    0%, 100% { filter: brightness(1) contrast(1); }
-    50% { filter: brightness(1.3) contrast(1.14) saturate(1.06); }
+    0%,
+    100% {
+        filter: brightness(1) contrast(1);
+    }
+    50% {
+        filter: brightness(1.3) contrast(1.14) saturate(1.06);
+    }
 }
 
 @keyframes deadbolt-badge-pulse {
-    0%, 100% { box-shadow: 0 0 0 1px rgb(255 255 255 / 8%), 0 1px 3px rgb(0 0 0 / 45%); }
-    50% { box-shadow: 0 0 0 1px rgb(255 255 255 / 24%), 0 0 7px rgb(200 220 255 / 50%), 0 1px 3px rgb(0 0 0 / 45%); }
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 1px rgb(255 255 255 / 8%),
+            0 1px 3px rgb(0 0 0 / 45%);
+    }
+    50% {
+        box-shadow:
+            0 0 0 1px rgb(255 255 255 / 24%),
+            0 0 7px rgb(200 220 255 / 50%),
+            0 1px 3px rgb(0 0 0 / 45%);
+    }
 }
 
 .deadbolt-creator-tip {
@@ -110,8 +133,12 @@
 }
 
 @keyframes deadbolt-tip-sheen {
-    0% { background-position: 0% center; }
-    100% { background-position: 200% center; }
+    0% {
+        background-position: 0% center;
+    }
+    100% {
+        background-position: 200% center;
+    }
 }
 
 .deadbolt-contributor-badge {
@@ -125,7 +152,9 @@
     vertical-align: middle;
     line-height: 0;
     isolation: isolate;
-    box-shadow: 0 0 0 1px rgb(124 111 240 / 15%), 0 1px 3px rgb(0 0 0 / 45%);
+    box-shadow:
+        0 0 0 1px rgb(124 111 240 / 15%),
+        0 1px 3px rgb(0 0 0 / 45%);
     animation: deadbolt-contributor-pulse 3s ease-in-out infinite;
 }
 
@@ -141,7 +170,9 @@
 }
 
 @keyframes deadbolt-contributor-bolt-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .deadbolt-contributor-badge::before {
@@ -183,22 +214,43 @@
 }
 
 @keyframes deadbolt-contributor-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes deadbolt-contributor-sheen {
-    0% { transform: translateX(-160%); }
-    100% { transform: translateX(160%); }
+    0% {
+        transform: translateX(-160%);
+    }
+    100% {
+        transform: translateX(160%);
+    }
 }
 
 @keyframes deadbolt-contributor-breathe {
-    0%, 100% { filter: brightness(1) contrast(1); }
-    50% { filter: brightness(1.25) contrast(1.1) saturate(1.1); }
+    0%,
+    100% {
+        filter: brightness(1) contrast(1);
+    }
+    50% {
+        filter: brightness(1.25) contrast(1.1) saturate(1.1);
+    }
 }
 
 @keyframes deadbolt-contributor-pulse {
-    0%, 100% { box-shadow: 0 0 0 1px rgb(124 111 240 / 15%), 0 1px 3px rgb(0 0 0 / 45%); }
-    50% { box-shadow: 0 0 0 1px rgb(124 111 240 / 35%), 0 0 7px rgb(124 111 240 / 55%), 0 1px 3px rgb(0 0 0 / 45%); }
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 1px rgb(124 111 240 / 15%),
+            0 1px 3px rgb(0 0 0 / 45%);
+    }
+    50% {
+        box-shadow:
+            0 0 0 1px rgb(124 111 240 / 35%),
+            0 0 7px rgb(124 111 240 / 55%),
+            0 1px 3px rgb(0 0 0 / 45%);
+    }
 }
 
 .deadbolt-contributor-tip {

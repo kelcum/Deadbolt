@@ -111,7 +111,9 @@
     color: var(--text-muted, #949ba4);
     font: 600 13px/1 var(--font-primary, inherit);
     cursor: pointer;
-    transition: background-color 0.15s, color 0.15s;
+    transition:
+        background-color 0.15s,
+        color 0.15s;
 }
 
 .vc-badge-request-segment:hover {
@@ -139,7 +141,10 @@
     color: var(--text-muted, #949ba4);
     font: 600 13px/1 var(--font-primary, inherit);
     cursor: pointer;
-    transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    transition:
+        background-color 0.15s,
+        border-color 0.15s,
+        color 0.15s;
 }
 
 .vc-badge-request-chip:hover {
@@ -411,7 +416,9 @@
 }
 
 @keyframes vc-badge-request-name-sheen {
-    to { background-position: 200% center; }
+    to {
+        background-position: 200% center;
+    }
 }
 
 .vc-badge-request-float {
@@ -440,7 +447,9 @@
 
 .vc-badge-request-filled {
     background: var(--bg);
-    box-shadow: 0 0 0 1px rgb(255 255 255 / 10%), 0 calc(var(--size) * 0.06) calc(var(--size) * 0.2) rgb(0 0 0 / 45%);
+    box-shadow:
+        0 0 0 1px rgb(255 255 255 / 10%),
+        0 calc(var(--size) * 0.06) calc(var(--size) * 0.2) rgb(0 0 0 / 45%);
 }
 
 .vc-badge-request-shape-circle {
@@ -508,7 +517,12 @@
     z-index: 2;
     pointer-events: none;
     mix-blend-mode: screen;
-    background: linear-gradient(115deg, transparent 42%, rgb(255 255 255 / 70%) 50%, transparent 58%);
+    background: linear-gradient(
+        115deg,
+        transparent 42%,
+        rgb(255 255 255 / 70%) 50%,
+        transparent 58%
+    );
     transform: translateX(-160%);
     animation: vc-badge-request-sheen calc(2.6s / var(--speed)) ease-in-out infinite;
 }
@@ -525,7 +539,12 @@
 
 .vc-badge-request-art-shine {
     mix-blend-mode: screen;
-    background: linear-gradient(115deg, transparent 40%, rgb(255 255 255 / 80%) 50%, transparent 60%);
+    background: linear-gradient(
+        115deg,
+        transparent 40%,
+        rgb(255 255 255 / 80%) 50%,
+        transparent 60%
+    );
     background-size: 300% 100%;
     animation: vc-badge-request-mask-sheen calc(2.6s / var(--speed)) ease-in-out infinite;
 }
@@ -552,36 +571,69 @@
 }
 
 @keyframes vc-badge-request-spin {
-    to { transform: rotate(360deg); }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 @keyframes vc-badge-request-turn {
-    to { --vc-badge-request-angle: 360deg; }
+    to {
+        --vc-badge-request-angle: 360deg;
+    }
 }
 
 @keyframes vc-badge-request-sheen {
-    0% { transform: translateX(-160%); }
-    55%, 100% { transform: translateX(160%); }
+    0% {
+        transform: translateX(-160%);
+    }
+    55%,
+    100% {
+        transform: translateX(160%);
+    }
 }
 
 @keyframes vc-badge-request-mask-sheen {
-    0% { background-position: 100% 0; }
-    55%, 100% { background-position: 0% 0; }
+    0% {
+        background-position: 100% 0;
+    }
+    55%,
+    100% {
+        background-position: 0% 0;
+    }
 }
 
 @keyframes vc-badge-request-bob {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(calc(var(--size) * -0.08)); }
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(calc(var(--size) * -0.08));
+    }
 }
 
 @keyframes vc-badge-request-pulse {
-    0%, 100% { box-shadow: 0 0 0 1px color-mix(in srgb, var(--glow) 35%, transparent), 0 0 0 transparent; }
-    50% { box-shadow: 0 0 0 1px color-mix(in srgb, var(--glow) 80%, white), 0 0 calc(var(--size) * 0.35) color-mix(in srgb, var(--glow) 70%, transparent); }
+    0%,
+    100% {
+        box-shadow:
+            0 0 0 1px color-mix(in srgb, var(--glow) 35%, transparent),
+            0 0 0 transparent;
+    }
+    50% {
+        box-shadow:
+            0 0 0 1px color-mix(in srgb, var(--glow) 80%, white),
+            0 0 calc(var(--size) * 0.35) color-mix(in srgb, var(--glow) 70%, transparent);
+    }
 }
 
 @keyframes vc-badge-request-glow {
-    0%, 100% { filter: drop-shadow(0 0 0 transparent); }
-    50% { filter: drop-shadow(0 0 calc(var(--size) * 0.12) var(--glow)); }
+    0%,
+    100% {
+        filter: drop-shadow(0 0 0 transparent);
+    }
+    50% {
+        filter: drop-shadow(0 0 calc(var(--size) * 0.12) var(--glow));
+    }
 }
 
 .vc-badge-request-sent {
