@@ -158,5 +158,51 @@
             "for": "inmymaws"
         },
         "imageHash": "f5cd5b86cbc40567"
+    },
+    {
+        "id": "c59680f86e5ee683",
+        "users": ["195516525631897600"],
+        "name": "pure",
+        "colors": ["#ffffff", "#fff4d6", "#f2d38a"],
+        "image": "c59680f86e5ee683.webp",
+        "imageType": "image/webp",
+        "design": {
+            "shape": "none",
+            "background": "none",
+            "effects": ["float", "glint"],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "pure",
+            "for": "xanax.pl"
+        },
+        "imageHash": "2ec809821c63bbad"
+    },
+    {
+        "id": "887115c504ee800b",
+        "users": ["195516525631897600"],
+        "name": "snow",
+        "colors": ["#ffffff", "#dff3ff", "#9fd4ff"],
+        "image": "887115c504ee800b.webp",
+        "imageType": "image/webp",
+        "design": {
+            "shape": "none",
+            "background": "none",
+            "effects": ["float", "glint"],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "snow",
+            "for": "xanax.pl"
+        },
+        "imageHash": "c2cc1aa1a95d5329"
     }
 ]
