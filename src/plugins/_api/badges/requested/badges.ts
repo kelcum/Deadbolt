@@ -7,6 +7,7 @@
 import img_2e9aa52581c65bcc from "file://2e9aa52581c65bcc.jpg?base64";
 import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
 import img_17b954e0cb2b20b8 from "file://17b954e0cb2b20b8.jpg?base64";
+import img_76a226e52e1d8120 from "file://76a226e52e1d8120.gif?base64";
 import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
 import img_887115c504ee800b from "file://887115c504ee800b.webp?base64";
 import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
@@ -78,5 +79,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "snow",
         image: `data:image/webp;base64,${img_887115c504ee800b}`,
         design: { shape: "none", background: "none", colors: [0xffffff, 0xdff3ff, 0x9fd4ff], effects: ["float", "glint"], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "76a226e52e1d8120",
+        users: ["720465317226086413"],
+        name: "𝐎𝐩𝐭𝐢𝐦𝐮𝐬 𝐏𝐫𝐢𝐦𝐞",
+        image: `data:image/gif;base64,${img_76a226e52e1d8120}`,
+        design: { shape: "circle", background: "gradient", colors: [0xffffff, 0x800000], effects: ["shine", "glint"], speed: 1, zoom: 1.37, x: -0.027, y: 0.103, rotate: 0 },
     },
 ];

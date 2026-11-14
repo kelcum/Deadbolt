@@ -204,5 +204,28 @@
             "for": "xanax.pl"
         },
         "imageHash": "c2cc1aa1a95d5329"
+    },
+    {
+        "id": "76a226e52e1d8120",
+        "users": ["720465317226086413"],
+        "name": "𝐎𝐩𝐭𝐢𝐦𝐮𝐬 𝐏𝐫𝐢𝐦𝐞",
+        "colors": ["#ffffff", "#800000"],
+        "image": "76a226e52e1d8120.gif",
+        "imageType": "image/gif",
+        "design": {
+            "shape": "circle",
+            "background": "gradient",
+            "effects": ["shine", "glint"],
+            "speed": 1,
+            "zoom": 1.37,
+            "x": -0.027,
+            "y": 0.103,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "𝐎𝐩𝐭𝐢𝐦𝐮𝐬 𝐏𝐫𝐢𝐦𝐞",
+            "for": "dxcoy"
+        },
+        "imageHash": "66293c3a99cba869"
     }
 ]
