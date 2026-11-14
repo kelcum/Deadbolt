@@ -4,10 +4,8 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
-import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin from "@utils/types";
 import { Alerts } from "@webpack/common";
 
 const CONFIRM_WINDOW_MS = 15_000;
@@ -16,17 +14,7 @@ const MENTION_RE = /(?:^|[^\w@])@(everyone|here)\b/;
 
 const armed = new Set<string>();
 
-const settings = definePluginSettings({
-    enabled: {
-        type: OptionType.BOOLEAN,
-        description: "Confirm before sending a message containing @everyone or @here",
-        default: true
-    }
-});
-
 function onSend(channelId: string, messageObj: { content: string; }) {
-    if (!settings.store.enabled) return;
-
     const { content } = messageObj;
     const match = MENTION_RE.exec(content);
     if (!match) return;
@@ -60,13 +48,10 @@ export default definePlugin({
     description: "Asks for confirmation before sending a message that pings @everyone or @here, so a typo or fat-finger doesn't blast the whole channel.",
     tags: ["Utility", "Chat"],
     authors: [Devs.K3],
-    settings,
 
-    start() {
-        addMessagePreSendListener(onSend);
-    },
+    onBeforeMessageSend: onSend,
+
     stop() {
-        removeMessagePreSendListener(onSend);
         armed.clear();
     }
 });

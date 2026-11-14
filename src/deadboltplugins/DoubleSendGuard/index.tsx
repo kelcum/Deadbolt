@@ -4,18 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { addMessagePreSendListener, removeMessagePreSendListener } from "@api/MessageEvents";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
 import { Alerts } from "@webpack/common";
 
 const settings = definePluginSettings({
-    enabled: {
-        type: OptionType.BOOLEAN,
-        description: "Warn before sending the exact same message twice in a row in the same channel",
-        default: true
-    },
     windowSeconds: {
         type: OptionType.NUMBER,
         description: "How many seconds after a message counts as a possible accidental repeat",
@@ -34,8 +28,6 @@ const armed = new Set<string>();
 const ARM_WINDOW_MS = 15_000;
 
 function onSend(channelId: string, messageObj: { content: string; }) {
-    if (!settings.store.enabled) return;
-
     const content = messageObj.content.trim();
     if (!content) return;
 
@@ -72,11 +64,9 @@ export default definePlugin({
     authors: [Devs.K3],
     settings,
 
-    start() {
-        addMessagePreSendListener(onSend);
-    },
+    onBeforeMessageSend: onSend,
+
     stop() {
-        removeMessagePreSendListener(onSend);
         lastSentByChannel.clear();
         armed.clear();
     }

@@ -156,7 +156,12 @@ function markFoldersRead(ids = getSelectedIds()) {
     }
 }
 
-function syncSelectedFolders() {
+function saveManagedGuilds(guilds: Set<string>) {
+    const next = JSON.stringify([...guilds].sort());
+    if (settings.store.managed !== next) settings.store.managed = next;
+}
+
+function syncSelectedFolders(force = false) {
     const folders = getFolders();
     const selected = new Set(getSelectedIds());
     const existing = new Set(folders.map(folderId));
@@ -169,10 +174,23 @@ function syncSelectedFolders() {
         for (const guildId of folder.guildIds) nextGuilds.add(guildId);
     }
 
-    for (const guildId of managedGuilds) if (!nextGuilds.has(guildId)) setGuildMuted(guildId, false);
-    for (const guildId of nextGuilds) setGuildMuted(guildId, true);
+    const previous = managedGuilds;
+    for (const guildId of previous) if (!nextGuilds.has(guildId)) setGuildMuted(guildId, false);
+    for (const guildId of nextGuilds) if (force || !previous.has(guildId)) setGuildMuted(guildId, true);
     managedGuilds = nextGuilds;
+    saveManagedGuilds(nextGuilds);
     emitChange();
+}
+
+let syncQueued = false;
+
+function queueSync() {
+    if (syncQueued) return;
+    syncQueued = true;
+    setTimeout(() => {
+        syncQueued = false;
+        syncSelectedFolders();
+    }, 0);
 }
 
 const css = `
@@ -234,6 +252,12 @@ const settings = definePluginSettings({
         component: FolderManager,
         default: "[]",
     },
+    managed: {
+        type: OptionType.STRING,
+        description: "Servers this plugin muted",
+        hidden: true,
+        default: "[]",
+    },
 });
 
 function patchFolderContext(children: any[], props: { folderId?: string | number; }) {
@@ -262,7 +286,8 @@ export default definePlugin({
     start() {
         const legacy = getSelectedIds();
         saveSelectedIds(legacy);
-        syncSelectedFolders();
+        managedGuilds = new Set(parseIds(settings.store.managed));
+        syncSelectedFolders(true);
         markFoldersRead();
         readTimer = setInterval(markFoldersRead, DAY);
     },
@@ -276,14 +301,26 @@ export default definePlugin({
             if (!getSelectedGuildIds().has(message.guild_id)) return;
             setTimeout(() => markMessageRead(message.channel_id, message.id), 0);
         },
-        GUILD_FOLDER_UPDATE() {
-            syncSelectedFolders();
+        USER_SETTINGS_PROTO_UPDATE() {
+            queueSync();
+        },
+        GUILD_FOLDER_CREATE_LOCAL() {
+            queueSync();
+        },
+        GUILD_FOLDER_EDIT_LOCAL() {
+            queueSync();
+        },
+        GUILD_FOLDER_DELETE_LOCAL() {
+            queueSync();
+        },
+        GUILD_MOVE_BY_ID() {
+            queueSync();
         },
         GUILD_CREATE() {
-            syncSelectedFolders();
+            queueSync();
         },
         GUILD_DELETE() {
-            syncSelectedFolders();
+            queueSync();
         },
     },
 });
