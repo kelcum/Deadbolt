@@ -334,7 +334,7 @@ const RuinednzBadge: ProfileBadge = {
     shouldShow: ({ userId }) => RUINEDNZ_IDS.includes(userId),
 };
 
-function AnimatedDeadboltContributorBadge({ userId }: ProfileBadge & BadgeUserArgs) {
+function AnimatedDeadboltContributorBadge() {
     return (
         <Tooltip
             text={
@@ -350,10 +350,6 @@ function AnimatedDeadboltContributorBadge({ userId }: ProfileBadge & BadgeUserAr
                     aria-label="Deadbolt Contributor"
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    onClick={e => {
-                        e.stopPropagation();
-                        openContributorModal(UserStore.getUser(userId));
-                    }}
                     style={{ cursor: "pointer" }}
                 >
                     <img src={DEADBOLT_CONTRIBUTOR_BADGE_ICON} alt="" draggable={false} />
@@ -376,6 +372,7 @@ const DeadboltContributorBadge: ProfileBadge = {
     component: AnimatedDeadboltContributorBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => DEADBOLT_CONTRIBUTOR_IDS.includes(userId),
+    onClick: (_, { userId }) => openContributorModal(UserStore.getUser(userId)),
 };
 
 function PluginCreatorBadgeComponent({ userId }: ProfileBadge & BadgeUserArgs) {
@@ -397,10 +394,6 @@ function PluginCreatorBadgeComponent({ userId }: ProfileBadge & BadgeUserArgs) {
                     aria-label="Plugin Creator"
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    onClick={e => {
-                        e.stopPropagation();
-                        openContributorModal(UserStore.getUser(userId));
-                    }}
                     style={{ cursor: "pointer" }}
                 >
                     <img src={PLUGIN_CREATOR_BADGE_ICON} alt="" draggable={false} />
@@ -423,6 +416,7 @@ const PluginCreatorBadge: ProfileBadge = {
     component: PluginCreatorBadgeComponent,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => !DEADBOLT_CREATOR_IDS.includes(userId) && getDeadboltPluginsBy(userId).length > 0,
+    onClick: (_, { userId }) => openContributorModal(UserStore.getUser(userId)),
 };
 
 function AnimatedNullCreatorBadge() {
@@ -774,7 +768,15 @@ export default definePlugin({
 
     renderBadgeComponent: ErrorBoundary.wrap((badge: ProfileBadge & BadgeUserArgs) => {
         const Component = badge.component!;
-        if (!badge.iconSrc || !badge.userId || badge.onClick) return <Component {...badge} />;
+        const { onClick } = badge;
+        if (onClick) {
+            return (
+                <span style={{ display: "contents" }} onClick={e => onClick(e, badge)}>
+                    <Component {...badge} />
+                </span>
+            );
+        }
+        if (!badge.iconSrc || !badge.userId) return <Component {...badge} />;
 
         const badgeId = toDirectoryBadge(badge, badge.userId).badge_id;
         return (

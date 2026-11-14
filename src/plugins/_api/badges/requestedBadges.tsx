@@ -50,6 +50,9 @@ const badgeFor = new WeakMap<RequestedBadgeEntry, ProfileBadge>();
 const drawnIcons = new Map<string, string>();
 let drawing: Promise<void> = Promise.resolve();
 
+const isBareImage = ({ image, design }: RequestedBadgeEntry) =>
+    !!image && design.shape === "none" && design.background === "none" && design.zoom === 1 && !design.x && !design.y && !design.rotate;
+
 const iconKey = (entry: RequestedBadgeEntry) =>
     `${entry.id}:${JSON.stringify(entry.design)}:${entry.image?.length ?? 0}:${entry.image?.slice(-64) ?? ""}`;
 
@@ -70,7 +73,7 @@ function makeBadge(entry: RequestedBadgeEntry): ProfileBadge {
         </Tooltip>
     );
 
-    const icon = drawnIcons.get(iconKey(entry));
+    const icon = isBareImage(entry) ? entry.image! : drawnIcons.get(iconKey(entry));
 
     return {
         id: `requested_${entry.id}`,
