@@ -6,7 +6,7 @@
 
 import "./styles.css";
 
-import { badgeChangesVersion, subscribeBadgeChanges, visibleDeadboltBadgesOf } from "@plugins/_api/badges";
+import BadgeAPI, { badgeChangesVersion, subscribeBadgeChanges, visibleDeadboltBadgesOf } from "@plugins/_api/badges";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { User } from "@vencord/discord-types";
@@ -19,20 +19,28 @@ const RoleIconComponent = findComponentByCodeLazy("#{intl::ROLE_ICON_ALT_TEXT}")
 function DeadboltChatBadges({ author }: { author: User; }) {
     React.useSyncExternalStore(subscribeBadgeChanges, badgeChangesVersion);
 
-    const badges = visibleDeadboltBadgesOf(author.id).filter(b => b.iconSrc);
+    const badges = visibleDeadboltBadgesOf(author.id).filter(b => b.component || b.iconSrc);
     if (!badges.length) return null;
+
+    const RenderBadge = BadgeAPI.renderBadgeComponent;
 
     return (
         <span className="vc-deadbolt-chat-badges">
-            {badges.map(badge => (
-                <RoleIconComponent
-                    key={badge.id}
-                    className={roleIcon}
-                    name={badge.name ?? badge.description}
-                    size={20}
-                    src={badge.iconSrc}
-                />
-            ))}
+            {badges.map(badge => badge.component
+                ? (
+                    <span key={badge.id} className="vc-deadbolt-chat-badge">
+                        <RenderBadge {...badge} userId={author.id} guildId="" />
+                    </span>
+                )
+                : (
+                    <RoleIconComponent
+                        key={badge.id}
+                        className={roleIcon}
+                        name={badge.name ?? badge.description}
+                        size={20}
+                        src={badge.iconSrc}
+                    />
+                ))}
         </span>
     );
 }

@@ -10,3 +10,15 @@
 .vc-deadbolt-chat-badges img {
     border-radius: 4px;
 }
+
+.vc-deadbolt-chat-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    zoom: 0.91;
+    line-height: 0;
+}
+
+.vc-deadbolt-chat-badge img {
+    border-radius: 0;
+}
