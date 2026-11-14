@@ -8,6 +8,7 @@ import * as DataStore from "@api/DataStore";
 import { Logger } from "@utils/Logger";
 import { UserStore } from "@webpack/common";
 
+import { notifyBadgesChanged } from "./badgeChanges";
 import team from "./team.json";
 
 const PREFS_URL = "https://api.xan.gripe/v1/badges/prefs";
@@ -32,6 +33,7 @@ export const isTestMode = () => testMode;
 
 export function setTestMode(on: boolean) {
     testMode = on;
+    notifyBadgesChanged();
     DataStore.set(TEST_KEY, on).catch(() => { });
 }
 
@@ -42,13 +44,17 @@ export function holdsEveryBadge(userId: string) {
 function apply(prefs: Record<string, { hidden: string[]; }>) {
     hidden = new Map(Object.entries(prefs).map(([user, p]) => [user, new Set(p.hidden)]));
     fetched = true;
+    notifyBadgesChanged();
     DataStore.set(CACHE_KEY, prefs).catch(() => { });
 }
 
 export async function loadHiddenBadges() {
     if (!fetched) {
         const cached = await DataStore.get<Record<string, { hidden: string[]; }>>(CACHE_KEY).catch(() => undefined);
-        if (cached && !fetched) hidden = new Map(Object.entries(cached).map(([user, p]) => [user, new Set(p.hidden)]));
+        if (cached && !fetched) {
+            hidden = new Map(Object.entries(cached).map(([user, p]) => [user, new Set(p.hidden)]));
+            notifyBadgesChanged();
+        }
     }
     try {
         const res = await fetch(PREFS_URL, { cache: "no-cache" });

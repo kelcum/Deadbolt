@@ -1,0 +1,12 @@
+.vc-deadbolt-chat-badges {
+    display: inline-flex;
+    align-items: center;
+    vertical-align: top;
+    position: relative;
+    gap: 2px;
+    margin: 6px 2px 0 -1px !important;
+}
+
+.vc-deadbolt-chat-badges img {
+    border-radius: 4px;
+}

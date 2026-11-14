@@ -34,6 +34,7 @@ import { copyWithToast } from "@utils/discord";
 import { Logger } from "@utils/Logger";
 import { pluralize, shouldShowContributorBadge, shouldShowEquicordContributorBadge } from "@utils/misc";
 import definePlugin from "@utils/types";
+import { findByPropsLazy } from "@webpack";
 import { ContextMenuApi, Menu, showToast, Tooltip, UserStore } from "@webpack/common";
 import avoraCreatorLogo from "file://avoraCreatorLogo.png?base64";
 import deadboltCreatorLogo from "file://deadboltCreatorLogo.png?base64";
@@ -197,6 +198,13 @@ const DeadboltCreatorBadge: ProfileBadge = {
     id: "deadbolt_creator_badge",
     description: "Deadbolt Creator",
     key: "Deadbolt Creator",
+    name: "Deadbolt Creator",
+    detail: "Created Deadbolt, a cold, no-frills fork of Equicord.",
+    infoLabel: "Deadbolt",
+    rarity: BadgeRarity.MYTHIC,
+    iconSrc: DEADBOLT_CREATOR_BADGE_ICON,
+    largeIconSrc: DEADBOLT_CREATOR_BADGE_ICON,
+    obtainedAt: "2026-09-23T12:00:00.000Z",
     component: AnimatedDeadboltCreatorBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => DEADBOLT_CREATOR_IDS.includes(userId),
@@ -235,6 +243,13 @@ const VesperCreatorBadge: ProfileBadge = {
     id: "vesper_creator_badge",
     description: "Vesper Creator",
     key: "Vesper Creator",
+    name: "Vesper Creator",
+    detail: "Created Vesper.",
+    infoLabel: "Deadbolt",
+    rarity: BadgeRarity.MYTHIC,
+    iconSrc: VESPER_CREATOR_BADGE_ICON,
+    largeIconSrc: VESPER_CREATOR_BADGE_ICON,
+    obtainedAt: "2026-10-07T12:00:00.000Z",
     component: AnimatedVesperCreatorBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => VESPER_CREATOR_IDS.includes(userId),
@@ -268,6 +283,13 @@ const VitraCreatorBadge: ProfileBadge = {
     id: "vitra_creator_badge",
     description: "Vitra Creator",
     key: "Vitra Creator",
+    name: "Vitra Creator",
+    detail: "Created Vitra.",
+    infoLabel: "Deadbolt",
+    rarity: BadgeRarity.MYTHIC,
+    iconSrc: VITRA_CREATOR_BADGE_ICON,
+    largeIconSrc: VITRA_CREATOR_BADGE_ICON,
+    obtainedAt: "2026-10-07T12:00:00.000Z",
     component: AnimatedVitraCreatorBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => VITRA_CREATOR_IDS.includes(userId),
@@ -301,6 +323,12 @@ const RuinednzBadge: ProfileBadge = {
     id: "ruinednz_badge",
     description: "ruinednz",
     key: "ruinednz",
+    name: "ruinednz",
+    detail: "One of a kind.",
+    infoLabel: "Deadbolt",
+    rarity: BadgeRarity.MYTHIC,
+    iconSrc: RUINEDNZ_BADGE_ICON,
+    largeIconSrc: RUINEDNZ_BADGE_ICON,
     component: AnimatedRuinednzBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => RUINEDNZ_IDS.includes(userId),
@@ -322,7 +350,10 @@ function AnimatedDeadboltContributorBadge({ userId }: ProfileBadge & BadgeUserAr
                     aria-label="Deadbolt Contributor"
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    onClick={() => openContributorModal(UserStore.getUser(userId))}
+                    onClick={e => {
+                        e.stopPropagation();
+                        openContributorModal(UserStore.getUser(userId));
+                    }}
                     style={{ cursor: "pointer" }}
                 >
                     <img src={DEADBOLT_CONTRIBUTOR_BADGE_ICON} alt="" draggable={false} />
@@ -336,6 +367,12 @@ const DeadboltContributorBadge: ProfileBadge = {
     id: "deadbolt_contributor_badge",
     description: "Deadbolt Contributor",
     key: "Deadbolt Contributor",
+    name: "Deadbolt Contributor",
+    detail: "Helped build Deadbolt.",
+    infoLabel: "Deadbolt",
+    rarity: BadgeRarity.EPIC,
+    iconSrc: DEADBOLT_CONTRIBUTOR_BADGE_ICON,
+    largeIconSrc: DEADBOLT_CONTRIBUTOR_BADGE_ICON,
     component: AnimatedDeadboltContributorBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => DEADBOLT_CONTRIBUTOR_IDS.includes(userId),
@@ -360,7 +397,10 @@ function PluginCreatorBadgeComponent({ userId }: ProfileBadge & BadgeUserArgs) {
                     aria-label="Plugin Creator"
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
-                    onClick={() => openContributorModal(UserStore.getUser(userId))}
+                    onClick={e => {
+                        e.stopPropagation();
+                        openContributorModal(UserStore.getUser(userId));
+                    }}
                     style={{ cursor: "pointer" }}
                 >
                     <img src={PLUGIN_CREATOR_BADGE_ICON} alt="" draggable={false} />
@@ -374,6 +414,12 @@ const PluginCreatorBadge: ProfileBadge = {
     id: "deadbolt_plugin_creator_badge",
     description: "Plugin Creator",
     key: "Plugin Creator",
+    name: "Plugin Creator",
+    detail: "Made a plugin that ships with Deadbolt.",
+    infoLabel: "Deadbolt",
+    rarity: BadgeRarity.EPIC,
+    iconSrc: PLUGIN_CREATOR_BADGE_ICON,
+    largeIconSrc: PLUGIN_CREATOR_BADGE_ICON,
     component: PluginCreatorBadgeComponent,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => !DEADBOLT_CREATOR_IDS.includes(userId) && getDeadboltPluginsBy(userId).length > 0,
@@ -410,6 +456,12 @@ const NullCreatorBadge: ProfileBadge = {
     id: "null_creator_badge",
     description: "Null Creator",
     key: "Null Creator",
+    name: "Null Creator",
+    detail: "Created Null.",
+    infoLabel: "Deadbolt",
+    rarity: BadgeRarity.MYTHIC,
+    iconSrc: NULL_CREATOR_BADGE_ICON,
+    largeIconSrc: NULL_CREATOR_BADGE_ICON,
     component: AnimatedNullCreatorBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => NULL_CREATOR_IDS.includes(userId),
@@ -446,12 +498,31 @@ const AvoraCreatorBadge: ProfileBadge = {
     id: "avora_creator_badge",
     description: "Avora Creator",
     key: "Avora Creator",
+    name: "Avora Creator",
+    detail: "Created Avora.",
+    infoLabel: "Deadbolt",
+    rarity: BadgeRarity.MYTHIC,
+    iconSrc: AVORA_CREATOR_BADGE_ICON,
+    largeIconSrc: AVORA_CREATOR_BADGE_ICON,
     component: AnimatedAvoraCreatorBadge,
     position: BadgePosition.START,
     shouldShow: ({ userId }) => AVORA_CREATOR_IDS.includes(userId),
 };
 
 const DEADBOLT_BADGES = [PluginCreatorBadge, DeadboltContributorBadge, RuinednzBadge, VitraCreatorBadge, VesperCreatorBadge, DeadboltCreatorBadge, NullCreatorBadge, AvoraCreatorBadge];
+
+export function visibleDeadboltBadgesOf(userId: string): ProfileBadge[] {
+    const args = { userId, guildId: "" };
+    const visible = (b: ProfileBadge) => owns(b, args) && !isBadgeHidden(userId, b.id);
+    const requested = requestedBadgesOf(userId).filter(b => !isBadgeHidden(userId, b.id));
+    return [
+        ...[AvoraCreatorBadge, NullCreatorBadge, DeadboltCreatorBadge, VesperCreatorBadge, VitraCreatorBadge, RuinednzBadge].filter(visible),
+        ...requested,
+        ...[DeadboltContributorBadge, PluginCreatorBadge].filter(visible),
+    ];
+}
+
+export { badgeChangesVersion, subscribeBadgeChanges } from "./badgeChanges";
 
 export function deadboltBadgesOf(userId: string): ProfileBadge[] {
     const args = { userId, guildId: "" };
@@ -508,13 +579,26 @@ async function loadAllBadges(noCache = false) {
     EquicordDonorBadges = equicordBadges;
 }
 
+const BadgeDirectoryModal = findByPropsLazy("openBadgeDirectoryModal");
+
+function openBadgeDirectory(badge: ProfileBadge & BadgeUserArgs, badgeId: string) {
+    const user = UserStore.getUser(badge.userId);
+    BadgeDirectoryModal.openBadgeDirectoryModal({
+        initialBadgeId: badgeId,
+        targetUserId: badge.userId,
+        targetUsername: user?.globalName ?? user?.username
+    });
+}
+
 let intervalId: any;
 let hiddenIntervalId: any;
 
 function toDirectoryBadge(b: ProfileBadge, userId: string): DirectoryBadge {
     const id = `vc-${userId}-${b.id}`;
+    const cached = DirectoryBadges[id];
+    if (cached && cached.simple_icon_url === b.iconSrc && cached.name === (b.name ?? b.description ?? "")) return cached;
 
-    return DirectoryBadges[id] ??= {
+    return DirectoryBadges[id] = {
         badge_id: id,
         name: b.name ?? b.description ?? "",
         description: b.detail ?? b.description ?? b.name ?? "",
@@ -690,7 +774,14 @@ export default definePlugin({
 
     renderBadgeComponent: ErrorBoundary.wrap((badge: ProfileBadge & BadgeUserArgs) => {
         const Component = badge.component!;
-        return <Component {...badge} />;
+        if (!badge.iconSrc || !badge.userId || badge.onClick) return <Component {...badge} />;
+
+        const badgeId = toDirectoryBadge(badge, badge.userId).badge_id;
+        return (
+            <span style={{ display: "contents" }} onClick={() => openBadgeDirectory(badge, badgeId)}>
+                <Component {...badge} />
+            </span>
+        );
     }, { noop: true }),
 
     getBadgeMouseEventHandlers(badge: ProfileBadge & BadgeUserArgs) {

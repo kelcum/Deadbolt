@@ -6,12 +6,13 @@
 
 import "./requestedBadges.css";
 
-import { BadgePosition, ProfileBadge } from "@api/Badges";
+import { BadgePosition, BadgeRarity, ProfileBadge } from "@api/Badges";
 import * as DataStore from "@api/DataStore";
-import { BadgeDesign, BadgeName, BadgePreview } from "@components/settings/tabs/vencord/BadgeDesigner";
+import { BadgeDesign, BadgeName, BadgePreview, renderBadgePng } from "@components/settings/tabs/vencord/BadgeDesigner";
 import { Logger } from "@utils/Logger";
 import { Tooltip } from "@webpack/common";
 
+import { notifyBadgesChanged } from "./badgeChanges";
 import { holdsEveryBadge, isBadgeHidden } from "./hiddenBadges";
 import { requestedBadges } from "./requested/badges";
 
@@ -46,6 +47,11 @@ const logger = new Logger("RequestedBadges");
 
 let entries: RequestedBadgeEntry[] = requestedBadges;
 const badgeFor = new WeakMap<RequestedBadgeEntry, ProfileBadge>();
+const drawnIcons = new Map<string, string>();
+let drawing: Promise<void> = Promise.resolve();
+
+const iconKey = (entry: RequestedBadgeEntry) =>
+    `${entry.id}:${JSON.stringify(entry.design)}:${entry.image?.length ?? 0}:${entry.image?.slice(-64) ?? ""}`;
 
 function makeBadge(entry: RequestedBadgeEntry): ProfileBadge {
     const Component = () => (
@@ -64,10 +70,18 @@ function makeBadge(entry: RequestedBadgeEntry): ProfileBadge {
         </Tooltip>
     );
 
+    const icon = drawnIcons.get(iconKey(entry));
+
     return {
         id: `requested_${entry.id}`,
         description: entry.name,
+        iconSrc: icon,
+        largeIconSrc: icon,
         key: `requested_${entry.id}`,
+        name: entry.name,
+        detail: "A custom badge made with the Deadbolt badge designer.",
+        infoLabel: "Deadbolt",
+        rarity: BadgeRarity.RARE,
         component: Component,
         position: BadgePosition.START,
     };
@@ -80,6 +94,29 @@ function getBadge(entry: RequestedBadgeEntry) {
         badgeFor.set(entry, badge);
     }
     return badge;
+}
+
+async function drawIcons() {
+    let changed = false;
+    for (const entry of entries) {
+        const badge = getBadge(entry);
+        if (badge.iconSrc) continue;
+        try {
+            const key = iconKey(entry);
+            const src = drawnIcons.get(key) ?? `data:image/png;base64,${await renderBadgePng(entry.design, entry.image)}`;
+            drawnIcons.set(key, src);
+            badge.iconSrc = src;
+            badge.largeIconSrc = src;
+            changed = true;
+        } catch (e) {
+            logger.warn(`Couldn't draw the image for badge ${entry.id}`, e);
+        }
+    }
+    if (changed) notifyBadgesChanged();
+}
+
+function drawAllIcons() {
+    drawing = drawing.then(drawIcons, drawIcons);
 }
 
 export function requestedBadgesOf(userId: string) {
@@ -131,7 +168,11 @@ let loading: Promise<void> | null = null;
 
 async function load() {
     const cached = await DataStore.get<CachedEntry[]>(CACHE_KEY).catch(() => undefined);
-    if (cached?.length && entries === requestedBadges) entries = cached;
+    if (cached?.length && entries === requestedBadges) {
+        entries = cached;
+        notifyBadgesChanged();
+    }
+    drawAllIcons();
 
     const res = await fetch(`${PUBLISHED_URL}/badges.json`, { cache: "no-cache" });
     if (!res.ok) throw new Error(`badges.json: ${res.status}`);
@@ -141,6 +182,8 @@ async function load() {
     const next = await Promise.all(published.map(e => toEntry(e, known.get(e.id))));
 
     entries = next;
+    notifyBadgesChanged();
+    drawAllIcons();
     await DataStore.set(CACHE_KEY, next);
 }
 
