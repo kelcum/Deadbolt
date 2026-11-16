@@ -21,6 +21,7 @@ import { join } from "path";
 import { promisify } from "util";
 
 import { Updater } from ".";
+import { addToolPaths } from "./toolPaths";
 
 const VENCORD_SRC_DIR = join(__dirname, "..");
 const EQUICORD_DIR = join(__dirname, "../../");
@@ -29,7 +30,7 @@ const execFile = promisify(cpExecFile);
 
 const isFlatpak = process.platform === "linux" && !!process.env.FLATPAK_ID;
 
-if (process.platform === "darwin") process.env.PATH = `/usr/local/bin:${process.env.PATH}`;
+addToolPaths();
 
 function git(...args: string[]) {
     const opts = { cwd: VENCORD_SRC_DIR };
