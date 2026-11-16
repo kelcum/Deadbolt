@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
@@ -168,9 +169,40 @@ function advanceSpoof() {
 }
 
 const suppressedGames = new Map<string, RunningGame>();
+let running = false;
+
+const whenRunning = (fn: () => void) => () => {
+    if (running) fn();
+};
 
 function gameKey(game: RunningGame) {
     return game.id ?? game.exePath;
+}
+
+const SUPPRESSED_STORE_KEY = "VSCodeActivity_suppressedGames";
+
+type SavedGame = Pick<RunningGame, "id" | "name" | "exePath" | "distributor">;
+
+function toSaved(game: RunningGame): SavedGame {
+    return { id: game.id, name: game.name, exePath: game.exePath, distributor: game.distributor };
+}
+
+function saveSuppressedGames() {
+    const games = [...suppressedGames.values()].map(toSaved);
+    const write = games.length ? DataStore.set(SUPPRESSED_STORE_KEY, games) : DataStore.del(SUPPRESSED_STORE_KEY);
+    write.catch(e => logger.error("Failed to save the hidden games list", e));
+}
+
+async function restoreSavedGames() {
+    const saved = await DataStore.get<SavedGame[]>(SUPPRESSED_STORE_KEY).catch(() => undefined);
+    if (!saved?.length) return;
+    for (const game of saved) {
+        const asGame = game as RunningGame;
+        if (!RunningGameStore.isDetectionEnabled(asGame)) {
+            FluxDispatcher.dispatch({ type: "RUNNING_GAME_TOGGLE_DETECTION", game: asGame });
+        }
+    }
+    await DataStore.del(SUPPRESSED_STORE_KEY).catch(() => undefined);
 }
 
 function shouldHideRealGames() {
@@ -188,6 +220,7 @@ function suppressRealGames() {
         FluxDispatcher.dispatch({ type: "RUNNING_GAME_TOGGLE_DETECTION", game });
         suppressedGames.set(key, game);
     }
+    saveSuppressedGames();
 }
 
 function restoreRealGames() {
@@ -197,6 +230,7 @@ function restoreRealGames() {
         }
     }
     suppressedGames.clear();
+    saveSuppressedGames();
 }
 
 function syncRealGameSuppression() {
@@ -222,7 +256,7 @@ function startPolling() {
         suppressRealGames();
     } else {
         poll();
-        pollTimer = setInterval(poll, settings.store.pollInterval);
+        pollTimer = setInterval(poll, Math.max(1000, settings.store.pollInterval));
     }
 }
 
@@ -245,62 +279,64 @@ const settings = definePluginSettings({
         description: "Always show as actively editing (a rotating fake file), regardless of whether VS Code is actually open or what you're really doing",
         type: OptionType.BOOLEAN,
         default: false,
-        onChange: () => startPolling()
+        onChange: whenRunning(startPolling)
     },
     spoofWorkspace: {
         description: "Workspace/folder name to show while spoofing",
         type: OptionType.STRING,
         default: "Deadbolt",
-        onChange: refreshNow
+        onChange: whenRunning(refreshNow)
     },
     spoofFiles: {
         description: "Files to rotate through while spoofing, one per line",
         type: OptionType.STRING,
         default: DEFAULT_SPOOF_FILES,
         multiline: true,
-        onChange: refreshNow
+        onChange: whenRunning(refreshNow)
     },
     spoofRotateMinutes: {
         description: "How often to switch to a different fake file while spoofing (minutes)",
         type: OptionType.NUMBER,
         default: 6,
-        onChange: () => startPolling()
+        min: 1,
+        onChange: whenRunning(startPolling)
     },
     hideRealGamesWhileSpoofing: {
         description: "While spoof mode is on, disable Discord's detection of any real running games so only the fake VS Code activity shows",
         type: OptionType.BOOLEAN,
         default: true,
-        onChange: syncRealGameSuppression
+        onChange: whenRunning(syncRealGameSuppression)
     },
     pollInterval: {
         description: "How often to check VS Code's real window title (ms) - ignored while spoofing",
         type: OptionType.NUMBER,
         default: 15000,
-        onChange: () => startPolling()
+        min: 1000,
+        onChange: whenRunning(startPolling)
     },
     showWorkspace: {
         description: "Show the workspace/folder name as the status line",
         type: OptionType.BOOLEAN,
         default: true,
-        onChange: refreshNow
+        onChange: whenRunning(refreshNow)
     },
     showDirtyIndicator: {
         description: "Note when the current (real) file has unsaved changes",
         type: OptionType.BOOLEAN,
         default: true,
-        onChange: refreshNow
+        onChange: whenRunning(refreshNow)
     },
     applicationId: {
         description: "Optional: your own Discord application ID (developer portal) with an uploaded Rich Presence asset, for a real icon. Leave blank for text-only.",
         type: OptionType.STRING,
         default: "",
-        onChange: refreshNow
+        onChange: whenRunning(refreshNow)
     },
     iconAssetKey: {
         description: "Asset key name you uploaded under that application's Rich Presence tab",
         type: OptionType.STRING,
         default: "vscode",
-        onChange: refreshNow
+        onChange: whenRunning(refreshNow)
     },
 });
 
@@ -313,11 +349,18 @@ export default definePlugin({
     settings,
 
     start() {
-        RunningGameStore.addChangeListener(suppressRealGames);
-        startPolling();
+        running = true;
+        restoreSavedGames()
+            .catch(e => logger.error("Failed to restore hidden games", e))
+            .finally(() => {
+                if (!running) return;
+                RunningGameStore.addChangeListener(suppressRealGames);
+                startPolling();
+            });
     },
 
     stop() {
+        running = false;
         RunningGameStore.removeChangeListener(suppressRealGames);
         stopPolling();
     }

@@ -92,6 +92,10 @@ export async function runImport(source: ImportSource, opts: ImportOptions): Prom
         if (settings) {
             const links = union(PlainSettings.themeLinks, settings.themeLinks);
             PlainSettings.themeLinks = links.list;
+            if (PlainSettings.enableOnlineThemes !== false) {
+                const enabledLinks = Array.isArray(settings.enabledThemeLinks) ? settings.enabledThemeLinks : settings.themeLinks;
+                PlainSettings.enabledThemeLinks = union(PlainSettings.enabledThemeLinks, enabledLinks).list;
+            }
             PlainSettings.enabledThemes = union(PlainSettings.enabledThemes, settings.enabledThemes).list;
             result.themeLinks = links.added;
         }

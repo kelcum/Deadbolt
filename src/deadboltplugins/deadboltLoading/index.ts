@@ -4,12 +4,12 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import "./deadboltLoading.css";
-
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
-import definePlugin, { OptionType } from "@utils/types";
+import definePlugin, { OptionType, StartAt } from "@utils/types";
+
+import managedStyle from "./deadboltLoading.css?managed";
 
 const deadboltQuotes = [
     "Deadbolt engaged.",
@@ -142,6 +142,8 @@ export default definePlugin({
     tags: ["Appearance", "Customisation"],
     authors: [Devs.K3],
     enabledByDefault: true,
+    startAt: StartAt.Init,
+    managedStyle,
 
     settings,
 
