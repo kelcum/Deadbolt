@@ -1,0 +1,99 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-doctor-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.vc-doctor-summary {
+    padding: 10px 12px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.vc-doctor-summary.vc-doctor-ok {
+    background: rgb(74 222 128 / 10%);
+    color: #4ade80;
+}
+
+.vc-doctor-summary.vc-doctor-warn {
+    background: rgb(251 191 36 / 10%);
+    color: #fbbf24;
+}
+
+.vc-doctor-summary.vc-doctor-bad {
+    background: rgb(248 113 113 / 10%);
+    color: #f87171;
+}
+
+.vc-doctor-rows {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    border: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.vc-doctor-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 12px;
+    background: var(--background-mod-subtle, rgb(255 255 255 / 3%));
+}
+
+.vc-doctor-dot {
+    flex-shrink: 0;
+    width: 8px;
+    height: 8px;
+    margin-top: 6px;
+    border-radius: 50%;
+}
+
+.vc-doctor-dot.vc-doctor-ok {
+    background: #4ade80;
+}
+
+.vc-doctor-dot.vc-doctor-warn {
+    background: #fbbf24;
+}
+
+.vc-doctor-dot.vc-doctor-bad {
+    background: #f87171;
+}
+
+.vc-doctor-title {
+    color: var(--text-strong, var(--header-primary, #f2f3f5));
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.vc-doctor-detail {
+    color: var(--text-muted, #949ba4);
+    font-size: 12px;
+}
+
+.vc-doctor-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.vc-doctor-output {
+    margin: 0;
+    padding: 10px 12px;
+    max-height: 240px;
+    overflow: auto;
+    border-radius: 8px;
+    background: var(--background-secondary-alt, #16171d);
+    color: var(--text-default, #dbdee1);
+    font-family: var(--font-code, Consolas, monospace);
+    font-size: 12px;
+    white-space: pre-wrap;
+}
