@@ -42,3 +42,5 @@ misc/bundle
 
 # intl scripts
 misc/scripts
+
+scripts/sync.paused

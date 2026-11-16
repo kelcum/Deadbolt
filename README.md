@@ -162,7 +162,7 @@ pnpm build
 powershell -ExecutionPolicy Bypass -File scripts\reapply-branding.ps1 -Restart
 ```
 
-By default this reapplies to both Canary and Stable; pass `-Clients Canary` or `-Clients Stable` to restrict it to one. `-Restart` only relaunches whichever client(s) were already running — it never launches one that wasn't. Discord occasionally ships `resources/app.asar` as a real packed archive instead of the unpacked directory this relies on — the script unpacks it in place automatically when that happens (`scripts/ensure-asar-unpacked.cjs`).
+By default this reapplies to both Canary and Stable; pass `-Clients Canary` or `-Clients Stable` to restrict it to one. `-Restart` only relaunches whichever client(s) were already running — it never launches one that wasn't. When a Discord update ships a fresh `resources/app.asar`, the script moves it to `_app.asar` and puts the small Deadbolt loader folder in its place, the same way the installer does. Folders Discord is still downloading (`.app-*.installing`) are left alone, and a client is never restarted while one exists. The script exits with code 2 if the version Discord launches still doesn't have Deadbolt afterwards.
 
 ### Running this automatically
 
@@ -172,17 +172,27 @@ By default this reapplies to both Canary and Stable; pass `-Clients Canary` or `
 2. Merges in new commits from `upstream` Equicord/Equicord:main. A clean merge gets rebuilt and verified before being pushed back to `origin/main`; a conflicted merge is aborted and left alone for a human to resolve — it never guesses at a resolution or pushes a broken build.
 3. Reapplies branding to both Canary and Stable every run regardless of 1/2 — Discord's own updater can reset that independently of any Deadbolt-side change. Only restarts a client if it was already running; never launches Discord on its own.
 
-Logs to `scripts/auto-update.log`, trimmed to the last 500 lines each run.
+Logs to `scripts/auto-update.log`, moved to `auto-update.log.1` once it passes 512 KB.
 
-When a run gets stuck (a merge conflict, a failed build or push, uncommitted changes in the checkout, a failed branding reapply) it tells you instead of failing quietly in the log: a Windows notification, or a popup window if Windows notifications are switched off for your account. Either one offers to open the log. The same problem is only announced once per 24 hours, and a run that finishes cleanly resets that, so the next one is announced straight away. The notification code is in [`scripts/stuck-alert.ps1`](scripts/stuck-alert.ps1).
+- A failed build never leaves Discord on a broken build: the last good `dist\desktop` is put back and nothing is restarted. The next run retries the build until `dist\built-from.txt` matches `HEAD`.
+- If a run is killed between merging upstream and pushing, the next run finds that clean merge, builds it and pushes it (or drops it and merges again if `origin/main` moved meanwhile). A merge you resolved by hand is never touched.
+- Two runs never overlap; a second one exits straight away.
+- Create an empty `scripts\sync.paused` file to stop pulling, merging and building while you work. Branding is still reapplied. Delete the file to resume.
 
-To run it automatically on a schedule (e.g. every 5 hours):
+It only interrupts you when something is actually wrong, with a Windows notification, or a popup if notifications are switched off for your account. Either one offers to open the log.
+
+- **Broken** (a failed build, a merge that broke the build, a failed reapply): announced right away, then at most once every 24 hours while it lasts.
+- **Only waiting** (an upstream conflict, uncommitted changes, unpushed commits, a failed push or fetch): logged quietly, and announced only if it is still like that after 3 days.
+
+Each problem is tracked on its own in `%LOCALAPPDATA%\DeadboltAutoUpdate\last-alert.json` and forgotten as soon as a run finds it fixed. The notification code is in [`scripts/stuck-alert.ps1`](scripts/stuck-alert.ps1).
+
+To run it automatically, register the background tasks once:
 
 ```powershell
-$action = New-ScheduledTaskAction -Execute "powershell.exe" -Argument '-ExecutionPolicy Bypass -File "C:\path\to\Deadbolt\scripts\auto-update.ps1"'
-$trigger = New-ScheduledTaskTrigger -Once -At (Get-Date) -RepetitionInterval (New-TimeSpan -Hours 5) -RepetitionDuration (New-TimeSpan -Days 3650)
-Register-ScheduledTask -TaskName "Deadbolt Auto-Update" -Action $action -Trigger $trigger -Description "Keeps Deadbolt synced with origin/main and reapplies Canary branding"
+powershell -ExecutionPolicy Bypass -File scripts\install-background-tasks.ps1
 ```
+
+That adds **Deadbolt Auto-Update** (every 5 hours) and **Deadbolt Guard** (at logon and every 10 minutes, reapplying Deadbolt right after Discord updates itself). Both run hidden and only write to `scripts\guard.log` when they fix something. If an install ever looks broken, `powershell -ExecutionPolicy Bypass -File scripts\repair.ps1` rebuilds if needed, reapplies, re-registers the tasks and restarts Discord.
 
 ## Credits
 

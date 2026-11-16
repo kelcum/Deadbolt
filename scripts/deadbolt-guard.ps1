@@ -26,4 +26,6 @@ if ($exitCode -ne 0) {
     Send-StuckAlert "guard" "Deadbolt couldn't re-apply itself to Discord after an update. Run scripts\repair.ps1 in the Deadbolt folder."
 }
 
+Clear-StuckAlert @("guard")
+
 exit $exitCode
