@@ -113,16 +113,20 @@ if (process.platform === "darwin") {
 
     console.log("Now running Installer...");
 
+    const env = {
+        ...process.env,
+        EQUICORD_USER_DATA_DIR: BASE_DIR,
+        EQUICORD_DIRECTORY: join(BASE_DIR, "dist/desktop"),
+        EQUICORD_DEV_INSTALL: "1"
+    };
+
     try {
-        execFileSync(installerBin, args, {
-            stdio: "inherit",
-            env: {
-                ...process.env,
-                EQUICORD_USER_DATA_DIR: BASE_DIR,
-                EQUICORD_DIRECTORY: join(BASE_DIR, "dist/desktop"),
-                EQUICORD_DEV_INSTALL: "1"
-            }
-        });
+        if (process.platform === "linux") {
+            const { runLinuxInstaller } = await import("./linuxInstaller.mjs");
+            runLinuxInstaller(installerBin, args, env);
+        } else {
+            execFileSync(installerBin, args, { stdio: "inherit", env });
+        }
     } catch {
         console.error("Something went wrong. Please check the logs above.");
         process.exitCode = 1;
