@@ -1,0 +1,177 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-quickfind-host {
+    position: fixed;
+    z-index: 1002;
+    width: min(420px, calc(100vw - 32px));
+}
+
+.vc-quickfind-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+    border-radius: 12px;
+    background: var(--background-floating, #16171d);
+    box-shadow: 0 12px 32px rgb(0 0 0 / 45%);
+    color: var(--text-default, var(--text-normal, #dbdee1));
+}
+
+.vc-quickfind-bar {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px;
+}
+
+.vc-quickfind-input {
+    flex: 1;
+    min-width: 0;
+    padding: 7px 10px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    background: var(--input-background, rgb(0 0 0 / 25%));
+    color: inherit;
+    font-size: 14px;
+    outline: none;
+}
+
+.vc-quickfind-input:focus {
+    border-color: #7c6ff0;
+}
+
+.vc-quickfind-count {
+    min-width: 42px;
+    color: var(--text-muted, #949ba4);
+    font-size: 12px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+}
+
+.vc-quickfind-btn {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: none;
+    border-radius: 6px;
+    background: transparent;
+    color: var(--interactive-normal, #b5bac1);
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.vc-quickfind-btn:hover:not(:disabled) {
+    background: var(--background-modifier-hover, rgb(255 255 255 / 6%));
+    color: var(--interactive-hover, #dbdee1);
+}
+
+.vc-quickfind-btn:disabled {
+    opacity: 0.35;
+    cursor: default;
+}
+
+.vc-quickfind-on {
+    background: rgb(124 111 240 / 22%);
+    color: #a59cf5;
+}
+
+.vc-quickfind-results {
+    display: flex;
+    flex-direction: column;
+    max-height: min(420px, 60vh);
+    overflow-y: auto;
+    border-top: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+}
+
+.vc-quickfind-result {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
+.vc-quickfind-result:hover {
+    background: var(--background-modifier-hover, rgb(255 255 255 / 4%));
+}
+
+.vc-quickfind-active {
+    background: rgb(124 111 240 / 14%);
+    box-shadow: inset 2px 0 0 #7c6ff0;
+}
+
+.vc-quickfind-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+}
+
+.vc-quickfind-author {
+    color: var(--text-strong, var(--header-primary, #f2f3f5));
+    font-weight: 600;
+}
+
+.vc-quickfind-time {
+    color: var(--text-muted, #949ba4);
+}
+
+.vc-quickfind-text {
+    overflow: hidden;
+    color: var(--text-default, #dbdee1);
+    font-size: 13px;
+    line-height: 1.35;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-quickfind-text mark {
+    border-radius: 3px;
+    background: rgb(251 191 36 / 30%);
+    color: inherit;
+}
+
+.vc-quickfind-note {
+    padding: 10px 12px;
+    color: var(--text-muted, #949ba4);
+    font-size: 12px;
+}
+
+.vc-quickfind-footer {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 12px;
+    border-top: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+    background: var(--background-floating, #16171d);
+    color: var(--text-muted, #949ba4);
+    font-size: 11px;
+}
+
+.vc-quickfind-link {
+    padding: 0;
+    border: none;
+    background: none;
+    color: #a59cf5;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.vc-quickfind-link:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
