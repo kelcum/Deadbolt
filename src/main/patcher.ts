@@ -64,6 +64,8 @@ if (!IS_VANILLA) {
         require("./persistAfterDiscordUpdates");
     }
 
+    if (IS_CORE_INJECT && process.platform === "darwin") require("./persistCoreInject");
+
     if (process.platform === "win32" && settings.winCtrlQ) {
         const originalBuild = Menu.buildFromTemplate;
         Menu.buildFromTemplate = function (template) {
