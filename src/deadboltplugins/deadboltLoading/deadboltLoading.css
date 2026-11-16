@@ -104,14 +104,67 @@
     animation: deadbolt-splash-sheen 3.4s linear infinite;
 }
 
+.deadbolt-splash-bar {
+    position: relative;
+    width: 132px;
+    height: 2px;
+    margin-top: -8px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: rgb(255 255 255 / 8%);
+}
+
+.deadbolt-splash-bar span {
+    position: absolute;
+    inset: 0;
+    width: 40%;
+    border-radius: 2px;
+    background: linear-gradient(
+        90deg,
+        transparent,
+        #c3ccd6 45%,
+        #fff 50%,
+        #c3ccd6 55%,
+        transparent
+    );
+    animation: deadbolt-splash-bar 1.5s ease-in-out infinite;
+}
+
+@keyframes deadbolt-splash-bar {
+    0% {
+        transform: translateX(-110%);
+    }
+    100% {
+        transform: translateX(260%);
+    }
+}
+
+.deadbolt-splash-build {
+    position: absolute;
+    bottom: 18px;
+    font-family: var(--font-code, Consolas, monospace);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: rgb(220 224 232 / 28%);
+}
+
 .deadbolt-splash-tip {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 6px;
     max-width: 440px;
+    min-height: 48px;
     text-align: center;
     padding: 0 24px;
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease;
+}
+
+.deadbolt-splash-tip.deadbolt-splash-tip-swap {
+    opacity: 0;
+    transform: translateY(4px);
 }
 
 .deadbolt-splash-tip-label {
@@ -174,7 +227,12 @@
     .deadbolt-splash-overlay,
     .deadbolt-splash-crest img,
     .deadbolt-splash-crest::before,
-    .deadbolt-splash-word {
+    .deadbolt-splash-word,
+    .deadbolt-splash-bar span {
         animation: none;
+    }
+
+    .deadbolt-splash-tip {
+        transition: none;
     }
 }

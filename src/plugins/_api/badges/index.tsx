@@ -24,6 +24,7 @@ import "./pluginCreatorBadge.css";
 import "./vesperCreatorBadge.css";
 import "./vitraCreatorBadge.css";
 import "./ruinednzBadge.css";
+import "./pauseWhenUnfocused.css";
 
 import { _getBadges, BadgePosition, BadgeRarity, BadgeUserArgs, DirectoryBadge, ProfileBadge } from "@api/Badges";
 import ErrorBoundary from "@components/ErrorBoundary";
@@ -635,6 +636,10 @@ export function BadgeContextMenu({ badge }: { badge: Omit<ProfileBadge, "id"> & 
     );
 }
 
+function syncBadgePause() {
+    document.documentElement.classList.toggle("deadbolt-badges-paused", !document.hasFocus());
+}
+
 export default definePlugin({
     name: "BadgeAPI",
     description: "API to add badges to users",
@@ -718,6 +723,9 @@ export default definePlugin({
     ],
 
     async start() {
+        window.addEventListener("focus", syncBadgePause);
+        window.addEventListener("blur", syncBadgePause);
+        syncBadgePause();
         loadRequestedBadges();
         loadHiddenBadges();
         clearInterval(hiddenIntervalId);
@@ -731,6 +739,9 @@ export default definePlugin({
     },
 
     async stop() {
+        window.removeEventListener("focus", syncBadgePause);
+        window.removeEventListener("blur", syncBadgePause);
+        document.documentElement.classList.remove("deadbolt-badges-paused");
         clearInterval(intervalId);
         clearInterval(hiddenIntervalId);
         DirectoryBadges = {};
