@@ -1,0 +1,112 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-plugin-manager-body {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.vc-plugin-manager-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+    border-radius: 10px;
+    background: var(--background-mod-subtle, rgb(255 255 255 / 3%));
+}
+
+.vc-plugin-manager-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.vc-plugin-manager-name {
+    color: var(--text-strong, var(--header-primary, #f2f3f5));
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-plugin-manager-meta {
+    color: var(--text-muted, #949ba4);
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-plugin-manager-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.vc-plugin-manager-filter {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 8px 10px;
+    border: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+    border-radius: 8px;
+    background: var(--input-background, rgb(0 0 0 / 20%));
+    color: var(--text-default, var(--text-normal, #dbdee1));
+    font-size: 14px;
+    outline: none;
+}
+
+.vc-plugin-manager-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.vc-plugin-manager-code {
+    width: 100%;
+    min-height: 460px;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+    border-radius: 10px;
+    background: var(--background-secondary-alt, #16171d);
+    color: var(--text-default, var(--text-normal, #dbdee1));
+    font-family: var(--font-code, Consolas, "Courier New", monospace);
+    font-size: 13px;
+    line-height: 1.5;
+    tab-size: 4;
+    white-space: pre;
+    overflow: auto;
+    resize: vertical;
+    outline: none;
+}
+
+.vc-plugin-manager-code:focus {
+    border-color: #7c6ff0;
+}
+
+.vc-plugin-manager-code:disabled {
+    opacity: 0.6;
+}
+
+.vc-plugin-manager-hint {
+    color: var(--text-muted, #949ba4);
+    font-size: 12px;
+}
+
+.vc-plugin-manager-error {
+    margin: 0;
+    padding: 10px 12px;
+    max-height: 220px;
+    overflow: auto;
+    border-radius: 8px;
+    background: rgb(248 113 113 / 10%);
+    color: #f87171;
+    font-family: var(--font-code, Consolas, monospace);
+    font-size: 12px;
+    white-space: pre-wrap;
+}

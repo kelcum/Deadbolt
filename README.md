@@ -19,7 +19,7 @@ What sets this fork apart from vanilla Equicord:
 
 - **A boot splash that's actually Deadbolt's** — replaces Discord's own connecting screen with an animated chrome crest and Deadbolt-branded quotes, instead of just retexting Discord's default one.
 - **Animated profile badges** — a continuously rotating chrome shine on the Creator badge and a violet counterpart for Contributors, each with a rich hover card instead of a plain tooltip.
-- **`/addplugin`** — add a plugin to Deadbolt from inside Discord itself: attach the file, Deadbolt saves it, rebuilds, and offers to reload. No editor, no terminal. See [Adding your own plugins](#adding-your-own-plugins).
+- **`/addplugin` and `/myplugins`** — add, edit, switch, share and remove your own plugins from inside Discord itself. Deadbolt saves the code, rebuilds, and offers to reload. No editor, no terminal. See [Adding your own plugins](#adding-your-own-plugins).
 - **VSCodeActivity** — shows the real file/workspace you're editing in VS Code instead of Discord's generic "Playing Visual Studio Code", with an optional spoof mode that fakes a coding session (and can hide real game activity) on demand.
 - **A real macOS install, not a broken one** — macOS injects through Discord's external `discord_desktop_core` module instead of modifying the signed `app.asar`, so Discord's Apple code signature stays intact. See [macOS](#macos).
 - **A default look out of the box** — new installs start with a black, grayscale QuickCSS theme that also tidies away Nitro/gift, stickers, emoji, Discover and a few other buttons. See [Default look](#default-look).
@@ -142,6 +142,18 @@ You can also add a plugin without leaving Discord. Turn on **UserPluginUploader*
 - `replace:True` overwrites a plugin folder that already has that name.
 
 Deadbolt then rebuilds itself, turns the plugin on and offers to reload Discord. If the rebuild fails, nothing is changed and the build error is shown in chat, so a broken file can't break your next build. The file is read locally and never sent to Discord.
+
+### Managing them
+
+`/myplugins` (or **Open your plugins** in UserPluginUploader's settings) lists everything in `src/userplugins`:
+
+- **Switch** turns a plugin on or off. Most switch right away; ones that patch Discord ask you to reload.
+- **Edit** opens the plugin's `index.ts`/`index.tsx` in a code editor. Tab indents and Ctrl+S saves. Saving rebuilds Deadbolt, and if the build fails the build error is shown and the file goes back to how it was.
+- **Share** puts the plugin's files into the current chat's message box, so you can send them to a friend. Nothing is sent until you press Enter.
+- **Remove** moves the plugin folder to `removed-userplugins/` in your Deadbolt folder (so you can bring it back) and rebuilds without it.
+- **Add from file** does the same as `/addplugin`, naming the folder after the plugin.
+
+`/toggleplugin name:<plugin>` and `/shareplugin name:<plugin>` do the same for one plugin without opening the list.
 
 This only works when you built Deadbolt from source on the same PC (it needs the `src` folder and `pnpm` in your PATH), and only in the desktop app. The plugin file needs the usual `export default definePlugin({ name: "...", ... })` with `name` as the first property.
 
