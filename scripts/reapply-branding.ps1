@@ -1,5 +1,6 @@
 param(
     [switch]$Restart,
+    [switch]$Quiet,
     [ValidateSet("Canary", "Stable")]
     [string[]]$Clients = @("Canary", "Stable")
 )
@@ -24,14 +25,39 @@ $ClientDefs = @{
     }
 }
 
-function Write-Step($msg) { Write-Host "-> $msg" -ForegroundColor Cyan }
-function Write-Ok($msg)   { Write-Host "   OK: $msg" -ForegroundColor Green }
-function Write-Warn2($msg) { Write-Host "   SKIP: $msg" -ForegroundColor Yellow }
+$script:Lines = New-Object System.Collections.Generic.List[string]
+$script:Changes = 0
+$script:Failures = 0
 
-Write-Host "Deadbolt branding reapply" -ForegroundColor Magenta
-Write-Host "Repo:    $RepoRoot"
-Write-Host "Clients: $($Clients -join ', ')"
-Write-Host ""
+function Out-Line($text, $color = "Gray") {
+    $script:Lines.Add($text)
+    if (-not $Quiet) { Write-Host $text -ForegroundColor $color }
+}
+function Write-Step($msg) { Out-Line "-> $msg" "Cyan" }
+function Write-Ok($msg) { $script:Changes++; Out-Line "   OK: $msg" "Green" }
+function Write-Same($msg) { Out-Line "   already set: $msg" "DarkGray" }
+function Write-Warn2($msg) { Out-Line "   SKIP: $msg" "Yellow" }
+function Write-Fail($msg) { $script:Failures++; Out-Line "   FAILED: $msg" "Red" }
+
+function Get-Hash($path) {
+    (Get-FileHash -Path $path -Algorithm SHA256).Hash
+}
+
+function Copy-IfDifferent($source, $target) {
+    if ((Test-Path $target) -and ((Get-Hash $source) -eq (Get-Hash $target))) { return $false }
+    Copy-Item -Path $source -Destination $target -Force
+    return $true
+}
+
+function Save-Original($path) {
+    $orig = "$path.orig"
+    if (-not (Test-Path $orig)) { Copy-Item $path $orig }
+}
+
+Out-Line "Deadbolt branding reapply" "Magenta"
+Out-Line "Repo:    $RepoRoot"
+Out-Line "Clients: $($Clients -join ', ')"
+Out-Line ""
 
 if (-not (Test-Path $PatcherPath)) {
     Write-Host "ERROR: $PatcherPath not found." -ForegroundColor Red
@@ -47,16 +73,18 @@ $PatcherRequirePath = $PatcherPath -replace "\\", "/"
 $StubContent = "require(`"$PatcherRequirePath`");"
 $shell = New-Object -ComObject WScript.Shell
 $touchedClients = @()
+$newlyPatched = @{}
 
 foreach ($clientName in $Clients) {
     $client = $ClientDefs[$clientName]
     $ClientRoot = $client.Root
+    $newlyPatched[$clientName] = @()
 
-    Write-Host "== $clientName ($ClientRoot) ==" -ForegroundColor Magenta
+    Out-Line "== $clientName ($ClientRoot) ==" "Magenta"
 
     if (-not (Test-Path $ClientRoot)) {
         Write-Warn2 "Discord $clientName isn't installed at $ClientRoot, skipping."
-        Write-Host ""
+        Out-Line ""
         continue
     }
     $touchedClients += $clientName
@@ -68,86 +96,115 @@ foreach ($clientName in $Clients) {
 
     foreach ($verDir in $versionDirs) {
         Write-Step "Version folder: $($verDir.Name)"
-
-        $appAsar = Join-Path $verDir.FullName "resources\app.asar"
-        if ((Test-Path $appAsar) -and -not (Get-Item $appAsar).PSIsContainer) {
-            Write-Step "app.asar is a packed archive here, unpacking it first..."
-            & node (Join-Path $RepoRoot "scripts\ensure-asar-unpacked.cjs") $appAsar | ForEach-Object { Write-Host "   $_" }
-        }
-
-        $indexJs = Join-Path $verDir.FullName "resources\app.asar\index.js"
-        if (Test-Path $indexJs) {
-            Set-Content -Path $indexJs -Value $StubContent -NoNewline -Encoding ascii
-            Write-Ok "patcher stub -> $indexJs"
-        } else {
-            Write-Warn2 "no resources\app.asar\index.js here"
-        }
-
-        $verIco = Join-Path $verDir.FullName "app.ico"
-        if (Test-Path $verIco) {
-            $verIcoOrig = "$verIco.orig"
-            if (-not (Test-Path $verIcoOrig)) { Copy-Item $verIco $verIcoOrig }
-            Copy-Item -Path $DeadboltIco -Destination $verIco -Force
-            Write-Ok "app.ico -> $verIco"
-        }
-
-        $coreDirs = Get-ChildItem -Path (Join-Path $verDir.FullName "modules") -Directory -Filter "discord_desktop_core-*" -ErrorAction SilentlyContinue
-        foreach ($coreDir in $coreDirs) {
-            $svg = Join-Path $coreDir.FullName "discord_desktop_core\app\images\discord.svg"
-            if (Test-Path $svg) {
-                $svgOrig = "$svg.orig"
-                if (-not (Test-Path $svgOrig)) { Copy-Item $svg $svgOrig }
-                Copy-Item -Path $SplashSvg -Destination $svg -Force
-                Write-Ok "splash logo -> $($coreDir.Name)"
+        try {
+            $appAsar = Join-Path $verDir.FullName "resources\app.asar"
+            if ((Test-Path $appAsar) -and -not (Get-Item $appAsar).PSIsContainer) {
+                Write-Step "app.asar is a packed archive here, unpacking it first..."
+                & node (Join-Path $RepoRoot "scripts\ensure-asar-unpacked.cjs") $appAsar | ForEach-Object { Out-Line "   $_" }
+                if ($LASTEXITCODE -ne 0) { throw "unpacking $appAsar failed (exit $LASTEXITCODE)" }
             }
+
+            $indexJs = Join-Path $verDir.FullName "resources\app.asar\index.js"
+            if (Test-Path $indexJs) {
+                $current = Get-Content -Path $indexJs -Raw -ErrorAction SilentlyContinue
+                if ($current -ne $StubContent) {
+                    Set-Content -Path $indexJs -Value $StubContent -NoNewline -Encoding ascii
+                    $newlyPatched[$clientName] += $verDir.FullName
+                    Write-Ok "patcher stub -> $indexJs"
+                } else {
+                    Write-Same "patcher stub in $($verDir.Name)"
+                }
+            } else {
+                Write-Warn2 "no resources\app.asar\index.js here"
+            }
+
+            $verIco = Join-Path $verDir.FullName "app.ico"
+            if (Test-Path $verIco) {
+                Save-Original $verIco
+                if (Copy-IfDifferent $DeadboltIco $verIco) { Write-Ok "app.ico -> $verIco" } else { Write-Same "app.ico in $($verDir.Name)" }
+            }
+
+            $coreDirs = Get-ChildItem -Path (Join-Path $verDir.FullName "modules") -Directory -Filter "discord_desktop_core-*" -ErrorAction SilentlyContinue
+            foreach ($coreDir in $coreDirs) {
+                $svg = Join-Path $coreDir.FullName "discord_desktop_core\app\images\discord.svg"
+                if (Test-Path $svg) {
+                    Save-Original $svg
+                    if (Copy-IfDifferent $SplashSvg $svg) { Write-Ok "splash logo -> $($coreDir.Name)" } else { Write-Same "splash logo in $($coreDir.Name)" }
+                }
+            }
+        } catch {
+            Write-Fail "$($verDir.Name): $_"
         }
     }
 
     Write-Step "Root app.ico"
-    $rootIco = Join-Path $ClientRoot "app.ico"
-    if (Test-Path $rootIco) {
-        $rootIcoOrig = "$rootIco.orig"
-        if (-not (Test-Path $rootIcoOrig)) { Copy-Item $rootIco $rootIcoOrig }
-        Copy-Item -Path $DeadboltIco -Destination $rootIco -Force
-        Write-Ok "$rootIco"
+    try {
+        $rootIco = Join-Path $ClientRoot "app.ico"
+        if (Test-Path $rootIco) {
+            Save-Original $rootIco
+            if (Copy-IfDifferent $DeadboltIco $rootIco) { Write-Ok "$rootIco" } else { Write-Same "$rootIco" }
+        }
+    } catch {
+        Write-Fail "root app.ico: $_"
     }
 
     Write-Step "Shortcuts"
+    $wantIcon = "$DeadboltIco,0"
     $shortcutPaths = foreach ($lnkName in $client.ShortcutNames) {
         Join-Path $env:APPDATA "Microsoft\Internet Explorer\Quick Launch\User Pinned\TaskBar\$lnkName"
         Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\$lnkName"
         Join-Path $env:APPDATA "Microsoft\Windows\Start Menu\Programs\Discord Inc\$lnkName"
+        Join-Path ([Environment]::GetFolderPath("Desktop")) $lnkName
     }
     foreach ($p in $shortcutPaths) {
-        if (Test-Path $p) {
+        if (-not (Test-Path $p)) { continue }
+        try {
             $lnk = $shell.CreateShortcut($p)
-            $lnk.IconLocation = "$DeadboltIco,0"
-            $lnk.Save()
-            Write-Ok "$p"
-        } else {
-            Write-Warn2 "not found: $p"
+            if ($lnk.IconLocation -ne $wantIcon) {
+                $lnk.IconLocation = $wantIcon
+                $lnk.Save()
+                Write-Ok "$p"
+            } else {
+                Write-Same "$p"
+            }
+        } catch {
+            Write-Fail "shortcut $p : $_"
         }
     }
 
-    Write-Host ""
+    Out-Line ""
 }
-
-Write-Host "Done." -ForegroundColor Magenta
 
 if ($Restart) {
     foreach ($clientName in $touchedClients) {
         $client = $ClientDefs[$clientName]
-        $running = Get-Process -Name $client.ProcessName -ErrorAction SilentlyContinue
-        if ($running) {
-            Write-Step "Restarting Discord $clientName (was already running)"
+        $running = @(Get-Process -Name $client.ProcessName -ErrorAction SilentlyContinue)
+        if (-not $running) { continue }
+
+        $runningDirs = @($running | ForEach-Object { try { Split-Path -Parent $_.Path } catch { $null } } | Where-Object { $_ } | Sort-Object -Unique)
+        $needsRestart = @($runningDirs | Where-Object { $newlyPatched[$clientName] -contains $_ })
+
+        if ($needsRestart) {
+            Write-Step "Restarting Discord $($clientName), it was running without Deadbolt ($(Split-Path -Leaf $needsRestart[0]))"
             Stop-Process -Name $client.ProcessName -Force -ErrorAction SilentlyContinue
-            Start-Sleep -Milliseconds 500
+            Start-Sleep -Milliseconds 800
             Start-Process (Join-Path $client.Root "Update.exe") -ArgumentList "--processStart $($client.ProcessName).exe"
             Write-Ok "relaunch requested"
         } else {
-            Write-Step "Discord $clientName isn't running, not launching it"
+            Out-Line "-> Discord $clientName is running with Deadbolt already, leaving it alone" "DarkGray"
         }
     }
-} else {
-    Write-Host "Run with -Restart to also relaunch whichever clients were already running, or restart them yourself to apply." -ForegroundColor DarkGray
 }
+
+if ($Quiet -and ($script:Changes -gt 0 -or $script:Failures -gt 0)) {
+    $script:Lines | ForEach-Object { Write-Output $_ }
+}
+
+if ($script:Changes -eq 0 -and $script:Failures -eq 0) {
+    Write-Output "Done. Everything was already in place."
+} else {
+    Write-Output "Done. $($script:Changes) change(s), $($script:Failures) failure(s)."
+}
+
+if ($script:Failures -gt 0) { exit 2 }
+exit 0

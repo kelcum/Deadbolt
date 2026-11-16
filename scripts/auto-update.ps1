@@ -4,6 +4,7 @@ $RepoRoot = Split-Path -Parent $PSScriptRoot
 $LogFile = Join-Path $PSScriptRoot "auto-update.log"
 $UpstreamRemote = "upstream"
 $UpstreamBranch = "main"
+$env:GIT_TERMINAL_PROMPT = "0"
 
 function Log($msg) {
     $line = "[{0}] {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $msg
@@ -12,6 +13,16 @@ function Log($msg) {
 }
 
 . (Join-Path $PSScriptRoot "stuck-alert.ps1")
+
+function Invoke-GitFetch($remote, $branch) {
+    for ($attempt = 1; $attempt -le 3; $attempt++) {
+        git -c http.lowSpeedLimit=1000 -c http.lowSpeedTime=60 fetch $remote $branch 2>&1 | ForEach-Object { Log $_ }
+        if ($LASTEXITCODE -eq 0) { return $true }
+        Log "git fetch $remote failed (attempt $attempt of 3, exit $LASTEXITCODE)."
+        if ($attempt -lt 3) { Start-Sleep -Seconds (15 * $attempt) }
+    }
+    return $false
+}
 
 function Build-Repo() {
     pnpm install --config.confirmModulesPurge=false 2>&1 | ForEach-Object { Log $_ }
@@ -44,8 +55,7 @@ try {
         Log ($status | Out-String)
         Send-StuckAlert "dirty-tree" "Updates are paused: the Deadbolt folder has uncommitted changes. Commit or stash them and it carries on by itself."
     } else {
-        git fetch origin main 2>&1 | ForEach-Object { Log $_ }
-        if ($LASTEXITCODE -ne 0) { throw "git fetch origin failed (exit $LASTEXITCODE)" }
+        if (-not (Invoke-GitFetch "origin" "main")) { throw "git fetch origin failed after 3 attempts" }
 
         $before = git rev-parse HEAD
         $behind = [int](git rev-list --count "HEAD..origin/main")
@@ -71,9 +81,8 @@ try {
                 }
             }
 
-            git fetch $UpstreamRemote $UpstreamBranch 2>&1 | ForEach-Object { Log $_ }
-            if ($LASTEXITCODE -ne 0) {
-                Log "git fetch $UpstreamRemote failed (exit $LASTEXITCODE) - skipping upstream sync this run."
+            if (-not (Invoke-GitFetch $UpstreamRemote $UpstreamBranch)) {
+                Log "git fetch $UpstreamRemote failed 3 times - skipping upstream sync this run."
             } else {
                 $upstreamRef = "$UpstreamRemote/$UpstreamBranch"
                 $upstreamBehind = [int](git rev-list --count "HEAD..$upstreamRef")
@@ -122,8 +131,8 @@ try {
 
 try {
     $reapplyScript = Join-Path $RepoRoot "scripts\reapply-branding.ps1"
-    Log "Reapplying branding to Canary and Stable (only restarting whichever is already running)..."
-    & powershell -ExecutionPolicy Bypass -File $reapplyScript -Restart *>&1 | ForEach-Object { Log $_ }
+    Log "Reapplying branding to Canary and Stable (restarting a client only if it was running without Deadbolt)..."
+    & powershell -NoProfile -ExecutionPolicy Bypass -File $reapplyScript -Restart -Quiet *>&1 | ForEach-Object { Log $_ }
     if ($LASTEXITCODE -ne 0) {
         Send-StuckAlert "branding" "Re-applying Deadbolt to Discord failed, so Discord may be running without the mod."
     }
