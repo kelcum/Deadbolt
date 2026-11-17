@@ -54,6 +54,7 @@ jobs:
                   grep -q "$SHA" dist/desktop/renderer.js
                   cd dist/desktop
                   zip -X "$GITHUB_WORKSPACE/deadbolt-dist.zip" package.json patcher.js preload.js renderer.css renderer.js
+                  zip -X -j "$GITHUB_WORKSPACE/deadbolt-dist.zip" "$GITHUB_WORKSPACE/browser/deadbolt.ico" "$GITHUB_WORKSPACE/browser/splash.svg"
                   unzip -l "$GITHUB_WORKSPACE/deadbolt-dist.zip"
 
             - name: Upload to the latest release

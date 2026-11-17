@@ -18,6 +18,7 @@ import { UpdateData, Updater } from ".";
 const API_BASE = `https://api.github.com/repos/${gitRemote}`;
 const DIST_ASSET = "deadbolt-dist.zip";
 const DIST_FILES = ["package.json", "preload.js", "renderer.css", "renderer.js", "patcher.js"];
+const BRANDING_FILES = ["deadbolt.ico", "splash.svg"];
 const STATE_FILE = join(__dirname, "release.json");
 
 interface Build {
@@ -108,11 +109,12 @@ async function applyUpdate() {
     const missing = DIST_FILES.filter(f => !files[f]);
     if (missing.length) throw new Error(`The downloaded build is missing ${missing.join(", ")}`);
 
+    const names = [...BRANDING_FILES.filter(f => files[f]), ...DIST_FILES];
     try {
-        for (const f of DIST_FILES) writeFileSync(join(__dirname, `${f}.new`), files[f], { flush: true });
-        for (const f of DIST_FILES) renameSync(join(__dirname, `${f}.new`), join(__dirname, f));
+        for (const f of names) writeFileSync(join(__dirname, `${f}.new`), files[f], { flush: true });
+        for (const f of names) renameSync(join(__dirname, `${f}.new`), join(__dirname, f));
     } finally {
-        for (const f of DIST_FILES) rmSync(join(__dirname, `${f}.new`), { force: true });
+        for (const f of names) rmSync(join(__dirname, `${f}.new`), { force: true });
     }
 
     writeFileSync(STATE_FILE, JSON.stringify({ assetId: PendingUpdate.id, hash: PendingUpdate.hash }));
