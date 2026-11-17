@@ -17,7 +17,7 @@ import { UpdateData, Updater } from ".";
 
 const API_BASE = `https://api.github.com/repos/${gitRemote}`;
 const DIST_ASSET = "deadbolt-dist.zip";
-const DIST_FILES = ["package.json", "patcher.js", "preload.js", "renderer.css", "renderer.js"];
+const DIST_FILES = ["package.json", "preload.js", "renderer.css", "renderer.js", "patcher.js"];
 const STATE_FILE = join(__dirname, "release.json");
 
 interface Build {
