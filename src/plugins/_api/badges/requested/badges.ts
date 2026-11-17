@@ -6,6 +6,7 @@
 
 import img_2e9aa52581c65bcc from "file://2e9aa52581c65bcc.jpg?base64";
 import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
+import img_9f947d83963d1a8b from "file://9f947d83963d1a8b.jpg?base64";
 import img_17b954e0cb2b20b8 from "file://17b954e0cb2b20b8.jpg?base64";
 import img_76a226e52e1d8120 from "file://76a226e52e1d8120.gif?base64";
 import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
@@ -86,5 +87,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "𝐎𝐩𝐭𝐢𝐦𝐮𝐬 𝐏𝐫𝐢𝐦𝐞",
         image: `data:image/gif;base64,${img_76a226e52e1d8120}`,
         design: { shape: "circle", background: "gradient", colors: [0xffffff, 0x800000], effects: ["shine", "glint"], speed: 1, zoom: 1.37, x: -0.027, y: 0.103, rotate: 0 },
+    },
+    {
+        id: "9f947d83963d1a8b",
+        users: ["272758757610749962"],
+        name: "im him",
+        image: `data:image/jpeg;base64,${img_9f947d83963d1a8b}`,
+        design: { shape: "circle", background: "gradient", colors: [0x000000, 0xffffff], effects: ["shine"], speed: 0.45, zoom: 1.06, x: 0, y: 0, rotate: -29 },
     },
 ];
