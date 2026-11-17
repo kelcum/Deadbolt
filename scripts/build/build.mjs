@@ -41,7 +41,7 @@ const defines = stringifyValues({
     DESKTOP_MONACO_EDITOR_URL: await getMonacoEditorCdnUrl(),
 });
 
-if (defines.IS_STANDALONE === "false") {
+if (defines.IS_STANDALONE === "false" && !process.env.DEADBOLT_UNIVERSAL) {
     // If this is a local build (not standalone), optimize
     // for the specific platform we're on
     defines["process.platform"] = JSON.stringify(process.platform);
