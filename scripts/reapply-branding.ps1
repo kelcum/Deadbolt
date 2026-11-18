@@ -79,7 +79,7 @@ function Write-Text($path, $text) {
 
 function ConvertTo-StubKey($text) {
     if ($null -eq $text) { return $null }
-    ($text.Trim() -replace '\\\\', '/' -replace '\\', '/').ToLowerInvariant()
+    ($text.Trim() -replace '\\\\', '/').ToLowerInvariant()
 }
 
 function New-ShimFolder($app, $orig, $stub) {
