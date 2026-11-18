@@ -77,6 +77,11 @@ function Write-Text($path, $text) {
     [System.IO.File]::WriteAllText($path, $text, (New-Object System.Text.UTF8Encoding($false)))
 }
 
+function ConvertTo-StubKey($text) {
+    if ($null -eq $text) { return $null }
+    ($text.Trim() -replace '\\\\', '/' -replace '\\', '/').ToLowerInvariant()
+}
+
 function New-ShimFolder($app, $orig, $stub) {
     $origName = Split-Path -Leaf $orig
     Rename-Item -LiteralPath $app -NewName $origName
@@ -119,7 +124,7 @@ function Set-Shim($resources, $stub) {
         Write-Text (Join-Path $app "package.json") $StubPackage
         $changed = $true
     }
-    if ((Read-Text (Join-Path $app "index.js")) -ne $stub) {
+    if ((ConvertTo-StubKey (Read-Text (Join-Path $app "index.js"))) -ne (ConvertTo-StubKey $stub)) {
         Write-Text (Join-Path $app "index.js") $stub
         $changed = $true
     }
@@ -129,7 +134,7 @@ function Set-Shim($resources, $stub) {
 
 function Test-Injected($versionDir, $stub) {
     $resources = Join-Path $versionDir "resources"
-    (Test-Path -LiteralPath (Join-Path $resources "_app.asar")) -and ((Read-Text (Join-Path $resources "app.asar\index.js")) -eq $stub)
+    (Test-Path -LiteralPath (Join-Path $resources "_app.asar")) -and ((ConvertTo-StubKey (Read-Text (Join-Path $resources "app.asar\index.js"))) -eq (ConvertTo-StubKey $stub))
 }
 
 function Get-VersionNumber($name) {
@@ -184,10 +189,16 @@ foreach ($clientName in $Clients) {
         Write-Warn2 "No app-* version folders found under $ClientRoot"
     }
 
+    $newestName = if ($versionDirs) { ($versionDirs | Sort-Object { Get-VersionNumber $_.Name } | Select-Object -Last 1).Name } else { $null }
+
     foreach ($verDir in $versionDirs) {
         Write-Step "Version folder: $($verDir.Name)"
+        $resources = Join-Path $verDir.FullName "resources"
+        if ($verDir.Name -ne $newestName -and -not (Test-Path -LiteralPath (Join-Path $resources "app.asar")) -and -not (Test-Path -LiteralPath (Join-Path $resources "_app.asar"))) {
+            Write-Warn2 "$($verDir.Name) is an old Discord version that's being deleted, leaving it alone"
+            continue
+        }
         try {
-            $resources = Join-Path $verDir.FullName "resources"
             $result = Set-Shim $resources $StubContent
             switch ($result) {
                 "shimmed" { $newlyPatched[$clientName] += $verDir.FullName; Write-Ok "Deadbolt injected into $($verDir.Name) (packed app.asar moved to _app.asar)" }
