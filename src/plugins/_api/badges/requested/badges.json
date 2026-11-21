@@ -281,10 +281,10 @@
         "image": "72bd506d4970fa4f.png",
         "imageType": "image/png",
         "design": {
-            "shape": "rounded",
+            "shape": "none",
             "background": "gradient",
             "effects": ["pulse"],
-            "speed": 3,
+            "speed": 2.1,
             "zoom": 1,
             "x": 0,
             "y": 0,

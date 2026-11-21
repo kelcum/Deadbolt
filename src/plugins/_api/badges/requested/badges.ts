@@ -108,6 +108,6 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         users: ["1193711027456589864"],
         name: ".gg/Opiumware",
         image: `data:image/png;base64,${img_72bd506d4970fa4f}`,
-        design: { shape: "rounded", background: "gradient", colors: [0xa50000, 0x939393], effects: ["pulse"], speed: 3, zoom: 1, x: 0, y: 0, rotate: 0 },
+        design: { shape: "none", background: "gradient", colors: [0xa50000, 0x939393], effects: ["pulse"], speed: 2.1, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];
