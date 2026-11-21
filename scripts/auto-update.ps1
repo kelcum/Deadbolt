@@ -137,9 +137,32 @@ function Resume-UpdaterMerge($behind) {
     return $true
 }
 
+function Backup-UserPlugins {
+    $source = Join-Path $RepoRoot "src\userplugins"
+    if (-not (Test-Path $source)) { return }
+    $files = @(Get-ChildItem -Path $source -Recurse -File -ErrorAction SilentlyContinue)
+    if (-not $files) { return }
+    $backupDir = Join-Path $env:LOCALAPPDATA "DeadboltAutoUpdate\userplugins-backups"
+    New-Item -ItemType Directory -Force -Path $backupDir | Out-Null
+    $fingerprint = ($files | Sort-Object FullName | ForEach-Object { "$($_.FullName.Substring($source.Length))|$($_.Length)|$($_.LastWriteTimeUtc.Ticks)" }) -join "`n"
+    $stampFile = Join-Path $backupDir "last.txt"
+    if ((Test-Path $stampFile) -and ((Get-Content -Path $stampFile -Raw) -eq $fingerprint)) { return }
+    $zip = Join-Path $backupDir ("userplugins-{0}.zip" -f (Get-Date -Format "yyyy-MM-dd_HH-mm"))
+    Compress-Archive -Path (Join-Path $source "*") -DestinationPath $zip -Force
+    Set-Content -Path $stampFile -Value $fingerprint -NoNewline
+    Get-ChildItem -Path $backupDir -Filter "userplugins-*.zip" | Sort-Object LastWriteTime -Descending | Select-Object -Skip 15 | Remove-Item -Force
+    Log "Backed up src\userplugins ($($files.Count) files) to $zip"
+}
+
 $script:BuildFailed = $false
 
 Log "=== auto-update run starting ==="
+
+try {
+    Backup-UserPlugins
+} catch {
+    Log "Couldn't back up src\userplugins: $_"
+}
 
 $prevEap = $ErrorActionPreference
 $ErrorActionPreference = "Continue"
