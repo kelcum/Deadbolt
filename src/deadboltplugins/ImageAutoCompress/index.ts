@@ -8,7 +8,7 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
-import { showToast, Toasts } from "@webpack/common";
+import { showToast } from "@webpack/common";
 
 const logger = new Logger("ImageAutoCompress");
 
@@ -85,11 +85,11 @@ export default definePlugin({
             try {
                 const out = await shrink(file, tooBig);
                 if (!out) {
-                    if (settings.store.showToast) showToast(`Couldn't shrink ${file.name} enough to fit your upload limit.`, Toasts.Type.FAILURE);
+                    if (settings.store.showToast) showToast({ text: `Couldn't shrink ${file.name} enough to fit your upload limit.`, variant: "critical" });
                     return upload;
                 }
 
-                if (settings.store.showToast) showToast(`Shrunk ${file.name} from ${megabytes(file.size)} to ${megabytes(out.size)} so it fits.`, Toasts.Type.SUCCESS);
+                if (settings.store.showToast) showToast({ text: `Shrunk ${file.name} from ${megabytes(file.size)} to ${megabytes(out.size)} so it fits.`, variant: "success" });
                 return { ...upload, file: out };
             } catch (e) {
                 logger.error("Failed to shrink image", e);
