@@ -295,5 +295,27 @@
             "for": "inmymaws"
         },
         "imageHash": "4201f82ee370436b"
+    },
+    {
+        "id": "3101337eeafcaa56",
+        "users": ["100000000000000001"],
+        "name": "E2E Test",
+        "colors": ["#8b5cf6", "#c0c0c0"],
+        "image": null,
+        "imageType": null,
+        "design": {
+            "shape": "circle",
+            "background": "gradient",
+            "effects": ["shine"],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "E2E Test",
+            "for": "e2e-test"
+        }
     }
 ]

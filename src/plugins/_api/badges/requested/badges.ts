@@ -110,4 +110,11 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         image: `data:image/webp;base64,${img_72bd506d4970fa4f}`,
         design: { shape: "rounded", background: "gradient", colors: [0xa50000, 0x939393], effects: ["pulse"], speed: 3, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
+    {
+        id: "3101337eeafcaa56",
+        users: ["100000000000000001"],
+        name: "E2E Test",
+        image: null,
+        design: { shape: "circle", background: "gradient", colors: [0x8b5cf6, 0xc0c0c0], effects: ["shine"], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
 ];
