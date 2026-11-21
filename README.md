@@ -33,20 +33,26 @@ Deadbolt ships with the same 300+ plugin library Equicord maintains, plus whatev
 
 ## Installing
 
-There's no packaged GUI installer — Equicord's official installer (Equilotl) only targets the upstream Equicord repo, not this fork. Instead, each platform has a one-command script that builds Deadbolt from source and injects it:
+Equicord's official installer (Equilotl) only targets the upstream Equicord repo, not this fork, so each platform has its own one-command install. Windows gets a ready-made build; macOS and Linux build Deadbolt from source and inject it.
 
 ### Windows
 
+Paste this into PowerShell (a normal window, not "Run as administrator"):
+
 ```powershell
-git clone https://github.com/kelcum/Deadbolt
-cd Deadbolt
-npm i -g pnpm
-pnpm install --frozen-lockfile
-pnpm build
-pnpm inject
+irm https://github.com/kelcum/Deadbolt/releases/latest/download/install.ps1 | iex
 ```
 
-Discord Canary/Stable's own updater periodically resets the icon, splash, and shortcuts (and can occasionally break the injection stub) — see [Windows: reapplying branding after a Discord update](#windows-reapplying-branding-after-a-discord-update) if that happens, or to automate it entirely.
+Or download [DeadboltSetup.exe](https://github.com/kelcum/Deadbolt/releases/latest/download/DeadboltSetup.exe) and double-click it. It isn't signed, so your browser and SmartScreen warn about it the first time (**More info → Run anyway**); the command above doesn't trigger that.
+
+Setup finds Discord, Discord PTB and Discord Canary (if you have more than one it asks which, or does all of them), downloads the latest Deadbolt build, puts it on and starts Discord. You don't need Git, Node.js or pnpm. It also:
+
+- **Keeps Deadbolt on after Discord updates.** Setup keeps a copy of itself in `%LOCALAPPDATA%\DeadboltInstall` and runs it quietly each time you sign in to Windows. If Discord updated without Deadbolt, it puts Deadbolt back on and restarts Discord, but only if Discord was running without it. It also puts the Deadbolt icon and splash logo back if an update reset them. This needs no internet, and you only hear from it when it can't fix something; what it did is in `repair.log` in that folder.
+- **Adds Repair Deadbolt and Uninstall Deadbolt to the Start menu.** Repair downloads the latest build and puts Deadbolt back on every Discord it was on. Uninstall puts every Discord back to stock, icons included, and removes everything except your settings in `%APPDATA%\Deadbolt`. Uninstall is also listed in **Settings → Apps**.
+
+The same from a terminal: `DeadboltSetup.exe --repair`, `DeadboltSetup.exe --uninstall`, and `--quiet` for no prompts or windows (`--repair --quiet` is the offline sign-in check).
+
+Prefer building from source? Follow [Building from source](#building-from-source) and run `pnpm inject`; [Windows: reapplying branding after a Discord update](#windows-reapplying-branding-after-a-discord-update) covers keeping a source install patched.
 
 ### macOS
 

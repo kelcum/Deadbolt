@@ -18,6 +18,7 @@
 
 import { onceDefined } from "@shared/onceDefined";
 import electron, { app, BrowserWindowConstructorOptions, Menu } from "electron";
+import { existsSync } from "fs";
 import { dirname, join } from "path";
 
 import { RendererSettings } from "./settings";
@@ -100,7 +101,7 @@ if (!IS_VANILLA) {
             options.webPreferences.sandbox = false;
 
             const deadboltIcon = process.platform === "win32"
-                ? join(__dirname, "..", "..", "browser", "deadbolt.ico")
+                ? [join(__dirname, "deadbolt.ico"), join(__dirname, "..", "..", "browser", "deadbolt.ico")].find(p => existsSync(p))
                 : null;
             if (deadboltIcon) options.icon = deadboltIcon;
 
