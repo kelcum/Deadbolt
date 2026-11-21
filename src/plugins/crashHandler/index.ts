@@ -18,6 +18,7 @@
 
 import { DataStore } from "@api/index";
 import { showNotification } from "@api/Notifications";
+import { noteCrash } from "@api/SafeMode";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
@@ -76,6 +77,7 @@ export default definePlugin({
     ],
 
     handleCrash(_this: any, errorState: any) {
+        noteCrash(errorState);
         DataStore.del("KeepCurrentChannel_previousData");
 
         if (IS_DEV) {

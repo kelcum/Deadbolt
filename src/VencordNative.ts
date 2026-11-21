@@ -102,5 +102,12 @@ export default {
             invoke<CspRequestResult>(IpcEvents.CSP_REQUEST_ADD_OVERRIDE, url, directives, callerName),
     },
 
+    safeMode: {
+        boot: () => sendSync<{ active: boolean; suspect: string | null; }>(IpcEvents.SAFE_MODE_BOOT),
+        note: (plugin: string) => invoke<void>(IpcEvents.SAFE_MODE_NOTE, plugin),
+        ready: () => invoke<void>(IpcEvents.SAFE_MODE_READY),
+        exit: () => invoke<void>(IpcEvents.SAFE_MODE_EXIT),
+    },
+
     pluginHelpers: PluginHelpers
 };

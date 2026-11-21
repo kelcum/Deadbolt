@@ -8,6 +8,7 @@ import "./style.css";
 
 import { ApplicationCommandInputType } from "@api/Commands";
 import { showNotice } from "@api/Notices";
+import { leaveSafeMode, safeMode, safeModeReason } from "@api/SafeMode";
 import { Button } from "@components/Button";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
@@ -66,6 +67,10 @@ function needsInject(h: Health) {
 
 function rowsFor(h: Health): Row[] {
     const rows: Row[] = [];
+
+    if (safeMode?.active) {
+        rows.push({ level: "bad", title: "Safe mode", detail: safeModeReason() });
+    }
 
     if (h.platform !== "win32") {
         rows.push({ level: "ok", title: "Running with Deadbolt", detail: "Version checks below are Windows only for now." });
@@ -175,6 +180,9 @@ function HealthPanel() {
                 ))}
             </div>
             <div className={cl("actions")}>
+                {safeMode?.active && (
+                    <Button size="small" variant="primary" onClick={leaveSafeMode}>Turn everything back on</Button>
+                )}
                 {health.versions.length > 0 && (
                     <Button size="small" variant={needsInject(health) ? "primary" : "secondary"} disabled={!!busy} onClick={inject}>
                         {busy === "inject" ? "Injecting…" : "Re-inject now"}

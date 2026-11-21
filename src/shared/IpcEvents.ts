@@ -54,4 +54,9 @@ export const enum IpcEvents {
     PRELOAD_GET_RENDERER_JS = "VencordPreloadGetRendererJs",
 
     SUPPORTS_WINDOWS_MATERIAL = "VencordSupportsWindowsMaterial",
+
+    SAFE_MODE_BOOT = "DeadboltSafeModeBoot",
+    SAFE_MODE_NOTE = "DeadboltSafeModeNote",
+    SAFE_MODE_READY = "DeadboltSafeModeReady",
+    SAFE_MODE_EXIT = "DeadboltSafeModeExit",
 }

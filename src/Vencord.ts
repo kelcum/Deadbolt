@@ -41,6 +41,7 @@ import { get as dsGet } from "./api/DataStore";
 import { showNotice } from "./api/Notices";
 import { showNotification } from "./api/Notifications";
 import { initPluginManager, PMLogger, startAllPlugins } from "./api/PluginManager";
+import { initSafeMode } from "./api/SafeMode";
 import { PlainSettings, Settings, SettingsStore } from "./api/Settings";
 import { areLocalSettingsDirty, getCloudSettings, getCloudSyncDirection, markLocalSettingsDirty, putCloudSettings, shouldCloudSync } from "./api/SettingsSync/cloudSync";
 import { relaunch } from "./utils/native";
@@ -159,6 +160,7 @@ async function runUpdateCheck() {
 async function init() {
     await onceReady;
     startAllPlugins(StartAt.WebpackReady);
+    initSafeMode();
 
     syncSettings();
 
