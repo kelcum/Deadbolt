@@ -8,7 +8,6 @@ import "./style.css";
 
 import { HeaderBarButton } from "@api/HeaderBar";
 import { definePluginSettings } from "@api/Settings";
-import ErrorBoundary from "@components/ErrorBoundary";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
@@ -55,7 +54,7 @@ interface HistoryStore {
 const useHistory: HistoryStore = proxyLazy(() => zustandCreate(() => ({ entries: [], lastOpened: Date.now() })));
 const shouldNotify: (message: RawMessage, channelId: string) => boolean = findByCodeLazy(".SUPPRESS_NOTIFICATIONS))return!1");
 
-const SETTING_KEYS = ["showCount"] as const;
+const SETTING_KEYS: "showCount"[] = ["showCount"];
 
 const settings = definePluginSettings({
     maxEntries: {
@@ -179,7 +178,7 @@ export default definePlugin({
 
     headerBarButton: {
         icon: BellIcon,
-        render: ErrorBoundary.wrap(HistoryButton, { noop: true })
+        render: HistoryButton
     },
 
     flux: {
