@@ -97,3 +97,25 @@
     font-size: 12px;
     white-space: pre-wrap;
 }
+
+.vc-doctor-backup {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+}
+
+.vc-doctor-backup .vc-doctor-actions {
+    margin-top: 4px;
+}
+
+.vc-doctor-files {
+    margin: 4px 0 6px;
+    padding-left: 18px;
+    list-style: disc;
+    color: var(--text-default, #dbdee1);
+    font-family: var(--font-code, Consolas, monospace);
+    font-size: 12px;
+}

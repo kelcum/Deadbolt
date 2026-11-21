@@ -17,6 +17,7 @@ import definePlugin, { PluginNative } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal, openModal, showToast, useEffect, useState } from "@webpack/common";
 
+import { BackupSection } from "./BackupSection";
 import type { Health, Level, VersionState } from "./native";
 
 const Native = VencordNative.pluginHelpers.DeadboltDoctor as PluginNative<typeof import("./native")>;
@@ -209,6 +210,7 @@ function HealthModal({ modalProps }: { modalProps: RenderModalProps; }) {
             actions={[{ text: "Close", variant: "secondary", onClick: modalProps.onClose }]}
         >
             <HealthPanel />
+            <BackupSection />
         </Modal>
     );
 }
@@ -239,7 +241,7 @@ export default definePlugin({
     authors: [Devs.K3],
     enabledByDefault: true,
     dependencies: ["CommandsAPI"],
-    settingsAboutComponent: () => <HealthPanel />,
+    settingsAboutComponent: () => <><HealthPanel /><BackupSection /></>,
     toolboxActions: {
         "Deadbolt health"() {
             openHealth();
