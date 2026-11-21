@@ -8,9 +8,9 @@ import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Paragraph } from "@components/Paragraph";
 import { SpecialCard } from "@components/settings/SpecialCard";
-import { humanFriendlyJoin } from "@utils/text";
 import { deadboltBadgesOf } from "@plugins/_api/badges";
 import { BADGE_OWNERS, hiddenBadgesOf, isTestMode, saveHiddenBadges, setTestMode } from "@plugins/_api/badges/hiddenBadges";
+import { humanFriendlyJoin } from "@utils/text";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal, openModal, showToast, UserStore, useState } from "@webpack/common";
 
