@@ -40,6 +40,10 @@ What sets this fork apart from vanilla Equicord:
 
 Deadbolt ships with the same 300+ plugin library Equicord maintains, plus whatever gets added here going forward. Browse Equicord's plugin list [here](https://equicord.org/plugins) for what's included by default.
 
+Deadbolt's own plugins:
+
+- **ScamLinkGuard** — warns under a message when a link imitates Discord, Steam or another big site, offers fake Nitro, hides behind misleading link text or uses lookalike letters.
+
 ## Installing
 
 Equicord's official installer (Equilotl) only targets the upstream Equicord repo, not this fork, so each platform has its own one-command install. Windows gets a ready-made build; macOS and Linux build Deadbolt from source and inject it.
