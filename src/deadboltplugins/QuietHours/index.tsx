@@ -12,7 +12,7 @@ import type { User } from "@vencord/discord-types";
 import { Menu, RelationshipStore } from "@webpack/common";
 
 interface MessageEvent {
-    message: { author: { id: string; }; };
+    message: { author?: { id: string; }; };
 }
 
 const TIME = /^([01]?\d|2[0-3]):[0-5]\d$/;
@@ -88,17 +88,14 @@ export default definePlugin({
         {
             find: '"NotificationStore"',
             replacement: {
-                match: /(?<=MESSAGE_CREATE:)\i(?=[,}])/,
-                replace: "$self.wrap($&)"
+                match: /(?<=MESSAGE_CREATE:function\(\i\)\{)/,
+                replace: "if($self.shouldSilence(arguments[0]))return!1;"
             }
         }
     ],
     shouldSilence({ message }: MessageEvent) {
         if (!isQuietNow()) return false;
-        const { id } = message.author;
-        return !allowedIds().includes(id) && !(settings.store.allowFriends && RelationshipStore.isFriend(id));
-    },
-    wrap(handler: (event: MessageEvent) => unknown) {
-        return (event: MessageEvent) => this.shouldSilence(event) ? false : handler(event);
+        const id = message.author?.id;
+        return !id || (!allowedIds().includes(id) && !(settings.store.allowFriends && RelationshipStore.isFriend(id)));
     }
 });
