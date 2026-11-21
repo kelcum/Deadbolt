@@ -63,7 +63,6 @@ export function initSafeMode() {
         removeEventListener("error", onError);
         removeEventListener("unhandledrejection", onRejection);
         if (!crashed) VencordNative.safeMode.ready();
+        if (safeMode.active) showNotice(`Safe mode: ${safeModeReason()}`, "Turn everything back on", leaveSafeMode);
     }, 15_000);
-
-    if (safeMode.active) showNotice(`Safe mode: ${safeModeReason()}`, "Turn everything back on", leaveSafeMode);
 }
