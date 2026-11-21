@@ -1,0 +1,20 @@
+.vc-scamlinkguard-warning {
+    margin-top: 4px;
+    padding: 8px 12px;
+    border-left: 4px solid var(--status-danger);
+    border-radius: 4px;
+    background: color-mix(in srgb, var(--status-danger) 12%, transparent);
+    color: var(--text-normal);
+    font-size: 14px;
+    line-height: 1.375;
+}
+
+.vc-scamlinkguard-title {
+    font-weight: 600;
+    color: var(--status-danger);
+}
+
+.vc-scamlinkguard-host {
+    font-family: var(--font-code);
+    font-weight: 600;
+}
