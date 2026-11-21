@@ -164,15 +164,7 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    animation:
-        deadbolt-contributor-breathe 2.6s ease-in-out infinite,
-        deadbolt-contributor-bolt-spin 6s linear infinite;
-}
-
-@keyframes deadbolt-contributor-bolt-spin {
-    to {
-        transform: rotate(360deg);
-    }
+    animation: deadbolt-contributor-breathe 2.6s ease-in-out infinite;
 }
 
 .deadbolt-contributor-badge::before {
@@ -207,7 +199,7 @@
         transparent 58%
     );
     transform: translateX(-160%);
-    animation: deadbolt-contributor-sheen 1.9s linear infinite;
+    animation: deadbolt-contributor-sheen 5s ease-in-out infinite;
     mix-blend-mode: screen;
     pointer-events: none;
     z-index: 2;
@@ -223,6 +215,7 @@
     0% {
         transform: translateX(-160%);
     }
+    30%,
     100% {
         transform: translateX(160%);
     }

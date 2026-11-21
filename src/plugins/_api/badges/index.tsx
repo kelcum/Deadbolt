@@ -65,25 +65,39 @@ const DEADBOLT_CREATOR_IDS = teamUsers("deadbolt_creator");
 
 const DEADBOLT_CONTRIBUTOR_BADGE_ICON = "data:image/svg+xml;base64," + btoa(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <radialGradient id="dcbg" cx="35%" cy="30%" r="80%">
-      <stop offset="0%" stop-color="#2d2466"/>
-      <stop offset="100%" stop-color="#120e28"/>
+    <radialGradient id="dcbg" cx="38%" cy="28%" r="78%">
+      <stop offset="0%" stop-color="#30276e"/>
+      <stop offset="100%" stop-color="#0c0a1d"/>
     </radialGradient>
-    <linearGradient id="dcbolt" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#c9c0ff"/>
-      <stop offset="45%" stop-color="#7C6FF0"/>
-      <stop offset="100%" stop-color="#4f3fc9"/>
+    <linearGradient id="dcrim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f4f6fa"/>
+      <stop offset="50%" stop-color="#8a93a1"/>
+      <stop offset="100%" stop-color="#dfe3ea"/>
     </linearGradient>
-    <linearGradient id="dcboltinner" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.55"/>
-      <stop offset="100%" stop-color="#7C6FF0" stop-opacity="0"/>
+    <linearGradient id="dcshackle" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#9aa3b0"/>
+      <stop offset="35%" stop-color="#f6f8fb"/>
+      <stop offset="65%" stop-color="#c3cad4"/>
+      <stop offset="100%" stop-color="#6d7581"/>
+    </linearGradient>
+    <linearGradient id="dcbody" x1="0" y1="0" x2="0.6" y2="1">
+      <stop offset="0%" stop-color="#c9c0ff"/>
+      <stop offset="45%" stop-color="#7c6ff0"/>
+      <stop offset="100%" stop-color="#3d2fae"/>
+    </linearGradient>
+    <linearGradient id="dcgloss" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <rect width="64" height="64" fill="url(#dcbg)"/>
-  <polygon points="32,5 55.4,18.5 55.4,45.5 32,59 8.6,45.5 8.6,18.5" fill="url(#dcbolt)"/>
-  <polygon points="32,11 50.2,21.5 50.2,42.5 32,53 13.8,42.5 13.8,21.5" fill="url(#dcboltinner)"/>
-  <circle cx="32" cy="32" r="9" fill="#120e28"/>
-  <circle cx="29" cy="29" r="3" fill="#ffffff" fill-opacity="0.35"/>
+  <circle cx="32" cy="32" r="32" fill="url(#dcbg)"/>
+  <circle cx="32" cy="32" r="30.6" fill="none" stroke="url(#dcrim)" stroke-width="2.2" stroke-opacity="0.85"/>
+  <g transform="rotate(45 32 32)">
+    <path d="M28.6 25h6.8v26a3.4 3.4 0 0 1-6.8 0z" fill="url(#dcshackle)" stroke="#3b414b" stroke-width="0.6"/>
+    <path d="M23 18a9 9 0 0 0 5.6 8.6V30h6.8v-3.4A9 9 0 0 0 41 18a9 9 0 0 0-2-5.6V19.5l-4.2 2.4h-5.6L25 19.5v-7.1A9 9 0 0 0 23 18z" fill="url(#dcshackle)" stroke="#3b414b" stroke-width="0.6"/>
+  </g>
+  <polygon points="41,36 48,40 48,48 41,52 34,48 34,40" fill="url(#dcbody)" stroke="#231a6b" stroke-width="1"/>
+  <circle cx="41" cy="44" r="3" fill="#120e28"/>
 </svg>`);
 const DEADBOLT_CONTRIBUTOR_IDS = teamUsers("deadbolt_contributor");
 
@@ -104,19 +118,35 @@ const RUINEDNZ_IDS = teamUsers("ruinednz");
 
 const PLUGIN_CREATOR_BADGE_ICON = "data:image/svg+xml;base64," + btoa(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
   <defs>
-    <radialGradient id="pcbg" cx="35%" cy="30%" r="80%">
-      <stop offset="0%" stop-color="#2c3038"/>
-      <stop offset="100%" stop-color="#101115"/>
+    <radialGradient id="pcbg" cx="38%" cy="28%" r="78%">
+      <stop offset="0%" stop-color="#2e323b"/>
+      <stop offset="100%" stop-color="#0e0f13"/>
     </radialGradient>
+    <linearGradient id="pcrim" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#c9c0ff"/>
+      <stop offset="50%" stop-color="#7c6ff0"/>
+      <stop offset="100%" stop-color="#b3a8ff"/>
+    </linearGradient>
     <linearGradient id="pcpiece" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#eef1f5"/>
-      <stop offset="50%" stop-color="#b3bbc6"/>
-      <stop offset="100%" stop-color="#6f7783"/>
+      <stop offset="0%" stop-color="#f6f8fb"/>
+      <stop offset="45%" stop-color="#bcc4cf"/>
+      <stop offset="100%" stop-color="#5f6773"/>
+    </linearGradient>
+    <linearGradient id="pcedge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.9"/>
+      <stop offset="60%" stop-color="#ffffff" stop-opacity="0"/>
     </linearGradient>
   </defs>
-  <rect width="64" height="64" fill="url(#pcbg)"/>
-  <path transform="translate(32 32) scale(1.3) translate(-35 -35)" d="M18 24h8a6 6 0 1 1 12 0h8v8a6 6 0 1 1 0 12v8H18z" fill="url(#pcpiece)"/>
-  <path transform="translate(32 32) scale(1.3) translate(-35 -35)" d="M21 27h4.5M21 27v7" stroke="#fff" stroke-opacity="0.55" stroke-width="1.6" stroke-linecap="round" fill="none"/>
+  <circle cx="32" cy="32" r="32" fill="url(#pcbg)"/>
+  <circle cx="32" cy="32" r="30.6" fill="none" stroke="url(#pcrim)" stroke-width="2.2" stroke-opacity="0.9"/>
+  <g transform="translate(32 33) scale(1.14) translate(-32 -33)">
+    <g transform="translate(-1.4 0.6)">
+    <path transform="translate(1 2)" d="M17 23H25.2A5.6 5.6 0 1 1 34.8 23H43V31.2A5.6 5.6 0 1 1 43 40.8V49H17V40.8A5.6 5.6 0 1 0 17 31.2Z" fill="#000" fill-opacity="0.45"/>
+    <path d="M17 23H25.2A5.6 5.6 0 1 1 34.8 23H43V31.2A5.6 5.6 0 1 1 43 40.8V49H17V40.8A5.6 5.6 0 1 0 17 31.2Z" fill="url(#pcpiece)" stroke="#3b414b" stroke-width="0.8" stroke-linejoin="round"/>
+    <path d="M18.6 47.4V41.6M18.6 30.4V24.6H25" fill="none" stroke="url(#pcedge)" stroke-width="1.4" stroke-linecap="round"/>
+  </g>
+  </g>
+  <path d="M48.5 12.5l1.3 3.4 3.4 1.3-3.4 1.3-1.3 3.4-1.3-3.4-3.4-1.3 3.4-1.3z" fill="#e4defe"/>
 </svg>`);
 
 let deadboltPluginsByAuthor: Map<string, string[]> | undefined;
