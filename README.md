@@ -21,10 +21,14 @@ Built on [Equicord](https://github.com/Equicord/Equicord) (itself a fork of [Ven
 
 What sets this fork apart from vanilla Equicord:
 
-- **Survives Discord updates** — Discord's updater resets client mods, the icon, splash and shortcuts. Deadbolt's background tasks put it all back on their own, and [`scripts/reapply-branding.ps1`](scripts/reapply-branding.ps1) does it on demand on Windows.
+- **Survives Discord updates** — Discord's updater resets client mods, the icon, splash and shortcuts. Deadbolt puts it all back on its own: on Windows the [one-click installer](#windows) checks every time you sign in, and [`scripts/reapply-branding.ps1`](scripts/reapply-branding.ps1) does it on demand.
 - **DeadboltDoctor** — `/deadbolt` (or the toolbox, or the plugin's settings) shows whether every installed Discord version still has Deadbolt, whether the build and background tasks are healthy, and fixes it in one click: re-inject, repair everything, update now. If Discord installs an update without Deadbolt in it, a banner offers to fix it before your next restart.
+- **Backup and restore** — DeadboltDoctor saves your settings, QuickCSS and your own plugins to one file and restores them later. Before restoring it shows exactly what will change, and if your plugins from the backup don't build, nothing is touched.
+- **Crash safe mode** — if Discord fails to start twice in a row, Deadbolt starts with only its core plugins, tells you which plugin it suspects, and lets you go back to normal in one click.
+- **Breakage alerts, opt-in** — turn on Breakage alerts in DeadboltDoctor and, when a Discord update breaks plugins, Deadbolt reports which ones so a fix can start right away. Only plugin names and Discord's build number are sent, and your own plugins are never included. Off by default.
 - **A boot splash that's actually Deadbolt's** — replaces Discord's own connecting screen with an animated chrome crest and Deadbolt-branded quotes, instead of just retexting Discord's default one.
 - **Animated profile badges** — a continuously rotating chrome shine on the Creator badge and a violet counterpart for Contributors, each with a rich hover card instead of a plain tooltip.
+- **Design your own badge** — the badge designer in Deadbolt's settings (or [on the web](https://xan.gripe/deadbolt/badge/)) has a live preview, takes images and animated GIFs up to 5 MB, and can design a matching pair of badges in one request. Approved badges show up for everyone within about five minutes, no update needed.
 - **`/addplugin` and `/myplugins`** — add, edit, switch, share and remove your own plugins from inside Discord itself. Deadbolt saves the code, rebuilds, and offers to reload. No editor, no terminal. See [Adding your own plugins](#adding-your-own-plugins).
 - **QuickFind** — press Ctrl+Shift+F in any chat, DMs included, to search every message Discord has loaded there instantly and offline, step through matches with Enter, and load older history when you need it.
 - **What's new, once** — after an update Deadbolt shows a short list of what changed, one time. Turn it off with the WhatsNew plugin or reopen it with `/whatsnew`.
