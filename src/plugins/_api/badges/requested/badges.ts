@@ -106,7 +106,7 @@ export const requestedBadges: RequestedBadgeEntry[] = [
     {
         id: "72bd506d4970fa4f",
         users: ["1193711027456589864"],
-        name: "look who's back",
+        name: ".gg/Opiumware",
         image: `data:image/jpeg;base64,${img_72bd506d4970fa4f}`,
         design: { shape: "rounded", background: "gradient", colors: [0xa50000, 0x939393], effects: ["pulse"], speed: 3, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
