@@ -33,13 +33,17 @@ export interface BadgeImage {
     url: string;
 }
 
+export interface BadgePart {
+    badge: string;
+    image: BadgeImage | null;
+    design: BadgeDesign;
+}
+
 export interface BadgeFormState {
     discordId: string;
     name: string;
-    badge: string;
     details: string;
-    image: BadgeImage | null;
-    design: BadgeDesign;
+    parts: BadgePart[];
 }
 
 export const MAX_COLORS = 4;
@@ -50,6 +54,7 @@ export const PREVIEW_PX = 160;
 const SHAPES: [Shape, string][] = [["circle", "Circle"], ["rounded", "Rounded"], ["none", "No frame"]];
 const BACKGROUNDS: [Background, string][] = [["gradient", "Gradient"], ["solid", "Solid"], ["none", "None"]];
 const STAGES: ["dark" | "light", string][] = [["dark", "Dark"], ["light", "Light"]];
+const KINDS: ["single" | "pair", string][] = [["single", "One badge"], ["pair", "Matching pair"]];
 const EFFECTS: [Effect, string][] = [["shine", "Shine"], ["glint", "Glint"], ["pulse", "Pulse"], ["float", "Float"], ["spin", "Spin"]];
 
 export const DEFAULT_DESIGN: BadgeDesign = {
@@ -98,15 +103,23 @@ export function useBadgeForm(discordId: string, name: string) {
     const [state, setState] = useState<BadgeFormState>({
         discordId,
         name,
-        badge: "",
         details: "",
-        image: null,
-        design: DEFAULT_DESIGN
+        parts: [{ badge: "", image: null, design: DEFAULT_DESIGN }]
     });
+    const [editing, setEditing] = useState(0);
+    const setPart = (patch: (p: BadgePart) => Partial<BadgePart>) =>
+        setState(s => ({ ...s, parts: s.parts.map((p, i) => i === editing ? { ...p, ...patch(p) } : p) }));
     return {
         state,
-        set: (patch: Partial<BadgeFormState>) => setState(s => ({ ...s, ...patch })),
-        setDesign: (patch: Partial<BadgeDesign>) => setState(s => ({ ...s, design: { ...s.design, ...patch } }))
+        editing,
+        setEditing,
+        set: (patch: Partial<Omit<BadgeFormState, "parts">>) => setState(s => ({ ...s, ...patch })),
+        setPart: (patch: Partial<BadgePart>) => setPart(() => patch),
+        setDesign: (patch: Partial<BadgeDesign>) => setPart(p => ({ design: { ...p.design, ...patch } })),
+        setPaired: (paired: boolean) => {
+            setState(s => ({ ...s, parts: paired ? [s.parts[0], { badge: "", image: null, design: s.parts[0].design }] : [s.parts[0]] }));
+            setEditing(paired ? 1 : 0);
+        }
     };
 }
 
@@ -285,8 +298,10 @@ function readImage(file: File) {
 }
 
 export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avatar?: string; onError(message: string | null): void; }) {
-    const { state, set, setDesign } = form;
-    const { design } = state;
+    const { state, set, setPart, setDesign, editing, setEditing } = form;
+    const part = state.parts[editing];
+    const { design } = part;
+    const paired = state.parts.length > 1;
     const fileInput = useRef<HTMLInputElement>(null);
     const [stage, setStage] = useState<"dark" | "light">("dark");
     const idValid = /^\d{17,20}$/.test(state.discordId.trim());
@@ -299,7 +314,7 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
         if (!IMAGE_TYPES.includes(file.type)) return onError("The image has to be a PNG, JPG, GIF or WebP.");
         if (file.size > MAX_IMAGE_BYTES) return onError("That image is too big. Keep it under 5 MB.");
         try {
-            set({ image: { name: file.name, url: await readImage(file) } });
+            setPart({ image: { name: file.name, url: await readImage(file) } });
             setDesign(FIT_DEFAULTS);
             onError(null);
         } catch {
@@ -328,20 +343,36 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
                     </Field>
                 </div>
 
-                <Field label="Badge name">
-                    <TextInput value={state.badge} onChange={v => set({ badge: v })} placeholder="What it says when someone hovers it" maxLength={40} />
+                <div className={cl("row")}>
+                    <Field label="Badges">
+                        <Segmented label="Badges" value={paired ? "pair" : "single"} options={KINDS} onChange={v => form.setPaired(v === "pair")} />
+                    </Field>
+                    {paired && (
+                        <Field label="Editing">
+                            <Segmented
+                                label="Editing"
+                                value={String(editing)}
+                                options={state.parts.map((p, i) => [String(i), p.badge.trim() || (i ? "Second" : "First")])}
+                                onChange={v => setEditing(Number(v))}
+                            />
+                        </Field>
+                    )}
+                </div>
+
+                <Field label={paired ? (editing ? "Second badge name" : "First badge name") : "Badge name"}>
+                    <TextInput value={part.badge} onChange={v => setPart({ badge: v })} placeholder="What it says when someone hovers it" maxLength={40} />
                 </Field>
 
                 <Field label="Image" hint="optional, animated works too">
                     <div className={cl("file")}>
                         <Button variant="secondary" size="small" type="button" onClick={() => fileInput.current?.click()}>
-                            {state.image ? "Change image" : "Upload image"}
+                            {part.image ? "Change image" : "Upload image"}
                         </Button>
-                        {state.image
+                        {part.image
                             ? (
                                 <>
-                                    <span className={cl("file-name")}>{state.image.name}</span>
-                                    <TextButton variant="danger" type="button" onClick={() => set({ image: null })}>Remove</TextButton>
+                                    <span className={cl("file-name")}>{part.image.name}</span>
+                                    <TextButton variant="danger" type="button" onClick={() => setPart({ image: null })}>Remove</TextButton>
                                 </>
                             )
                             : <span className={cl("hint")}>PNG, JPG, GIF or WebP, up to 5 MB</span>}
@@ -349,7 +380,7 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
                     <input ref={fileInput} type="file" accept={IMAGE_TYPES.join(",")} hidden onChange={pickImage} />
                 </Field>
 
-                {state.image && (
+                {part.image && (
                     <Field
                         label="Position"
                         hint="or drag the preview and scroll to zoom"
@@ -436,8 +467,16 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
             </div>
 
             <aside className={cl("preview-panel")}>
-                <div className={cl("stage", `stage-${stage}`)}>
-                    <BadgePreview design={design} image={state.image?.url ?? null} size={168} onAdjust={setDesign} />
+                <div className={cl("stage", `stage-${stage}`, paired && "stage-pair")}>
+                    {state.parts.map((p, i) => (
+                        <div
+                            key={i}
+                            className={cl(paired && "stage-badge", paired && i === editing && "stage-badge-on")}
+                            onPointerDown={() => setEditing(i)}
+                        >
+                            <BadgePreview design={p.design} image={p.image?.url ?? null} size={paired ? 104 : 168} onAdjust={i === editing ? setDesign : undefined} />
+                        </div>
+                    ))}
                     <div className={cl("stage-toggle")}>
                         <Segmented label="Preview background" value={stage} options={STAGES} onChange={v => setStage(v)} />
                     </div>
@@ -449,13 +488,17 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
                         <div className={cl("profile-text")}>
                             <div className={cl("profile-name")}>{state.name.trim() || "you"}</div>
                             <div className={cl("profile-badges")}>
-                                <BadgePreview design={design} image={state.image?.url ?? null} size={22} />
+                                {state.parts.map((p, i) => <BadgePreview key={i} design={p.design} image={p.image?.url ?? null} size={22} />)}
                             </div>
                         </div>
                     </div>
-                    <div className={cl("pill")} style={{ "--name-gradient": nameGradient(design.colors) } as React.CSSProperties}>
-                        <BadgePreview design={design} image={state.image?.url ?? null} size={18} />
-                        <span className={cl("pill-name", !state.badge.trim() && "pill-empty")}>{state.badge.trim() || "Badge name"}</span>
+                    <div className={cl("pills")}>
+                        {state.parts.map((p, i) => (
+                            <div key={i} className={cl("pill")} style={{ "--name-gradient": nameGradient(p.design.colors) } as React.CSSProperties}>
+                                <BadgePreview design={p.design} image={p.image?.url ?? null} size={18} />
+                                <span className={cl("pill-name", !p.badge.trim() && "pill-empty")}>{p.badge.trim() || (paired ? (i ? "Second badge" : "First badge") : "Badge name")}</span>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </aside>

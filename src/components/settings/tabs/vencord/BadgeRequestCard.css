@@ -311,6 +311,25 @@
     color: #060607;
 }
 
+.vc-badge-request-stage-pair {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+.vc-badge-request-stage-badge {
+    padding: 8px;
+    border: 1px dashed transparent;
+    border-radius: 14px;
+    cursor: pointer;
+}
+
+.vc-badge-request-stage-badge-on {
+    border-color: rgb(128 128 128 / 55%);
+    cursor: default;
+}
+
 .vc-badge-request-stage-dark {
     background-color: #111214;
 }
@@ -374,6 +393,7 @@
 .vc-badge-request-profile-badges {
     display: flex;
     align-items: center;
+    gap: 4px;
     width: fit-content;
     margin-top: 4px;
     padding: 3px 5px;
@@ -667,9 +687,10 @@
 }
 
 .vc-badge-request-sent .vc-badge-request-stage {
-    width: 160px;
+    min-width: 160px;
     height: 160px;
     flex: none;
+    padding: 0 16px;
 }
 
 @media (width <= 760px) {

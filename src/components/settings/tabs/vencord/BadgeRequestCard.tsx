@@ -8,12 +8,13 @@ import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Paragraph } from "@components/Paragraph";
 import { SpecialCard } from "@components/settings/SpecialCard";
+import { humanFriendlyJoin } from "@utils/text";
 import { deadboltBadgesOf } from "@plugins/_api/badges";
 import { BADGE_OWNERS, hiddenBadgesOf, isTestMode, saveHiddenBadges, setTestMode } from "@plugins/_api/badges/hiddenBadges";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal, openModal, showToast, UserStore, useState } from "@webpack/common";
 
-import { BadgeDesigner, BadgePreview, cl, renderBadgePng, toHex, useBadgeForm } from "./BadgeDesigner";
+import { BadgeDesigner, BadgePart, BadgePreview, cl, renderBadgePng, toHex, useBadgeForm } from "./BadgeDesigner";
 
 const API = "https://api.xan.gripe/v1/badge-requests";
 const CARD_COLOR = "#b3abf7";
@@ -56,6 +57,17 @@ function BadgeIcon() {
     );
 }
 
+async function partBody({ badge, image, design }: BadgePart) {
+    const { colors, ...rest } = design;
+    return {
+        badge: badge.trim(),
+        colors: colors.map(toHex),
+        image: image?.url.replace(/^data:[^,]*,/, ""),
+        design: rest,
+        preview: await renderBadgePng(design, image?.url ?? null).catch(() => undefined)
+    };
+}
+
 function BadgeRequestModal({ modalProps }: { modalProps: RenderModalProps; }) {
     const me = UserStore.getCurrentUser();
     const form = useBadgeForm(me?.id ?? "", me?.username ?? "");
@@ -64,26 +76,24 @@ function BadgeRequestModal({ modalProps }: { modalProps: RenderModalProps; }) {
     const [sending, setSending] = useState(false);
     const [sent, setSent] = useState(false);
 
-    const ready = /^\d{17,20}$/.test(state.discordId.trim()) && !!state.name.trim() && !!state.badge.trim() && state.design.colors.length > 0;
+    const ready = /^\d{17,20}$/.test(state.discordId.trim()) && !!state.name.trim() && state.parts.every(p => p.badge.trim() && p.design.colors.length > 0);
+    const names = state.parts.map(p => p.badge.trim());
+    const previews = state.parts.map((p, i) => <BadgePreview key={i} design={p.design} image={p.image?.url ?? null} size={state.parts.length > 1 ? 72 : 96} />);
 
     async function submit() {
         setSending(true);
         setError(null);
         try {
-            const { colors, ...design } = state.design;
-            const preview = await renderBadgePng(state.design, state.image?.url ?? null).catch(() => undefined);
+            const [first, pair] = await Promise.all(state.parts.map(partBody));
             const res = await fetch(API, {
                 method: "POST",
                 headers: { "content-type": "application/json" },
                 body: JSON.stringify({
                     discordId: state.discordId.trim(),
                     name: state.name.trim(),
-                    badge: state.badge.trim(),
-                    colors: colors.map(toHex),
                     details: state.details.trim(),
-                    image: state.image?.url.replace(/^data:[^,]*,/, ""),
-                    design,
-                    preview,
+                    ...first,
+                    pair,
                     source: "deadbolt"
                 })
             });
@@ -106,11 +116,9 @@ function BadgeRequestModal({ modalProps }: { modalProps: RenderModalProps; }) {
                 actions={[{ text: "Close", variant: "primary", onClick: modalProps.onClose }]}
             >
                 <div className={cl("sent")}>
-                    <div className={cl("stage", "stage-dark")}>
-                        <BadgePreview design={state.design} image={state.image?.url ?? null} size={96} />
-                    </div>
+                    <div className={cl("stage", "stage-dark", names.length > 1 && "stage-pair")}>{previews}</div>
                     <Paragraph>
-                        Your design for <b>{state.badge.trim()}</b> went straight to Deadbolt's owner. If it gets made, it shows up on your profile for everyone on Deadbolt after the next update.
+                        Your design for <b>{humanFriendlyJoin(names)}</b> went straight to Deadbolt's owner. If {names.length > 1 ? "they get made, they show" : "it gets made, it shows"} up on your profile for everyone on Deadbolt after the next update.
                     </Paragraph>
                 </div>
             </Modal>
