@@ -6,8 +6,9 @@
 
 import "./BadgeRequestCard.css";
 
+import { Button, TextButton } from "@components/Button";
 import { classNameFactory } from "@utils/css";
-import { ColorPicker, React, TextInput, useEffect, useRef, useState } from "@webpack/common";
+import { ColorPicker, React, TextArea, TextInput, useEffect, useRef, useState } from "@webpack/common";
 
 export const cl = classNameFactory("vc-badge-request-");
 
@@ -333,14 +334,14 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
 
                 <Field label="Image" hint="optional, animated works too">
                     <div className={cl("file")}>
-                        <button type="button" className={cl("pill-button")} onClick={() => fileInput.current?.click()}>
+                        <Button variant="secondary" size="small" type="button" onClick={() => fileInput.current?.click()}>
                             {state.image ? "Change image" : "Upload image"}
-                        </button>
+                        </Button>
                         {state.image
                             ? (
                                 <>
                                     <span className={cl("file-name")}>{state.image.name}</span>
-                                    <button type="button" className={cl("remove")} aria-label="Remove image" onClick={() => set({ image: null })}>×</button>
+                                    <TextButton variant="danger" type="button" onClick={() => set({ image: null })}>Remove</TextButton>
                                 </>
                             )
                             : <span className={cl("hint")}>PNG, JPG, GIF or WebP, up to 5 MB</span>}
@@ -352,7 +353,7 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
                     <Field
                         label="Position"
                         hint="or drag the preview and scroll to zoom"
-                        action={fitChanged && <button type="button" className={cl("text-button")} onClick={() => setDesign(FIT_DEFAULTS)}>Reset</button>}
+                        action={fitChanged && <TextButton variant="link" type="button" onClick={() => setDesign(FIT_DEFAULTS)}>Reset</TextButton>}
                     >
                         <div className={cl("sliders")}>
                             <Slider label="Zoom" value={design.zoom} min={0.1} max={5} step={0.01} format={v => `${Math.round(v * 100)}%`} onChange={zoom => setDesign({ zoom })} />
@@ -395,9 +396,9 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
                             </div>
                         ))}
                         {design.colors.length < MAX_COLORS && (
-                            <button type="button" className={cl("pill-button")} onClick={() => setDesign({ colors: [...design.colors, 0xffffff] })}>
+                            <Button variant="secondary" size="small" type="button" onClick={() => setDesign({ colors: [...design.colors, 0xffffff] })}>
                                 Add color
-                            </button>
+                            </Button>
                         )}
                     </div>
                 </Field>
@@ -424,10 +425,9 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
                 </Field>
 
                 <Field label="Anything else?" hint="optional">
-                    <textarea
-                        className={cl("textarea")}
+                    <TextArea
                         value={state.details}
-                        onChange={e => set({ details: e.currentTarget.value })}
+                        onChange={details => set({ details })}
                         placeholder="How it should move, what it should show, where the idea came from..."
                         maxLength={1000}
                         rows={3}
@@ -437,9 +437,11 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
 
             <aside className={cl("preview-panel")}>
                 <div className={cl("stage", `stage-${stage}`)}>
-                    <BadgePreview design={design} image={state.image?.url ?? null} size={128} onAdjust={setDesign} />
+                    <BadgePreview design={design} image={state.image?.url ?? null} size={168} onAdjust={setDesign} />
+                    <div className={cl("stage-toggle")}>
+                        <Segmented label="Preview background" value={stage} options={STAGES} onChange={v => setStage(v)} />
+                    </div>
                 </div>
-                <Segmented label="Preview background" value={stage} options={STAGES} onChange={v => setStage(v)} />
                 <div className={cl("profile", `stage-${stage}`)}>
                     <div className={cl("profile-label")}>On a profile</div>
                     <div className={cl("profile-row")}>
@@ -451,7 +453,10 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
                             </div>
                         </div>
                     </div>
-                    <div className={cl("tooltip")}><BadgeName name={state.badge.trim() || "Badge name"} colors={design.colors} /></div>
+                    <div className={cl("pill")} style={{ "--name-gradient": nameGradient(design.colors) } as React.CSSProperties}>
+                        <BadgePreview design={design} image={state.image?.url ?? null} size={18} />
+                        <span className={cl("pill-name", !state.badge.trim() && "pill-empty")}>{state.badge.trim() || "Badge name"}</span>
+                    </div>
                 </div>
             </aside>
         </div>
