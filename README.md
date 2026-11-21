@@ -40,6 +40,8 @@ What sets this fork apart from vanilla Equicord:
 
 Deadbolt ships with the same 300+ plugin library Equicord maintains, plus whatever gets added here going forward. Browse Equicord's plugin list [here](https://equicord.org/plugins) for what's included by default.
 
+- **ReplyChainView**: hover a reply and pick View Reply Chain to read the whole conversation it belongs to, from the first message down to its replies, in one window.
+
 ## Installing
 
 Equicord's official installer (Equilotl) only targets the upstream Equicord repo, not this fork, so each platform has its own one-command install. Windows gets a ready-made build; macOS and Linux build Deadbolt from source and inject it.

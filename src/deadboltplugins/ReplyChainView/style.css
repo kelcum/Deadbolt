@@ -1,0 +1,28 @@
+.vc-replychain-entry {
+    position: relative;
+    border-left: 2px solid transparent;
+    padding: 4px 0;
+}
+
+.vc-replychain-entry + .vc-replychain-entry {
+    border-top: 1px solid var(--background-modifier-accent);
+}
+
+.vc-replychain-current {
+    border-left-color: var(--brand-500);
+    background: var(--background-modifier-hover);
+}
+
+.vc-replychain-jump {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+}
+
+.vc-replychain-note {
+    margin: 8px 0;
+}
+
+.vc-replychain-divider {
+    text-transform: uppercase;
+}
