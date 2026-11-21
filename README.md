@@ -36,6 +36,8 @@ What sets this fork apart from vanilla Equicord:
 
 Deadbolt ships with the same 300+ plugin library Equicord maintains, plus whatever gets added here going forward. Browse Equicord's plugin list [here](https://equicord.org/plugins) for what's included by default.
 
+- **SharedMedia** — a Shared Media button next to pins (or right-click a channel or DM) opens every image, video, file and link shared there, with Discord's viewer for flipping through them with the arrow keys.
+
 ## Installing
 
 Equicord's official installer (Equilotl) only targets the upstream Equicord repo, not this fork, so each platform has its own one-command install. Windows gets a ready-made build; macOS and Linux build Deadbolt from source and inject it.

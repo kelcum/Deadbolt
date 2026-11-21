@@ -1,0 +1,122 @@
+.vc-sharedmedia-tabs {
+    margin-bottom: 12px;
+}
+
+.vc-sharedmedia-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 240px;
+}
+
+.vc-sharedmedia-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 8px;
+}
+
+.vc-sharedmedia-tile {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.vc-sharedmedia-thumb {
+    position: relative;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border-radius: 8px;
+    background: var(--background-mod-subtle);
+    cursor: pointer;
+}
+
+.vc-sharedmedia-thumb img,
+.vc-sharedmedia-thumb video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+.vc-sharedmedia-thumb:hover img,
+.vc-sharedmedia-thumb:hover video {
+    opacity: 0.85;
+}
+
+.vc-sharedmedia-spoiler img,
+.vc-sharedmedia-spoiler video {
+    filter: blur(24px);
+}
+
+.vc-sharedmedia-play {
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 36px;
+    height: 36px;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    background: rgb(0 0 0 / 60%);
+}
+
+.vc-sharedmedia-play::after {
+    content: "";
+    position: absolute;
+    top: 11px;
+    left: 14px;
+    border-style: solid;
+    border-width: 7px 0 7px 11px;
+    border-color: transparent transparent transparent #fff;
+}
+
+.vc-sharedmedia-tile-footer,
+.vc-sharedmedia-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+}
+
+.vc-sharedmedia-tile-meta,
+.vc-sharedmedia-row-meta {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    color: var(--text-muted);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-sharedmedia-row {
+    padding: 8px 10px;
+    border-radius: 8px;
+    background: var(--background-mod-subtle);
+}
+
+.vc-sharedmedia-row-icon {
+    display: flex;
+    color: var(--interactive-normal);
+}
+
+.vc-sharedmedia-row-body {
+    flex: 1;
+    min-width: 0;
+}
+
+.vc-sharedmedia-row-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-sharedmedia-empty {
+    padding: 24px 0;
+    color: var(--text-muted);
+    text-align: center;
+}
+
+.vc-sharedmedia-more {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
+}
