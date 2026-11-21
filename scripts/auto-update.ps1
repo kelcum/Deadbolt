@@ -284,24 +284,28 @@ try {
     $ErrorActionPreference = $prevEap
 }
 
-try {
-    $reapplyScript = Join-Path $RepoRoot "scripts\reapply-branding.ps1"
-    $reapplyArgs = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $reapplyScript, "-Quiet")
-    if ($script:BuildFailed) {
-        Log "Reapplying branding without restarting anything, since this run's build failed..."
-    } else {
-        $reapplyArgs += "-Restart"
-        Log "Reapplying branding to Canary and Stable (restarting a client only if it was running without Deadbolt)..."
-    }
-    & powershell @reapplyArgs *>&1 | Write-Lines
-    if ($LASTEXITCODE -eq 0) {
-        Set-Checked "branding"
-    } else {
+if (Test-Path $PauseFile) {
+    Log "scripts\sync.paused exists, so Discord is left as it is this run."
+} else {
+    try {
+        $reapplyScript = Join-Path $RepoRoot "scripts\reapply-branding.ps1"
+        $reapplyArgs = @("-NoProfile", "-ExecutionPolicy", "Bypass", "-File", $reapplyScript, "-Quiet")
+        if ($script:BuildFailed) {
+            Log "Reapplying branding without restarting anything, since this run's build failed..."
+        } else {
+            $reapplyArgs += "-Restart"
+            Log "Reapplying branding to Canary and Stable (restarting a client only if it was running without Deadbolt)..."
+        }
+        & powershell @reapplyArgs *>&1 | Write-Lines
+        if ($LASTEXITCODE -eq 0) {
+            Set-Checked "branding"
+        } else {
+            Send-StuckAlert "branding" "Re-applying Deadbolt to Discord failed, so Discord may be running without the mod. Run scripts\repair.ps1 in the Deadbolt folder."
+        }
+    } catch {
+        Log "ERROR during branding reapply: $_"
         Send-StuckAlert "branding" "Re-applying Deadbolt to Discord failed, so Discord may be running without the mod. Run scripts\repair.ps1 in the Deadbolt folder."
     }
-} catch {
-    Log "ERROR during branding reapply: $_"
-    Send-StuckAlert "branding" "Re-applying Deadbolt to Discord failed, so Discord may be running without the mod. Run scripts\repair.ps1 in the Deadbolt folder."
 }
 
 Clear-StuckAlert $script:Checked.ToArray()
