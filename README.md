@@ -44,6 +44,7 @@ New Deadbolt plugins:
 
 - **BackForward** — go back and forward through the channels you visited with your mouse side buttons or Alt+Left and Alt+Right.
 - **ReplyWithQuote** — select part of a message and press Q, or right click it, to reply quoting just that part.
+- **ImageAutoCompress** — shrinks images that are over your upload limit so they still send instead of failing.
 
 ## Installing
 
