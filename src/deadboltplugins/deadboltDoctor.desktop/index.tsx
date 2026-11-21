@@ -7,21 +7,39 @@
 import "./style.css";
 
 import { ApplicationCommandInputType } from "@api/Commands";
+import * as DataStore from "@api/DataStore";
 import { showNotice } from "@api/Notices";
 import { leaveSafeMode, safeMode, safeModeReason } from "@api/SafeMode";
+import { definePluginSettings } from "@api/Settings";
 import { Button } from "@components/Button";
 import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
+import { Logger } from "@utils/Logger";
 import { relaunch, showItemInFolder } from "@utils/native";
-import definePlugin, { PluginNative } from "@utils/types";
+import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal, openModal, showToast, useEffect, useState } from "@webpack/common";
+import { failedPatchPlugins, getBuildNumber } from "@webpack/patcher";
+
+import { PluginMeta } from "~plugins";
 
 import type { Health, Level, VersionState } from "./native";
 
 const Native = VencordNative.pluginHelpers.DeadboltDoctor as PluginNative<typeof import("./native")>;
 const cl = classNameFactory("vc-doctor-");
+const logger = new Logger("DeadboltDoctor");
+
+const BREAKAGE_URL = "https://api.xan.gripe/v1/breakage";
+const BREAKAGE_KEY = "DeadboltDoctor_BreakageReported";
+
+const settings = definePluginSettings({
+    breakageAlerts: {
+        type: OptionType.BOOLEAN,
+        description: "When a Discord update breaks plugins, tell the Deadbolt team so a fix can start right away. Only the plugin names and Discord's build number are sent.",
+        default: false
+    }
+});
 
 const STATE_LABEL: Record<VersionState["state"], string> = {
     "injected": "Deadbolt is in",
@@ -226,6 +244,22 @@ export function openHealth() {
 }
 
 let checkTimer: ReturnType<typeof setTimeout> | undefined;
+let breakageTimer: ReturnType<typeof setInterval> | undefined;
+
+async function reportBreakage() {
+    const build = getBuildNumber();
+    const plugins = [...failedPatchPlugins].filter(p => !PluginMeta[p]?.userPlugin).sort();
+    if (!settings.store.breakageAlerts || build === -1 || !plugins.length) return;
+    const sent = await DataStore.get<{ build: number; plugins: string[]; }>(BREAKAGE_KEY);
+    if (sent?.build === build && plugins.every(p => sent.plugins.includes(p))) return;
+    const res = await fetch(BREAKAGE_URL, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ build, plugins })
+    });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    await DataStore.set(BREAKAGE_KEY, { build, plugins });
+}
 
 async function startupCheck() {
     const h = await Native.getHealth().catch(() => null);
@@ -246,6 +280,7 @@ export default definePlugin({
     tags: ["Utility"],
     authors: [Devs.K3],
     enabledByDefault: true,
+    settings,
     dependencies: ["CommandsAPI"],
     settingsAboutComponent: () => <HealthPanel />,
     toolboxActions: {
@@ -265,8 +300,10 @@ export default definePlugin({
     ],
     start() {
         checkTimer = setTimeout(startupCheck, 20_000);
+        breakageTimer = setInterval(() => reportBreakage().catch(e => logger.warn("Couldn't send the breakage report", e)), 120_000);
     },
     stop() {
         clearTimeout(checkTimer);
+        clearInterval(breakageTimer);
     }
 });

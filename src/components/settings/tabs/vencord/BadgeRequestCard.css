@@ -36,23 +36,29 @@
 
 .vc-badge-request-designer {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) 236px;
+    grid-template-columns: minmax(0, 1fr) 300px;
     gap: 24px;
     align-items: start;
-    padding-bottom: 8px;
+    height: min(640px, calc(100vh - 240px));
+    min-height: 360px;
 }
 
 .vc-badge-request-controls {
     display: flex;
     flex-direction: column;
-    gap: 18px;
+    gap: 20px;
+    box-sizing: border-box;
     min-width: 0;
+    max-height: 100%;
+    padding: 0 8px 12px 0;
+    overflow-y: auto;
+    scrollbar-width: thin;
 }
 
 .vc-badge-request-row {
     display: flex;
     flex-wrap: wrap;
-    gap: 12px 16px;
+    gap: 16px;
 }
 
 .vc-badge-request-field {
@@ -63,7 +69,7 @@
 }
 
 .vc-badge-request-row > .vc-badge-request-field {
-    flex: 1 1 180px;
+    flex: 1 1 200px;
 }
 
 .vc-badge-request-field-disabled {
@@ -79,7 +85,7 @@
     font-size: 14px;
     font-weight: 600;
     line-height: 1.2;
-    color: var(--text-strong, var(--header-primary, #f2f3f5));
+    color: var(--text-strong);
 }
 
 .vc-badge-request-label-action {
@@ -90,26 +96,28 @@
 .vc-badge-request-hint {
     font-size: 12px;
     font-weight: 400;
-    color: var(--text-muted, #949ba4);
+    color: var(--text-muted);
 }
 
 .vc-badge-request-segmented {
-    display: inline-flex;
-    align-self: flex-start;
-    gap: 2px;
-    padding: 3px;
-    border-radius: 10px;
-    border: 1px solid var(--border-subtle, rgb(255 255 255 / 6%));
-    background: var(--background-mod-subtle, rgb(0 0 0 / 18%));
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--input-border-default, var(--border-subtle));
+    background: var(--background-base-lowest);
 }
 
 .vc-badge-request-segment {
-    padding: 7px 12px;
-    border: 0;
-    border-radius: 7px;
+    flex: 1 1 0;
+    min-height: 30px;
+    padding: 0 12px;
+    border: 1px solid transparent;
+    border-radius: 6px;
     background: transparent;
-    color: var(--text-muted, #949ba4);
-    font: 600 13px/1 var(--font-primary, inherit);
+    color: var(--text-muted);
+    font: 500 14px/1 var(--font-primary);
+    white-space: nowrap;
     cursor: pointer;
     transition:
         background-color 0.15s,
@@ -117,14 +125,20 @@
 }
 
 .vc-badge-request-segment:hover {
-    color: var(--text-default, var(--text-normal, #dbdee1));
+    background: var(--background-mod-subtle);
+    color: var(--text-default);
+}
+
+.vc-badge-request-segment:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: -2px;
 }
 
 .vc-badge-request-segment-on,
 .vc-badge-request-segment-on:hover {
-    background: var(--background-mod-strong, rgb(255 255 255 / 12%));
-    color: var(--text-strong, var(--header-primary, #f2f3f5));
-    box-shadow: 0 1px 2px rgb(0 0 0 / 25%);
+    border-color: var(--control-secondary-border-default);
+    background: var(--control-secondary-background-default);
+    color: var(--control-secondary-text-default);
 }
 
 .vc-badge-request-chips {
@@ -134,12 +148,13 @@
 }
 
 .vc-badge-request-chip {
-    padding: 7px 14px;
-    border: 1px solid var(--border-subtle, rgb(255 255 255 / 10%));
+    min-height: 32px;
+    padding: 0 14px;
+    border: 1px solid var(--input-border-default, var(--border-subtle));
     border-radius: 999px;
-    background: transparent;
-    color: var(--text-muted, #949ba4);
-    font: 600 13px/1 var(--font-primary, inherit);
+    background: var(--background-base-lowest);
+    color: var(--text-muted);
+    font: 500 14px/1 var(--font-primary);
     cursor: pointer;
     transition:
         background-color 0.15s,
@@ -148,137 +163,98 @@
 }
 
 .vc-badge-request-chip:hover {
-    color: var(--text-default, var(--text-normal, #dbdee1));
-    border-color: var(--border-strong, rgb(255 255 255 / 20%));
+    color: var(--text-default);
+    border-color: var(--border-strong);
+}
+
+.vc-badge-request-chip:focus-visible {
+    outline: 2px solid var(--border-focus);
+    outline-offset: 2px;
 }
 
 .vc-badge-request-chip-on,
 .vc-badge-request-chip-on:hover {
-    border-color: var(--brand-500, #5865f2);
-    background: color-mix(in srgb, var(--brand-500, #5865f2) 22%, transparent);
-    color: var(--text-strong, var(--header-primary, #f2f3f5));
-}
-
-.vc-badge-request-pill-button {
-    padding: 8px 12px;
-    border: 1px solid var(--border-subtle, rgb(255 255 255 / 10%));
-    border-radius: 8px;
-    background: var(--background-mod-subtle, rgb(255 255 255 / 4%));
-    color: var(--text-default, var(--text-normal, #dbdee1));
-    font: 600 13px/1 var(--font-primary, inherit);
-    cursor: pointer;
-    transition: background-color 0.15s;
-}
-
-.vc-badge-request-pill-button:hover {
-    background: var(--background-mod-normal, rgb(255 255 255 / 9%));
-}
-
-.vc-badge-request-text-button {
-    align-self: flex-start;
-    padding: 0;
-    border: 0;
-    background: none;
-    color: var(--text-link, #00a8fc);
-    font: 500 13px/1.2 var(--font-primary, inherit);
-    cursor: pointer;
-}
-
-.vc-badge-request-text-button:hover {
-    text-decoration: underline;
+    border-color: var(--control-primary-background-default);
+    background: color-mix(in srgb, var(--control-primary-background-default) 20%, transparent);
+    color: var(--text-strong);
 }
 
 .vc-badge-request-sliders {
     display: grid;
-    gap: 4px;
+    gap: 2px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid var(--input-border-default, var(--border-subtle));
+    background: var(--background-base-lowest);
 }
 
 .vc-badge-request-slider {
     display: grid;
     grid-template-columns: 88px minmax(0, 1fr) 46px;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .vc-badge-request-slider-label {
     font-size: 13px;
-    color: var(--text-muted, #949ba4);
+    color: var(--text-muted);
 }
 
 .vc-badge-request-slider input[type="range"] {
     width: 100%;
-    margin: 6px 0;
-    accent-color: var(--brand-500, #5865f2);
+    margin: 8px 0;
+    accent-color: var(--control-primary-background-default);
     cursor: pointer;
 }
 
 .vc-badge-request-slider-value {
-    font: 500 12px/1 var(--font-code, monospace);
+    font: 500 12px/1 var(--font-code);
     text-align: right;
-    color: var(--text-default, var(--text-normal, #dbdee1));
-}
-
-.vc-badge-request-textarea {
-    width: 100%;
-    min-height: 76px;
-    box-sizing: border-box;
-    padding: 10px 12px;
-    border: 1px solid var(--input-border, var(--border-subtle, rgb(255 255 255 / 8%)));
-    border-radius: 8px;
-    outline: none;
-    background: var(--input-background, var(--background-tertiary, rgb(0 0 0 / 25%)));
-    color: var(--text-default, var(--text-normal, #dbdee1));
-    font: 400 14px/1.4 var(--font-primary, inherit);
-    resize: vertical;
-}
-
-.vc-badge-request-textarea::placeholder {
-    color: var(--text-muted, #949ba4);
-}
-
-.vc-badge-request-textarea:focus {
-    border-color: var(--brand-500, #5865f2);
+    color: var(--text-default);
 }
 
 .vc-badge-request-colors {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
 }
 
 .vc-badge-request-color {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 4px 8px 4px 4px;
+    min-height: 40px;
+    box-sizing: border-box;
+    padding: 4px 6px 4px 4px;
     border-radius: 8px;
-    background: var(--background-mod-subtle, rgb(0 0 0 / 8%));
+    border: 1px solid var(--input-border-default, var(--border-subtle));
+    background: var(--background-base-lowest);
 }
 
 .vc-badge-request-hex {
     font-size: 13px;
-    color: var(--text-default, var(--text-normal, #dbdee1));
+    color: var(--text-default);
 }
 
 .vc-badge-request-remove {
     display: grid;
     place-items: center;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     padding: 0;
     border: 0;
     border-radius: 50%;
     background: transparent;
-    color: var(--text-muted, #949ba4);
+    color: var(--text-muted);
     font-size: 16px;
     line-height: 1;
     cursor: pointer;
 }
 
 .vc-badge-request-remove:hover {
-    background: var(--background-mod-strong, rgb(0 0 0 / 15%));
-    color: var(--text-default, var(--text-normal, #dbdee1));
+    background: var(--background-mod-strong);
+    color: var(--text-default);
 }
 
 .vc-badge-request-file {
@@ -298,24 +274,60 @@
 }
 
 .vc-badge-request-preview-panel {
-    position: sticky;
-    top: 0;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-}
-
-.vc-badge-request-preview-panel > .vc-badge-request-segmented {
-    align-self: center;
+    gap: 12px;
 }
 
 .vc-badge-request-stage {
+    position: relative;
     display: grid;
     place-items: center;
-    height: 196px;
-    border: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+    height: 280px;
+    border: 1px solid var(--border-subtle);
     border-radius: 12px;
-    background-image: radial-gradient(circle at 50% 45%, rgb(255 255 255 / 7%), transparent 65%);
+    background-image: radial-gradient(circle at 50% 42%, rgb(255 255 255 / 8%), transparent 62%);
+}
+
+.vc-badge-request-stage-toggle {
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    left: 10px;
+}
+
+.vc-badge-request-stage-light .vc-badge-request-segmented {
+    border-color: rgb(0 0 0 / 10%);
+    background: rgb(255 255 255 / 85%);
+}
+
+.vc-badge-request-stage-light .vc-badge-request-segment {
+    color: #4e5058;
+}
+
+.vc-badge-request-stage-light .vc-badge-request-segment-on {
+    border-color: rgb(0 0 0 / 12%);
+    background: #e3e5e8;
+    color: #060607;
+}
+
+.vc-badge-request-stage-pair {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+}
+
+.vc-badge-request-stage-badge {
+    padding: 8px;
+    border: 1px dashed transparent;
+    border-radius: 14px;
+    cursor: pointer;
+}
+
+.vc-badge-request-stage-badge-on {
+    border-color: rgb(128 128 128 / 55%);
+    cursor: default;
 }
 
 .vc-badge-request-stage-dark {
@@ -327,29 +339,33 @@
 }
 
 .vc-badge-request-profile {
-    padding: 12px;
-    border: 1px solid var(--border-subtle, rgb(255 255 255 / 8%));
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 14px;
+    border: 1px solid var(--border-subtle);
     border-radius: 12px;
 }
 
 .vc-badge-request-profile-label {
-    margin-bottom: 10px;
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 600;
     color: #949ba4;
+}
+
+.vc-badge-request-stage-light .vc-badge-request-profile-label {
+    color: #5c5e66;
 }
 
 .vc-badge-request-profile-row {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .vc-badge-request-avatar {
-    width: 40px;
-    height: 40px;
+    width: 48px;
+    height: 48px;
     flex: none;
     border-radius: 50%;
 }
@@ -362,7 +378,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
 }
 
@@ -377,6 +393,7 @@
 .vc-badge-request-profile-badges {
     display: flex;
     align-items: center;
+    gap: 4px;
     width: fit-content;
     margin-top: 4px;
     padding: 3px 5px;
@@ -391,18 +408,51 @@
     background: rgb(0 0 0 / 6%);
 }
 
-.vc-badge-request-tooltip {
+.vc-badge-request-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.vc-badge-request-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     width: fit-content;
     max-width: 100%;
-    margin-top: 10px;
-    padding: 6px 10px;
-    border-radius: 6px;
-    background: #18191c;
+    box-sizing: border-box;
+    padding: 5px 12px 5px 6px;
+    border: 1.5px solid transparent;
+    border-radius: 999px;
+    background:
+        linear-gradient(#1e1f22, #1e1f22) padding-box,
+        var(--name-gradient, #4e5058) border-box;
     box-shadow: 0 4px 12px rgb(0 0 0 / 30%);
+}
+
+.vc-badge-request-stage-light .vc-badge-request-pill {
+    background:
+        linear-gradient(#fff, #fff) padding-box,
+        var(--name-gradient, #c4c9ce) border-box;
+    box-shadow: 0 2px 8px rgb(0 0 0 / 12%);
+}
+
+.vc-badge-request-pill-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 18px;
     color: #f2f3f5;
-    font-size: 13px;
-    font-weight: 700;
-    overflow-wrap: anywhere;
+}
+
+.vc-badge-request-stage-light .vc-badge-request-pill-name {
+    color: #060607;
+}
+
+.vc-badge-request-pill-empty {
+    opacity: 0.55;
 }
 
 .vc-badge-request-name {
@@ -643,19 +693,31 @@
 }
 
 .vc-badge-request-sent .vc-badge-request-stage {
-    width: 140px;
-    height: 140px;
+    min-width: 160px;
+    height: 160px;
     flex: none;
+    padding: 0 16px;
 }
 
 @media (width <= 760px) {
     .vc-badge-request-designer {
         grid-template-columns: minmax(0, 1fr);
+        height: auto;
+    }
+
+    .vc-badge-request-controls {
+        max-height: none;
+        overflow: visible;
     }
 
     .vc-badge-request-preview-panel {
-        position: static;
         order: -1;
+    }
+}
+
+@media (height <= 760px) {
+    .vc-badge-request-stage {
+        height: 220px;
     }
 }
 
