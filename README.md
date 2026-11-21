@@ -7,7 +7,11 @@
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-b6c0cb?style=for-the-badge&labelColor=171A21)](#installing)
 [![Plugins](https://img.shields.io/badge/plugins-300%2B-b6c0cb?style=for-the-badge&labelColor=171A21)](https://equicord.org/plugins)
 
-Deadbolt is a personal fork of [Equicord](https://github.com/Equicord/Equicord) (itself a fork of [Vencord](https://github.com/Vendicated/Vencord)), focused on quality-of-life plugins.
+**The Discord mod that survives Discord updates.**
+
+Discord's updater quietly wipes client mods. Deadbolt notices, puts itself back, and tells you when it did. Install it once and forget about it.
+
+Built on [Equicord](https://github.com/Equicord/Equicord) (itself a fork of [Vencord](https://github.com/Vendicated/Vencord)), with extra quality-of-life plugins on top.
 
 **[Website](https://xan.gripe/deadbolt/) · [Windows](#windows) · [macOS](#macos) · [Linux](#linux)**
 
@@ -17,15 +21,16 @@ Deadbolt is a personal fork of [Equicord](https://github.com/Equicord/Equicord) 
 
 What sets this fork apart from vanilla Equicord:
 
+- **Survives Discord updates** — Discord's updater resets client mods, the icon, splash and shortcuts. Deadbolt's background tasks put it all back on their own, and [`scripts/reapply-branding.ps1`](scripts/reapply-branding.ps1) does it on demand on Windows.
+- **DeadboltDoctor** — `/deadbolt` (or the toolbox, or the plugin's settings) shows whether every installed Discord version still has Deadbolt, whether the build and background tasks are healthy, and fixes it in one click: re-inject, repair everything, update now. If Discord installs an update without Deadbolt in it, a banner offers to fix it before your next restart.
 - **A boot splash that's actually Deadbolt's** — replaces Discord's own connecting screen with an animated chrome crest and Deadbolt-branded quotes, instead of just retexting Discord's default one.
 - **Animated profile badges** — a continuously rotating chrome shine on the Creator badge and a violet counterpart for Contributors, each with a rich hover card instead of a plain tooltip.
 - **`/addplugin` and `/myplugins`** — add, edit, switch, share and remove your own plugins from inside Discord itself. Deadbolt saves the code, rebuilds, and offers to reload. No editor, no terminal. See [Adding your own plugins](#adding-your-own-plugins).
 - **QuickFind** — press Ctrl+Shift+F in any chat, DMs included, to search every message Discord has loaded there instantly and offline, step through matches with Enter, and load older history when you need it.
-- **DeadboltDoctor** — `/deadbolt` (or the toolbox, or the plugin's settings) shows whether every installed Discord version still has Deadbolt, whether the build and background tasks are healthy, and fixes it in one click: re-inject, repair everything, update now. If Discord installs an update without Deadbolt in it, a banner offers to fix it before your next restart.
+- **What's new, once** — after an update Deadbolt shows a short list of what changed, one time. Turn it off with the WhatsNew plugin or reopen it with `/whatsnew`.
 - **VSCodeActivity** — shows the real file/workspace you're editing in VS Code instead of Discord's generic "Playing Visual Studio Code", with an optional spoof mode that fakes a coding session (and can hide real game activity) on demand.
 - **A real macOS install, not a broken one** — macOS injects through Discord's external `discord_desktop_core` module instead of modifying the signed `app.asar`, so Discord's Apple code signature stays intact. See [macOS](#macos).
 - **A default look out of the box** — new installs start with a black, grayscale QuickCSS theme that also tidies away Nitro/gift, stickers, emoji, Discover and a few other buttons. See [Default look](#default-look).
-- **One-command recovery on Windows** — Discord's own updater periodically resets the icon, splash, and shortcuts (Canary *and* Stable); [`scripts/reapply-branding.ps1`](scripts/reapply-branding.ps1) puts it all back in one run, and [`scripts/auto-update.ps1`](scripts/auto-update.ps1) can do it on a schedule, unattended.
 
 ### Included Plugins
 
@@ -33,20 +38,26 @@ Deadbolt ships with the same 300+ plugin library Equicord maintains, plus whatev
 
 ## Installing
 
-There's no packaged GUI installer — Equicord's official installer (Equilotl) only targets the upstream Equicord repo, not this fork. Instead, each platform has a one-command script that builds Deadbolt from source and injects it:
+Equicord's official installer (Equilotl) only targets the upstream Equicord repo, not this fork, so each platform has its own one-command install. Windows gets a ready-made build; macOS and Linux build Deadbolt from source and inject it.
 
 ### Windows
 
+Paste this into PowerShell (a normal window, not "Run as administrator"):
+
 ```powershell
-git clone https://github.com/kelcum/Deadbolt
-cd Deadbolt
-npm i -g pnpm
-pnpm install --frozen-lockfile
-pnpm build
-pnpm inject
+irm https://github.com/kelcum/Deadbolt/releases/latest/download/install.ps1 | iex
 ```
 
-Discord Canary/Stable's own updater periodically resets the icon, splash, and shortcuts (and can occasionally break the injection stub) — see [Windows: reapplying branding after a Discord update](#windows-reapplying-branding-after-a-discord-update) if that happens, or to automate it entirely.
+Or download [DeadboltSetup.exe](https://github.com/kelcum/Deadbolt/releases/latest/download/DeadboltSetup.exe) and double-click it. It isn't signed, so your browser and SmartScreen warn about it the first time (**More info → Run anyway**); the command above doesn't trigger that.
+
+Setup finds Discord, Discord PTB and Discord Canary (if you have more than one it asks which, or does all of them), downloads the latest Deadbolt build, puts it on and starts Discord. You don't need Git, Node.js or pnpm. It also:
+
+- **Keeps Deadbolt on after Discord updates.** Setup keeps a copy of itself in `%LOCALAPPDATA%\DeadboltInstall` and runs it quietly each time you sign in to Windows. If Discord updated without Deadbolt, it puts Deadbolt back on and restarts Discord, but only if Discord was running without it. It also puts the Deadbolt icon and splash logo back if an update reset them. This needs no internet, and you only hear from it when it can't fix something; what it did is in `repair.log` in that folder.
+- **Adds Repair Deadbolt and Uninstall Deadbolt to the Start menu.** Repair downloads the latest build and puts Deadbolt back on every Discord it was on. Uninstall puts every Discord back to stock, icons included, and removes everything except your settings in `%APPDATA%\Deadbolt`. Uninstall is also listed in **Settings → Apps**.
+
+The same from a terminal: `DeadboltSetup.exe --repair`, `DeadboltSetup.exe --uninstall`, and `--quiet` for no prompts or windows (`--repair --quiet` is the offline sign-in check).
+
+Prefer building from source? Follow [Building from source](#building-from-source) and run `pnpm inject`; [Windows: reapplying branding after a Discord update](#windows-reapplying-branding-after-a-discord-update) covers keeping a source install patched.
 
 ### macOS
 

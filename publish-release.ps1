@@ -46,5 +46,15 @@ $uploadHeaders = @{
 $asset = Invoke-RestMethod -Uri "$uploadUrl`?name=deadbolt-dist.zip" -Method Post -Headers $uploadHeaders -InFile $zipPath
 
 Write-Host "Uploaded: $($asset.browser_download_url)"
+
+Write-Host "Starting the Deadbolt Release workflow so DeadboltSetup.exe and install.ps1 are added to $Tag too..."
+try {
+    $dispatch = @{ ref = "main" } | ConvertTo-Json
+    Invoke-RestMethod -Uri "https://api.github.com/repos/kelcum/Deadbolt/actions/workflows/deadbolt-release.yml/dispatches" -Method Post -Headers $headers -Body $dispatch -ContentType "application/json" | Out-Null
+    Write-Host "Started: https://github.com/kelcum/Deadbolt/actions/workflows/deadbolt-release.yml"
+} catch {
+    Write-Warning "Couldn't start the workflow ($($_.Exception.Message)). Run it from the Actions tab or upload them with publish-installer.ps1. Until then the releases/latest/download links for DeadboltSetup.exe and install.ps1 return 404."
+}
+
 Write-Host ""
 Write-Host "Done. Release is live at: $($release.html_url)"

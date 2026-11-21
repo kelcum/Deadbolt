@@ -18,6 +18,8 @@ jobs:
         name: Publish deadbolt-dist.zip
         if: github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push')
         runs-on: ubuntu-latest
+        outputs:
+            latest: ${{ steps.tip.outputs.latest }}
         env:
             SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
             GH_TOKEN: ${{ github.token }}
@@ -45,7 +47,9 @@ jobs:
 
             - name: Build
               if: steps.tip.outputs.latest == 'true'
-              run: pnpm build
+              run: |
+                  pnpm build
+                  node scripts/pluginNames.mjs plugin-names.json
 
             - name: Zip
               if: steps.tip.outputs.latest == 'true'
@@ -54,11 +58,100 @@ jobs:
                   grep -q "$SHA" dist/desktop/renderer.js
                   cd dist/desktop
                   zip -X "$GITHUB_WORKSPACE/deadbolt-dist.zip" package.json patcher.js preload.js renderer.css renderer.js
+                  zip -X -j "$GITHUB_WORKSPACE/deadbolt-dist.zip" "$GITHUB_WORKSPACE/browser/deadbolt.ico" "$GITHUB_WORKSPACE/browser/splash.svg"
                   unzip -l "$GITHUB_WORKSPACE/deadbolt-dist.zip"
 
             - name: Upload to the latest release
               if: steps.tip.outputs.latest == 'true'
               run: |
                   tag=$(gh release view -R "$REPO" --json tagName --jq .tagName)
-                  gh release upload "$tag" "deadbolt-dist.zip#deadbolt-dist.zip (build $SHA)" -R "$REPO" --clobber
+                  gh release upload "$tag" "deadbolt-dist.zip#deadbolt-dist.zip (build $SHA)" plugin-names.json -R "$REPO" --clobber
                   gh api "repos/$REPO/releases/latest" --jq '.assets[] | select(.name == "deadbolt-dist.zip") | "\(.label) \(.size) bytes"'
+
+    installer:
+        name: Publish DeadboltSetup.exe and install.ps1
+        needs: release
+        if: needs.release.outputs.latest == 'true'
+        runs-on: windows-latest
+        env:
+            SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+            GH_TOKEN: ${{ github.token }}
+            REPO: ${{ github.repository }}
+            PKG: "@yao-pkg/pkg@6.25.0"
+        defaults:
+            run:
+                shell: pwsh
+
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+              with:
+                  ref: ${{ env.SHA }}
+
+            - name: Check what the latest release already has
+              id: current
+              run: |
+                  $tag = gh release view -R $env:REPO --json tagName --jq .tagName
+                  $setupStamp = (Get-FileHash installer/deadboltSetup.cjs -Algorithm SHA256).Hash.Substring(0, 16).ToLower() + "-" + $env:PKG.Split("@")[-1]
+                  $scriptStamp = (Get-FileHash scripts/install.ps1 -Algorithm SHA256).Hash.Substring(0, 16).ToLower()
+                  $labels = gh api "repos/$env:REPO/releases/tags/$tag" --jq '.assets[] | "\(.name)|\(.label)"'
+                  $setupLabel = "DeadboltSetup.exe (setup $setupStamp)"
+                  $scriptLabel = "install.ps1 (script $scriptStamp)"
+                  "tag=$tag" >> $env:GITHUB_OUTPUT
+                  "setup_label=$setupLabel" >> $env:GITHUB_OUTPUT
+                  "script_label=$scriptLabel" >> $env:GITHUB_OUTPUT
+                  "setup_current=$([bool]($labels -contains "DeadboltSetup.exe|$setupLabel"))".ToLower() >> $env:GITHUB_OUTPUT
+                  "script_current=$([bool]($labels -contains "install.ps1|$scriptLabel"))".ToLower() >> $env:GITHUB_OUTPUT
+                  "Release $tag has: $($labels -join '; ')"
+
+            - name: Setup PNPM
+              if: steps.current.outputs.setup_current != 'true'
+              uses: pnpm/setup@fa36a5ef7dcdefc3a7cb25655c122e00cf6e636e
+              with:
+                  runtime: node@v24
+                  require-lockfile: true
+
+            - name: Build DeadboltSetup.exe
+              if: steps.current.outputs.setup_current != 'true'
+              run: |
+                  pnpm dlx $env:PKG installer/deadboltSetup.cjs --targets node22-win-x64 --output DeadboltSetup.exe
+                  if ($LASTEXITCODE) { exit $LASTEXITCODE }
+                  "Built DeadboltSetup.exe, $((Get-Item DeadboltSetup.exe).Length) bytes"
+
+            - name: Smoke test against a fake Discord
+              if: steps.current.outputs.setup_current != 'true'
+              run: |
+                  $root = Join-Path $env:RUNNER_TEMP "fake"
+                  $env:LOCALAPPDATA = Join-Path $root "Local"
+                  $env:APPDATA = Join-Path $root "Roaming"
+                  $env:USERPROFILE = Join-Path $root "Home"
+                  $env:OneDrive = ""
+                  $env:DEADBOLT_REG_BASE = "HKCU\Software\DeadboltSmokeTest"
+                  $env:DEADBOLT_SILENT = "1"
+                  $resources = Join-Path $env:LOCALAPPDATA "Discord\app-1.0.9999\resources"
+                  $dist = Join-Path $env:LOCALAPPDATA "DeadboltInstall\dist"
+                  New-Item -ItemType Directory -Force -Path $resources, $dist | Out-Null
+                  [IO.File]::WriteAllBytes((Join-Path $resources "app.asar"), (New-Object byte[] 2097152))
+                  foreach ($f in "package.json", "patcher.js", "preload.js", "renderer.css", "renderer.js") { Set-Content -LiteralPath (Join-Path $dist $f) -Value "x" }
+                  Copy-Item browser/deadbolt.ico, browser/splash.svg $dist
+                  Set-Content -LiteralPath (Join-Path $env:LOCALAPPDATA "DeadboltInstall\installed.json") -Value '{"branches":["stable"]}'
+
+                  ./DeadboltSetup.exe --repair --quiet
+                  if ($LASTEXITCODE) { throw "quiet repair exited $LASTEXITCODE" }
+                  $stub = Get-Content -Raw -LiteralPath (Join-Path $resources "app.asar\index.js")
+                  if (-not (Test-Path (Join-Path $resources "_app.asar")) -or $stub -notlike "*DeadboltInstall*dist*patcher.js*") { throw "quiet repair did not patch the fake Discord: $stub" }
+                  "quiet repair: $stub"
+
+                  ./DeadboltSetup.exe --uninstall --quiet
+                  if ($LASTEXITCODE) { throw "quiet uninstall exited $LASTEXITCODE" }
+                  if ((Test-Path (Join-Path $resources "_app.asar")) -or (Get-Item (Join-Path $resources "app.asar")).PSIsContainer) { throw "uninstall did not restore the fake Discord" }
+                  "quiet uninstall restored stock Discord"
+                  Remove-Item "HKCU:\Software\DeadboltSmokeTest" -Recurse -Force -ErrorAction SilentlyContinue
+
+            - name: Upload DeadboltSetup.exe
+              if: steps.current.outputs.setup_current != 'true'
+              run: gh release upload "${{ steps.current.outputs.tag }}" "DeadboltSetup.exe#${{ steps.current.outputs.setup_label }}" -R $env:REPO --clobber
+
+            - name: Upload install.ps1
+              if: steps.current.outputs.script_current != 'true'
+              run: gh release upload "${{ steps.current.outputs.tag }}" "scripts/install.ps1#${{ steps.current.outputs.script_label }}" -R $env:REPO --clobber
