@@ -20,6 +20,7 @@ import definePlugin, { OptionType, PluginNative } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
 import { Modal, openModal, showToast, useEffect, useState } from "@webpack/common";
 import { failedPatchPlugins, getBuildNumber } from "@webpack/patcher";
+
 import { PluginMeta } from "~plugins";
 
 import type { Health, Level, VersionState } from "./native";
