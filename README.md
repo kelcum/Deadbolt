@@ -47,6 +47,7 @@ New Deadbolt plugins:
 - **ImageAutoCompress** — shrinks images that are over your upload limit so they still send instead of failing.
 - **EnterToNewline** — Enter starts a new line and Ctrl+Enter sends, switchable for DMs, group chats, servers, threads and message edits.
 - **NotificationHistory** — a bell in the top bar that lists your DMs, mentions and other notifications, even on Do Not Disturb, so you can catch up on what you missed and jump straight to any of them.
+- **QuietHours** — silences message notifications and their sounds on a daily schedule, while people you pick (right click them, or all friends) still get through.
 
 ## Installing
 
