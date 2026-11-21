@@ -250,5 +250,27 @@
             "for": "kxnzzie"
         },
         "imageHash": "04f01a34406c27ee"
+    },
+    {
+        "id": "6b16e07c2fe19b2a",
+        "users": ["1531412914005606513"],
+        "name": "X",
+        "colors": ["#000000", "#ffffff"],
+        "image": null,
+        "imageType": null,
+        "design": {
+            "shape": "none",
+            "background": "none",
+            "effects": [],
+            "speed": 3,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "X",
+            "for": "zxt.lol"
+        }
     }
 ]

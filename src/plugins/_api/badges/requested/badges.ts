@@ -95,4 +95,11 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         image: `data:image/jpeg;base64,${img_9f947d83963d1a8b}`,
         design: { shape: "circle", background: "gradient", colors: [0x000000, 0xffffff], effects: ["shine"], speed: 0.45, zoom: 1.06, x: 0, y: 0, rotate: -29 },
     },
+    {
+        id: "6b16e07c2fe19b2a",
+        users: ["1531412914005606513"],
+        name: "X",
+        image: null,
+        design: { shape: "none", background: "none", colors: [0x000000, 0xffffff], effects: [], speed: 3, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
 ];
