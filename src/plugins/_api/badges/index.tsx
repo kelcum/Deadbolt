@@ -729,10 +729,12 @@ export default definePlugin({
         loadRequestedBadges();
         loadHiddenBadges();
         clearInterval(hiddenIntervalId);
-        hiddenIntervalId = setInterval(loadHiddenBadges, 1000 * 60 * 5);
+        hiddenIntervalId = setInterval(() => {
+            loadHiddenBadges();
+            loadRequestedBadges();
+        }, 1000 * 60 * 5);
         clearInterval(intervalId);
         intervalId = setInterval(() => {
-            loadRequestedBadges();
             loadAllBadges();
         }, 1000 * 60 * 30); // 30 minutes
         await loadAllBadges();

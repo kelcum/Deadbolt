@@ -40,6 +40,8 @@ interface PublishedEntry {
 }
 
 const PUBLISHED_URL = "https://raw.githubusercontent.com/kelcum/Deadbolt/main/src/plugins/_api/badges/requested";
+const LIVE_URL = "https://api.xan.gripe/v1/badges/published";
+const commitUrl = (sha: string) => `https://raw.githubusercontent.com/kelcum/Deadbolt/${sha}/src/plugins/_api/badges/requested`;
 const CACHE_KEY = "Deadbolt_RequestedBadges";
 const IMAGE_FILE = /^[0-9a-f]{16}\.(png|jpg|gif|webp)$/;
 
@@ -136,9 +138,9 @@ export const RequestedBadges: ProfileBadge = {
     getBadges: ({ userId }) => shown(userId),
 };
 
-async function fetchImage(file: string, type: string | null) {
+async function fetchImage(base: string, file: string, type: string | null) {
     if (!IMAGE_FILE.test(file)) throw new Error(`Bad badge image name: ${file}`);
-    const res = await fetch(`${PUBLISHED_URL}/${file}`, { cache: "no-cache" });
+    const res = await fetch(`${base}/${file}`, { cache: "no-cache" });
     if (!res.ok) throw new Error(`${file}: ${res.status}`);
     const blob = new Blob([await res.arrayBuffer()], { type: type ?? res.headers.get("content-type") ?? "image/png" });
     return new Promise<string>((resolve, reject) => {
@@ -149,13 +151,13 @@ async function fetchImage(file: string, type: string | null) {
     });
 }
 
-async function toEntry(e: PublishedEntry, old: CachedEntry | undefined): Promise<CachedEntry> {
+async function toEntry(base: string, e: PublishedEntry, old: CachedEntry | undefined): Promise<CachedEntry> {
     const imageKey = e.image ? `${e.image}:${e.imageHash ?? ""}` : null;
     const image = !e.image
         ? null
         : old?.image && old.imageKey === imageKey && e.imageHash
             ? old.image
-            : await fetchImage(e.image, e.imageType);
+            : await fetchImage(base, e.image, e.imageType);
 
     return {
         id: e.id,
@@ -165,6 +167,21 @@ async function toEntry(e: PublishedEntry, old: CachedEntry | undefined): Promise
         imageKey,
         design: { ...e.design, colors: e.colors.map(c => parseInt(c.replace("#", ""), 16)) },
     };
+}
+
+async function fetchPublished(): Promise<{ base: string; published: PublishedEntry[]; }> {
+    try {
+        const res = await fetch(LIVE_URL, { cache: "no-cache" });
+        if (!res.ok) throw new Error(`${LIVE_URL}: ${res.status}`);
+        const { commit, badges }: { commit: string; badges: PublishedEntry[]; } = await res.json();
+        if (!/^[0-9a-f]{40}$/.test(commit) || !Array.isArray(badges)) throw new Error("Unexpected badge list");
+        return { base: commitUrl(commit), published: badges };
+    } catch (e) {
+        logger.warn("Couldn't get the live badge list, falling back to GitHub", e);
+        const res = await fetch(`${PUBLISHED_URL}/badges.json`, { cache: "no-cache" });
+        if (!res.ok) throw new Error(`badges.json: ${res.status}`);
+        return { base: PUBLISHED_URL, published: await res.json() };
+    }
 }
 
 let loading: Promise<void> | null = null;
@@ -177,12 +194,10 @@ async function load() {
     }
     drawAllIcons();
 
-    const res = await fetch(`${PUBLISHED_URL}/badges.json`, { cache: "no-cache" });
-    if (!res.ok) throw new Error(`badges.json: ${res.status}`);
-    const published: PublishedEntry[] = await res.json();
+    const { base, published } = await fetchPublished();
 
     const known = new Map((cached ?? []).map(e => [e.id, e]));
-    const next = await Promise.all(published.map(e => toEntry(e, known.get(e.id))));
+    const next = await Promise.all(published.map(e => toEntry(base, e, known.get(e.id))));
 
     entries = next;
     notifyBadgesChanged();
