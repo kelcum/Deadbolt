@@ -15,7 +15,7 @@ import { proxyLazy } from "@utils/lazy";
 import definePlugin, { OptionType } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
 import { findByCodeLazy } from "@webpack";
-import { ChannelStore, Clickable, GuildMemberStore, GuildStore, IconUtils, Modal, NavigationRouter, openModal, SelectedChannelStore, UserStore, WindowStore, zustandCreate } from "@webpack/common";
+import { ChannelStore, Clickable, GuildMemberStore, GuildStore, IconUtils, Modal, NavigationRouter, openModal, RelationshipStore, SelectedChannelStore, UserGuildSettingsStore, UserStore, WindowStore, zustandCreate } from "@webpack/common";
 
 const cl = classNameFactory("vc-notifhistory-");
 
@@ -28,6 +28,9 @@ interface RawMessage {
     attachments?: unknown[];
     embeds?: unknown[];
     sticker_items?: unknown[];
+    mentions?: { id: string; }[];
+    mention_roles?: string[];
+    mention_everyone?: boolean;
 }
 
 interface Entry {
@@ -69,6 +72,16 @@ const settings = definePluginSettings({
         default: true
     }
 });
+
+function isForMe(m: RawMessage, me: string) {
+    const channel = ChannelStore.getChannel(m.channel_id);
+    if (!channel || RelationshipStore.isBlocked(m.author.id)) return false;
+    if (channel.isPrivate()) return !UserGuildSettingsStore.isChannelMuted(null, channel.id);
+    if (m.mentions?.some(u => u.id === me)) return true;
+    if (m.mention_everyone) return !UserGuildSettingsStore.isSuppressEveryoneEnabled(channel.guild_id);
+    const roles = GuildMemberStore.getMember(channel.guild_id, me)?.roles ?? [];
+    return !!m.mention_roles?.some(r => roles.includes(r)) && !UserGuildSettingsStore.isSuppressRolesEnabled(channel.guild_id);
+}
 
 function previewOf(m: RawMessage) {
     const text = m.content
@@ -133,7 +146,7 @@ function HistoryModal({ modalProps, since }: { modalProps: RenderModalProps; sin
             {...modalProps}
             size="md"
             title="Notification history"
-            subtitle="Everything Discord notified you about since it started. Click one to jump to it."
+            subtitle="Your DMs, mentions and other notifications since Discord started, even on Do Not Disturb. Click one to jump to it."
             actions={[
                 { text: "Clear", variant: "secondary", disabled: !entries.length, onClick: () => useHistory.setState({ entries: [] }) },
                 { text: "Close", variant: "primary", onClick: modalProps.onClose }
@@ -183,9 +196,10 @@ export default definePlugin({
 
     flux: {
         MESSAGE_CREATE({ message, optimistic }: { message: RawMessage; optimistic: boolean; }) {
-            if (optimistic || message.author.id === UserStore.getCurrentUser().id) return;
+            const me = UserStore.getCurrentUser().id;
+            if (optimistic || message.author.id === me) return;
             if (WindowStore.isFocused() && SelectedChannelStore.getChannelId() === message.channel_id) return;
-            if (!shouldNotify(message, message.channel_id)) return;
+            if (!shouldNotify(message, message.channel_id) && !isForMe(message, me)) return;
 
             const entry: Entry = {
                 id: message.id,
