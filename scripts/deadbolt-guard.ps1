@@ -7,6 +7,8 @@ function Log($msg) {
     Add-Content -Path $LogFile -Value ("[{0}] {1}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"), $msg)
 }
 
+if (Test-Path (Join-Path $PSScriptRoot "sync.paused")) { exit 0 }
+
 . (Join-Path $PSScriptRoot "stuck-alert.ps1")
 
 $output = & powershell -NoProfile -ExecutionPolicy Bypass -File $ReapplyScript -Restart -Quiet *>&1 | ForEach-Object { "$_" }
