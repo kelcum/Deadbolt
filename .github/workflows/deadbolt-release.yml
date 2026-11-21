@@ -47,7 +47,9 @@ jobs:
 
             - name: Build
               if: steps.tip.outputs.latest == 'true'
-              run: pnpm build
+              run: |
+                  pnpm build
+                  node scripts/pluginNames.mjs plugin-names.json
 
             - name: Zip
               if: steps.tip.outputs.latest == 'true'
@@ -63,7 +65,7 @@ jobs:
               if: steps.tip.outputs.latest == 'true'
               run: |
                   tag=$(gh release view -R "$REPO" --json tagName --jq .tagName)
-                  gh release upload "$tag" "deadbolt-dist.zip#deadbolt-dist.zip (build $SHA)" -R "$REPO" --clobber
+                  gh release upload "$tag" "deadbolt-dist.zip#deadbolt-dist.zip (build $SHA)" plugin-names.json -R "$REPO" --clobber
                   gh api "repos/$REPO/releases/latest" --jq '.assets[] | select(.name == "deadbolt-dist.zip") | "\(.label) \(.size) bytes"'
 
     installer:

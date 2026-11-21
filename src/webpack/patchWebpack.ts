@@ -17,6 +17,7 @@ import { AnyModuleFactory, AnyWebpackRequire, MaybePatchedModuleFactory, Patched
 import { _blacklistBadModules, _initWebpack, factoryListeners, moduleListeners, waitForSubscriptions, wreq } from "./webpack";
 
 export const patches = [] as Patch[];
+export const failedPatchPlugins = new Set<string>();
 
 export const SYM_ORIGINAL_MODULE_FACTORIES = Symbol("WebpackPatcher.originalModuleFactories");
 export const SYM_IS_PROXIED_FACTORY = Symbol("WebpackPatcher.isProxiedFactory");
@@ -553,6 +554,7 @@ function patchFactory(moduleId: PropertyKey, originalFactory: AnyModuleFactory):
                 if (newPatchedCode === patchedCode) {
                     if (!(patch.noWarn || replacement.noWarn)) {
                         logger.warn(`Patch by ${patch.plugin} had no effect (Module id is ${String(moduleId)}): ${replacement.match}`);
+                        failedPatchPlugins.add(patch.plugin);
                         if (IS_DEV) {
                             logger.debug("Function Source:\n", patchedCode);
                         }
@@ -604,6 +606,7 @@ function patchFactory(moduleId: PropertyKey, originalFactory: AnyModuleFactory):
                 const shouldSuppressError = patch.plugin === "ContextMenuAPI" && err instanceof SyntaxError && err.message.includes("arguments");
                 if (!shouldSuppressError) {
                     logger.error(`Patch by ${patch.plugin} errored (Module id is ${String(moduleId)}): ${replacement.match}\n`, err);
+                    failedPatchPlugins.add(patch.plugin);
 
                     if (IS_COMPANION_TEST)
                         reporterData.failedPatches.erroredPatch.push({
