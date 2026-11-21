@@ -203,3 +203,5 @@ export async function startUpdateTask(_: IpcMainInvokeEvent): Promise<boolean> {
     if (process.platform !== "win32" || !isSourceInstall()) return false;
     return (await run("schtasks.exe", ["/run", "/tn", TASKS[0]], 15_000)).code === 0;
 }
+
+export { exportBackup, inspectBackup, restoreBackup } from "./backup";
