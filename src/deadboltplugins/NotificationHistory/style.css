@@ -1,0 +1,89 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-notifhistory-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.vc-notifhistory-row {
+    display: flex;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.vc-notifhistory-row:hover {
+    background: var(--background-modifier-hover);
+}
+
+.vc-notifhistory-new {
+    box-shadow: inset 3px 0 0 var(--brand-500);
+}
+
+.vc-notifhistory-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.vc-notifhistory-body {
+    min-width: 0;
+    flex: 1;
+}
+
+.vc-notifhistory-meta {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.vc-notifhistory-name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--header-primary);
+}
+
+.vc-notifhistory-place {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-notifhistory-time {
+    margin-left: auto;
+    flex-shrink: 0;
+}
+
+.vc-notifhistory-text {
+    margin-top: 2px;
+    color: var(--text-default);
+    overflow-wrap: anywhere;
+    white-space: pre-wrap;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.vc-notifhistory-empty {
+    padding: 24px 0;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.vc-notifhistory-dot {
+    fill: var(--status-danger);
+    stroke: var(--background-base-lower, var(--background-tertiary));
+    stroke-width: 2px;
+}

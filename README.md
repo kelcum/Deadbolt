@@ -40,6 +40,10 @@ What sets this fork apart from vanilla Equicord:
 
 Deadbolt ships with the same 300+ plugin library Equicord maintains, plus whatever gets added here going forward. Browse Equicord's plugin list [here](https://equicord.org/plugins) for what's included by default.
 
+Deadbolt's own plugins:
+
+- **NotificationHistory** — a bell in the top bar that lists every notification Discord showed you, so you can catch up on what you missed and jump straight to any of them.
+
 ## Installing
 
 Equicord's official installer (Equilotl) only targets the upstream Equicord repo, not this fork, so each platform has its own one-command install. Windows gets a ready-made build; macOS and Linux build Deadbolt from source and inject it.
