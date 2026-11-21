@@ -16,7 +16,6 @@ import { Paragraph } from "@components/Paragraph";
 import { Devs } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { Logger } from "@utils/Logger";
-import { classes } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import { Channel, RenderModalProps, User } from "@vencord/discord-types";
 import { ChannelStore, Clickable, Humanize, MaskedLink, Menu, Modal, moment, NavigationRouter, openMediaModal, openModal, RestAPI, SelectedChannelStore, TabBar, useEffect, UserStore, useState, useStateFromStores } from "@webpack/common";
