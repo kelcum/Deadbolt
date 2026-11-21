@@ -50,6 +50,7 @@ New Deadbolt plugins:
 - **QuietHours** — silences message notifications and their sounds on a daily schedule, while people you pick (right click them, or all friends) still get through.
 - **ScamLinkGuard** — warns under a message when a link imitates Discord, Steam or another big site, offers fake Nitro, hides behind misleading link text or uses lookalike letters.
 - **SharedMedia** — a Shared Media button next to pins (or right-click a channel or DM) opens every image, video, file and link shared there, with Discord's viewer for flipping through them with the arrow keys.
+- **ReplyChainView** — hover a reply and pick View Reply Chain to read the whole conversation it belongs to, from the first message down to its replies, in one window.
 
 ## Installing
 
