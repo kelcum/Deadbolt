@@ -272,5 +272,28 @@
             "badge": "X",
             "for": "zxt.lol"
         }
+    },
+    {
+        "id": "7ad758d21b0b1066",
+        "users": ["1193711027456589864"],
+        "name": "look who's back",
+        "colors": ["#c50003", "#ffffff", "#000000"],
+        "image": "7ad758d21b0b1066.gif",
+        "imageType": "image/gif",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": ["pulse"],
+            "speed": 3,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "guess who's back",
+            "for": "inmymaws"
+        },
+        "imageHash": "337b185820cf09c5"
     }
 ]
