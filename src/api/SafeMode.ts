@@ -7,6 +7,7 @@
 import { showNotification } from "@api/Notifications";
 import { relaunch } from "@utils/native";
 import { wreq } from "@webpack";
+import { WindowStore } from "@webpack/common";
 import { getFactoryPatchedBy } from "@webpack/patcher";
 
 export const SAFE_MODE_CORE = new Set(["DeadboltDoctor", "CrashHandler"]);
@@ -63,13 +64,27 @@ export function initSafeMode() {
         removeEventListener("error", onError);
         removeEventListener("unhandledrejection", onRejection);
         if (!crashed) VencordNative.safeMode.ready();
-        if (safeMode.active) showNotification({
-            title: "Deadbolt is in safe mode",
-            body: `${safeModeReason()} Click here to turn everything back on.`,
-            color: "var(--status-danger)",
-            permanent: true,
-            noPersist: true,
-            onClick: leaveSafeMode
-        });
+        if (safeMode.active) announce();
     }, 15_000);
+}
+
+function announce() {
+    if (!WindowStore.isFocused()) {
+        WindowStore.addChangeListener(onWindowChange);
+        return;
+    }
+    showNotification({
+        title: "Deadbolt is in safe mode",
+        body: `${safeModeReason()} Click here to turn everything back on.`,
+        color: "var(--status-danger)",
+        permanent: true,
+        noPersist: true,
+        onClick: leaveSafeMode
+    });
+}
+
+function onWindowChange() {
+    if (!WindowStore.isFocused()) return;
+    WindowStore.removeChangeListener(onWindowChange);
+    announce();
 }
