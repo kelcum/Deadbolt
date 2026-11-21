@@ -92,17 +92,12 @@ const DEADBOLT_CONTRIBUTOR_BADGE_ICON = "data:image/svg+xml;base64," + btoa(`<sv
   </defs>
   <circle cx="32" cy="32" r="32" fill="url(#dcbg)"/>
   <circle cx="32" cy="32" r="30.6" fill="none" stroke="url(#dcrim)" stroke-width="2.2" stroke-opacity="0.85"/>
-  <g transform="translate(32 33) scale(1.14) translate(-32 -33)">
-    <ellipse cx="32" cy="50" rx="15" ry="3.2" fill="#000" fill-opacity="0.35"/>
-  <path d="M22.5 30v-5.5a9.5 9.5 0 0 1 19 0V30" fill="none" stroke="#0c0a1d" stroke-opacity="0.6" stroke-width="7"/>
-  <path d="M22.5 30v-5.5a9.5 9.5 0 0 1 19 0V30" fill="none" stroke="url(#dcshackle)" stroke-width="5"/>
-  <rect x="15.5" y="28" width="33" height="22" rx="6" fill="url(#dcbody)" stroke="#231a6b" stroke-width="1"/>
-  <rect x="17.5" y="29.5" width="29" height="8" rx="4" fill="url(#dcgloss)"/>
-  <circle cx="32" cy="37.5" r="3.8" fill="#120e28"/>
-  <path d="M30.2 39.5h3.6l1 6h-5.6z" fill="#120e28"/>
-  <circle cx="31" cy="36.5" r="1.1" fill="#c9c0ff" fill-opacity="0.7"/>
-  </g>
-  </svg>`);
+  <path d="M32 11 50 17.5v13c0 11-7.6 18.6-18 22.5C21.6 49.1 14 41.5 14 30.5v-13z" fill="#000" fill-opacity="0.35" transform="translate(0 1.5)"/>
+  <path d="M32 11 50 17.5v13c0 11-7.6 18.6-18 22.5C21.6 49.1 14 41.5 14 30.5v-13z" fill="url(#dcshackle)"/>
+  <path d="M32 14.6 46.6 19.8v10.7c0 9-6 15.3-14.6 18.8-8.6-3.5-14.6-9.8-14.6-18.8V19.8z" fill="url(#dcbody)"/>
+  <path d="M32 14.6 46.6 19.8v5.5H17.4v-5.5z" fill="url(#dcgloss)"/>
+  <path d="M34.5 19.5 25.5 33.5h6l-2 11 9-14h-6z" fill="#f4f6fa" stroke="#231a6b" stroke-width="0.8" stroke-linejoin="round"/>
+</svg>`);
 const DEADBOLT_CONTRIBUTOR_IDS = teamUsers("deadbolt_contributor");
 
 const NULL_CREATOR_BADGE_ICON = `data:image/png;base64,${nullCreatorLogo}`;
