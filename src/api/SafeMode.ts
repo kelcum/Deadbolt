@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
-import { showNotice } from "@api/Notices";
+import { showNotification } from "@api/Notifications";
 import { relaunch } from "@utils/native";
 import { wreq } from "@webpack";
 import { getFactoryPatchedBy } from "@webpack/patcher";
@@ -63,6 +63,13 @@ export function initSafeMode() {
         removeEventListener("error", onError);
         removeEventListener("unhandledrejection", onRejection);
         if (!crashed) VencordNative.safeMode.ready();
-        if (safeMode.active) showNotice(`Safe mode: ${safeModeReason()}`, "Turn everything back on", leaveSafeMode);
+        if (safeMode.active) showNotification({
+            title: "Deadbolt is in safe mode",
+            body: `${safeModeReason()} Click here to turn everything back on.`,
+            color: "var(--status-danger)",
+            permanent: true,
+            noPersist: true,
+            onClick: leaveSafeMode
+        });
     }, 15_000);
 }
