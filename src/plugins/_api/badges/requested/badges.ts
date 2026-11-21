@@ -8,7 +8,7 @@ import img_2e9aa52581c65bcc from "file://2e9aa52581c65bcc.jpg?base64";
 import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
 import img_9f947d83963d1a8b from "file://9f947d83963d1a8b.jpg?base64";
 import img_17b954e0cb2b20b8 from "file://17b954e0cb2b20b8.jpg?base64";
-import img_72bd506d4970fa4f from "file://72bd506d4970fa4f.webp?base64";
+import img_72bd506d4970fa4f from "file://72bd506d4970fa4f.png?base64";
 import img_76a226e52e1d8120 from "file://76a226e52e1d8120.gif?base64";
 import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
 import img_887115c504ee800b from "file://887115c504ee800b.webp?base64";
@@ -107,7 +107,7 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         id: "72bd506d4970fa4f",
         users: ["1193711027456589864"],
         name: ".gg/Opiumware",
-        image: `data:image/webp;base64,${img_72bd506d4970fa4f}`,
+        image: `data:image/png;base64,${img_72bd506d4970fa4f}`,
         design: { shape: "rounded", background: "gradient", colors: [0xa50000, 0x939393], effects: ["pulse"], speed: 3, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];

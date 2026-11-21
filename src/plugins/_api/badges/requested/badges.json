@@ -278,8 +278,8 @@
         "users": ["1193711027456589864"],
         "name": ".gg/Opiumware",
         "colors": ["#a50000", "#939393"],
-        "image": "72bd506d4970fa4f.webp",
-        "imageType": "image/webp",
+        "image": "72bd506d4970fa4f.png",
+        "imageType": "image/png",
         "design": {
             "shape": "rounded",
             "background": "gradient",
@@ -294,6 +294,6 @@
             "badge": ".gg/Opiumware",
             "for": "inmymaws"
         },
-        "imageHash": "4201f82ee370436b"
+        "imageHash": "00ce15fea26853f8"
     }
 ]
