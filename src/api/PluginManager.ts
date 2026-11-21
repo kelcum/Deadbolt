@@ -44,6 +44,7 @@ import { addAudioProcessor, removeAudioProcessor } from "./AudioPlayer";
 import { addChannelToolbarButton, addHeaderBarButton, removeChannelToolbarButton, removeHeaderBarButton } from "./HeaderBar";
 import { addProfileCollection, removeProfileCollection } from "./ProfileCollections";
 import { addProfileSection, removeProfileSection } from "./ProfileSections";
+import { SAFE_MODE_CORE, safeMode } from "./SafeMode";
 import { addUserAreaButton, removeUserAreaButton } from "./UserArea";
 
 const logger = new Logger("PluginManager", "#a6d189");
@@ -58,7 +59,7 @@ export function isPluginEnabled(p: string) {
     return (
         Plugins[p]?.required ||
         Plugins[p]?.isDependency ||
-        Settings.plugins[p]?.enabled
+        (safeMode?.active ? SAFE_MODE_CORE.has(p) : Settings.plugins[p]?.enabled)
     ) ?? false;
 }
 export function isPluginRequired(p: string) {

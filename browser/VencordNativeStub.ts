@@ -140,6 +140,13 @@ window.VencordNative = {
         openFolder: async () => Promise.reject("settings:openFolder is not supported on web"),
     },
 
+    safeMode: {
+        boot: () => ({ active: false, suspect: null }),
+        note: async () => { },
+        ready: async () => { },
+        exit: async () => { },
+    },
+
     pluginHelpers: {} as any,
     csp: {} as any,
 };

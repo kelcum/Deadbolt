@@ -19,6 +19,7 @@
 import "./updater";
 import "./ipcPlugins";
 import "./settings";
+import "./safeMode";
 
 import { debounce } from "@shared/debounce";
 import { IpcEvents } from "@shared/IpcEvents";
