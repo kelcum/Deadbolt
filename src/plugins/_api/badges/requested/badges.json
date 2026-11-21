@@ -272,5 +272,28 @@
             "badge": "X",
             "for": "zxt.lol"
         }
+    },
+    {
+        "id": "72bd506d4970fa4f",
+        "users": ["1193711027456589864"],
+        "name": "look who's back",
+        "colors": ["#a50000", "#939393"],
+        "image": "72bd506d4970fa4f.jpg",
+        "imageType": "image/jpeg",
+        "design": {
+            "shape": "rounded",
+            "background": "gradient",
+            "effects": ["pulse"],
+            "speed": 3,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": ".gg/Opiumware",
+            "for": "inmymaws"
+        },
+        "imageHash": "8b8492eb0db7b9db"
     }
 ]
