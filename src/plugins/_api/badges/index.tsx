@@ -92,11 +92,12 @@ const DEADBOLT_CONTRIBUTOR_BADGE_ICON = "data:image/svg+xml;base64," + btoa(`<sv
   </defs>
   <circle cx="32" cy="32" r="32" fill="url(#dcbg)"/>
   <circle cx="32" cy="32" r="30.6" fill="none" stroke="url(#dcrim)" stroke-width="2.2" stroke-opacity="0.85"/>
-  <path d="M32 11 50 17.5v13c0 11-7.6 18.6-18 22.5C21.6 49.1 14 41.5 14 30.5v-13z" fill="#000" fill-opacity="0.35" transform="translate(0 1.5)"/>
-  <path d="M32 11 50 17.5v13c0 11-7.6 18.6-18 22.5C21.6 49.1 14 41.5 14 30.5v-13z" fill="url(#dcshackle)"/>
-  <path d="M32 14.6 46.6 19.8v10.7c0 9-6 15.3-14.6 18.8-8.6-3.5-14.6-9.8-14.6-18.8V19.8z" fill="url(#dcbody)"/>
-  <path d="M32 14.6 46.6 19.8v5.5H17.4v-5.5z" fill="url(#dcgloss)"/>
-  <path d="M34.5 19.5 25.5 33.5h6l-2 11 9-14h-6z" fill="#f4f6fa" stroke="#231a6b" stroke-width="0.8" stroke-linejoin="round"/>
+  <g transform="rotate(45 32 32)">
+    <path d="M28.6 25h6.8v26a3.4 3.4 0 0 1-6.8 0z" fill="url(#dcshackle)" stroke="#3b414b" stroke-width="0.6"/>
+    <path d="M23 18a9 9 0 0 0 5.6 8.6V30h6.8v-3.4A9 9 0 0 0 41 18a9 9 0 0 0-2-5.6V19.5l-4.2 2.4h-5.6L25 19.5v-7.1A9 9 0 0 0 23 18z" fill="url(#dcshackle)" stroke="#3b414b" stroke-width="0.6"/>
+  </g>
+  <polygon points="41,36 48,40 48,48 41,52 34,48 34,40" fill="url(#dcbody)" stroke="#231a6b" stroke-width="1"/>
+  <circle cx="41" cy="44" r="3" fill="#120e28"/>
 </svg>`);
 const DEADBOLT_CONTRIBUTOR_IDS = teamUsers("deadbolt_contributor");
 
