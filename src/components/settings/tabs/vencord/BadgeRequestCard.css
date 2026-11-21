@@ -408,6 +408,12 @@
     background: rgb(0 0 0 / 6%);
 }
 
+.vc-badge-request-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
 .vc-badge-request-pill {
     display: flex;
     align-items: center;
