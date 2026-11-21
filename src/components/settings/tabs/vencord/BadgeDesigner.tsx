@@ -42,7 +42,7 @@ export interface BadgeFormState {
 }
 
 export const MAX_COLORS = 4;
-export const MAX_IMAGE_BYTES = 1_500_000;
+export const MAX_IMAGE_BYTES = 5_000_000;
 export const IMAGE_TYPES = ["image/png", "image/jpeg", "image/gif", "image/webp"];
 export const PREVIEW_PX = 160;
 
@@ -296,7 +296,7 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
         e.currentTarget.value = "";
         if (!file) return;
         if (!IMAGE_TYPES.includes(file.type)) return onError("The image has to be a PNG, JPG, GIF or WebP.");
-        if (file.size > MAX_IMAGE_BYTES) return onError("That image is too big. Keep it under 1.5 MB.");
+        if (file.size > MAX_IMAGE_BYTES) return onError("That image is too big. Keep it under 5 MB.");
         try {
             set({ image: { name: file.name, url: await readImage(file) } });
             setDesign(FIT_DEFAULTS);
@@ -343,7 +343,7 @@ export function BadgeDesigner({ form, avatar, onError }: { form: BadgeForm; avat
                                     <button type="button" className={cl("remove")} aria-label="Remove image" onClick={() => set({ image: null })}>×</button>
                                 </>
                             )
-                            : <span className={cl("hint")}>PNG, JPG, GIF or WebP, up to 1.5 MB</span>}
+                            : <span className={cl("hint")}>PNG, JPG, GIF or WebP, up to 5 MB</span>}
                     </div>
                     <input ref={fileInput} type="file" accept={IMAGE_TYPES.join(",")} hidden onChange={pickImage} />
                 </Field>
