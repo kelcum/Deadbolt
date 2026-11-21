@@ -57,9 +57,9 @@ export const requestedBadges: RequestedBadgeEntry[] = [
     {
         id: "17b954e0cb2b20b8",
         users: ["1388196102229987328"],
-        name: "fuck you k3",
+        name: "</3",
         image: `data:image/jpeg;base64,${img_17b954e0cb2b20b8}`,
-        design: { shape: "none", background: "gradient", colors: [0xff0004, 0x000000], effects: [], speed: 1, zoom: 1.5, x: 0, y: 0, rotate: 0 },
+        design: { shape: "rounded", background: "none", colors: [0xff0004, 0x000000], effects: [], speed: 1, zoom: 1.01, x: 0, y: 0, rotate: 0 },
     },
     {
         id: "2e9aa52581c65bcc",
