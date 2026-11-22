@@ -55,6 +55,7 @@ New Deadbolt plugins:
 - **MutedSpeakingAlert** — plays a sound and shows a notification you can click to unmute when you start talking while muted in voice, even with Discord in the background.
 - **TokenGuard** — holds back a message that contains your Discord token, a private key, an API key or a password, and only sends it if you press send again.
 - **LastSeen** — shows on a friend's profile when they were last online, remembered on your device from what Discord shows while you're connected.
+- **JumpToDate** — right click a chat and pick Jump to Date, or type /jumptodate yesterday, to open it at the messages from any day.
 
 ## Installing
 
