@@ -295,5 +295,28 @@
             "for": "inmymaws"
         },
         "imageHash": "00ce15fea26853f8"
+    },
+    {
+        "id": "390d4897f131034b",
+        "users": ["195516525631897600"],
+        "name": "Shiny Umbreon",
+        "colors": ["#5b696a", "#8dd9e4"],
+        "image": "390d4897f131034b.gif",
+        "imageType": "image/gif",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Shiny Umbreon",
+            "for": "kochajacy"
+        },
+        "imageHash": "88d77de42b28f9ee"
     }
 ]
