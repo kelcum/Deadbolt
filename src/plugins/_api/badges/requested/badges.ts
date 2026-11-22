@@ -75,7 +75,7 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         users: ["1193711027456589864"],
         name: "lamb",
         image: `data:image/jpeg;base64,${img_2e9aa52581c65bcc}`,
-        design: { shape: "rounded", background: "gradient", colors: [0x2c2c2c, 0x838383], effects: ["glint", "shine", "pulse"], speed: 0.7, zoom: 1, x: 0, y: 0, rotate: 0 },
+        design: { shape: "rounded", background: "gradient", colors: [0x2c2c2c, 0x838383], effects: [], speed: 0.7, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
     {
         id: "c59680f86e5ee683",

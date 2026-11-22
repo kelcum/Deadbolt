@@ -146,7 +146,7 @@
         "design": {
             "shape": "rounded",
             "background": "gradient",
-            "effects": ["glint", "shine", "pulse"],
+            "effects": [],
             "speed": 0.7,
             "zoom": 1,
             "x": 0,
