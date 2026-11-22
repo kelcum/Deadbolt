@@ -66,6 +66,7 @@ New Deadbolt plugins:
 - **WrongChannelGuard** — holds back a message you send right after switching chats when it looks meant for somewhere else, like an old draft or a reply you were typing in another chat, and sends it if you press send again.
 - **PasteCrop** — a crop button on images waiting to be sent lets you trim a pasted screenshot or blur out private parts before it uploads.
 - **KeybindEditor** — change the keys for any of Discord's own shortcuts, turn ones you don't want off, and give Deadbolt actions like QuickCSS or DeadboltDoctor keys of their own. It warns you when two things share the same keys.
+- **ModQuickActions** — right click a member and pick Quick Mod to time them out for one of your preset lengths, kick or ban them, with a saved reason for the audit log.
 
 ## Installing
 
