@@ -62,6 +62,7 @@ New Deadbolt plugins:
 - **CopyMessageRange** — shift click two messages, or use the right click menu, to copy everything between them as a plain text transcript with names and times.
 - **OnlineAlerts** — notifies you when people you pick (right click them, or all friends) come online or start playing a game, with an optional list of games to watch for.
 - **JoinMuted** — mutes your mic (or deafens you, if you pick that) whenever you join a voice channel or call, so nobody hears you until you unmute.
+- **WrongChannelGuard** — holds back a message you send right after switching chats when it looks meant for somewhere else, like an old draft or a reply you were typing in another chat, and sends it if you press send again.
 
 ## Installing
 
