@@ -55,7 +55,7 @@ const lastDraft = new Map<string, string>();
 const lastSent = new Map<string, string>();
 
 function prune(versions: Versions) {
-    const { maxVersions, keepDays } = settings.plain;
+    const { maxVersions, keepDays } = settings.store;
     const cutoff = Date.now() - keepDays * 86_400_000;
     const pruned: Versions = {};
     for (const [channelId, list] of Object.entries(versions)) {
@@ -71,7 +71,7 @@ function setVersions(versions: Versions) {
 }
 
 function remember(channelId: string, text: string) {
-    if (text.trim().length < settings.plain.minLength) return;
+    if (text.trim().length < settings.store.minLength) return;
     const { versions } = useHistory.getState();
     const list = (versions[channelId] ?? []).filter(v => v.text !== text);
     setVersions(prune({ ...versions, [channelId]: [{ text, at: Date.now() }, ...list] }));
@@ -80,7 +80,7 @@ function remember(channelId: string, text: string) {
 function onDraftChange(channelId: string, draft: string) {
     const previous = lastDraft.get(channelId) ?? "";
     lastDraft.set(channelId, draft);
-    if (previous.length - draft.length < settings.plain.minLength) return;
+    if (previous.length - draft.length < settings.store.minLength) return;
     if (lastSent.get(channelId) === previous.trim()) {
         lastSent.delete(channelId);
         return;
