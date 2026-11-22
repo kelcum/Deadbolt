@@ -15,9 +15,11 @@ import img_13dfcbf5f6640ac6 from "file://13dfcbf5f6640ac6.png?base64";
 import img_17b954e0cb2b20b8 from "file://17b954e0cb2b20b8.jpg?base64";
 import img_72bd506d4970fa4f from "file://72bd506d4970fa4f.png?base64";
 import img_76a226e52e1d8120 from "file://76a226e52e1d8120.gif?base64";
+import img_92d46af597578d72 from "file://92d46af597578d72.png?base64";
 import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
 import img_303af8f410632e09 from "file://303af8f410632e09.gif?base64";
 import img_390d4897f131034b from "file://390d4897f131034b.gif?base64";
+import img_65727ab54f2ac6f1 from "file://65727ab54f2ac6f1.webp?base64";
 import img_887115c504ee800b from "file://887115c504ee800b.webp?base64";
 import img_6416591f7ec53a25 from "file://6416591f7ec53a25.png?base64";
 import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
@@ -221,5 +223,19 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Thestral",
         image: `data:image/png;base64,${img_8a1b71709664c8bd}`,
         design: { shape: "none", background: "gradient", colors: [0x000000, 0xffffff], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "92d46af597578d72",
+        users: ["195516525631897600"],
+        name: "Mortal Kombat",
+        image: `data:image/png;base64,${img_92d46af597578d72}`,
+        design: { shape: "none", background: "gradient", colors: [0x1d1b1b], effects: ["shine"], speed: 1, zoom: 1.21, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "65727ab54f2ac6f1",
+        users: ["195516525631897600"],
+        name: "Umbrella Corporation",
+        image: `data:image/webp;base64,${img_65727ab54f2ac6f1}`,
+        design: { shape: "none", background: "gradient", colors: [0xc60202, 0xffffff], effects: ["spin"], speed: 1.15, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];
