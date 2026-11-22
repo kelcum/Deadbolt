@@ -265,7 +265,7 @@ export default definePlugin({
         {
             find: "#{intl::ATTACHMENT_UTILITIES_SPOILER}",
             replacement: {
-                match: /(?<=children:\[)(?=.{10,80}tooltip:.{0,100}#{intl::ATTACHMENT_UTILITIES_SPOILER})/,
+                match: /(?<=#{intl::ATTACHMENT_UTILITIES_SPOILER}\),onClick:.{0,300}?:null,)/,
                 replace: "arguments[0].canEdit!==false?$self.CropButton(arguments[0]):null,"
             }
         }
