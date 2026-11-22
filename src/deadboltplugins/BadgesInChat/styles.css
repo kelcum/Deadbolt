@@ -5,8 +5,10 @@
     vertical-align: top;
     position: relative;
     gap: 3px;
+    top: -1px;
     min-width: max-content;
-    margin: 6px 2px 0 -1px !important;
+    text-indent: 0;
+    margin: 0 2px 0 -1px !important;
 }
 
 .vc-deadbolt-chat-badges > * {

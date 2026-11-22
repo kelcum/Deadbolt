@@ -32,7 +32,7 @@ const settings = definePluginSettings({
     }
 });
 
-const SETTING_KEYS = ["badgeSize", "maxBadges"] as const;
+const SETTING_KEYS: ("badgeSize" | "maxBadges")[] = ["badgeSize", "maxBadges"];
 
 function DeadboltChatBadges({ author }: { author: User; }) {
     React.useSyncExternalStore(subscribeBadgeChanges, badgeChangesVersion);
@@ -47,7 +47,7 @@ function DeadboltChatBadges({ author }: { author: User; }) {
 
     const openRest = () => openBadgeDirectory(
         { ...rest[0], userId: author.id, guildId: "" },
-        BadgeAPI.getDirectoryBadgeId(rest[0].id, author.id)
+        BadgeAPI.getDirectoryBadgeId(rest[0].id ?? "", author.id)
     );
 
     return (
