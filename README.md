@@ -60,6 +60,7 @@ New Deadbolt plugins:
 - **InputModePerChannel** — right click a voice channel or server to pick push to talk or voice activity there, and it switches for you when you join, then switches back when you leave.
 - **ProfileHistory** — remembers the usernames, display names and avatars people had before, as your client sees them change, and lists them in their profile.
 - **CopyMessageRange** — shift click two messages, or use the right click menu, to copy everything between them as a plain text transcript with names and times.
+- **OnlineAlerts** — notifies you when people you pick (right click them, or all friends) come online or start playing a game, with an optional list of games to watch for.
 
 ## Installing
 
