@@ -48,6 +48,7 @@ New Deadbolt plugins:
 - **EnterToNewline** — Enter starts a new line and Ctrl+Enter sends, switchable for DMs, group chats, servers, threads and message edits.
 - **NotificationHistory** — a bell in the top bar that lists your DMs, mentions and other notifications, even on Do Not Disturb, so you can catch up on what you missed and jump straight to any of them.
 - **QuietHours** — silences message notifications and their sounds on a daily schedule, while people you pick (right click them, or all friends) still get through.
+- **ScamLinkGuard** — warns under a message when a link imitates Discord, Steam or another big site, offers fake Nitro, hides behind misleading link text or uses lookalike letters.
 - **SharedMedia** — a Shared Media button next to pins (or right-click a channel or DM) opens every image, video, file and link shared there, with Discord's viewer for flipping through them with the arrow keys.
 
 ## Installing
