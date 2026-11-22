@@ -56,6 +56,7 @@ New Deadbolt plugins:
 - **TokenGuard** — holds back a message that contains your Discord token, a private key, an API key or a password, and only sends it if you press send again.
 - **LastSeen** — shows on a friend's profile when they were last online, remembered on your device from what Discord shows while you're connected.
 - **JumpToDate** — right click a chat and pick Jump to Date, or type /jumptodate yesterday, to open it at the messages from any day.
+- **StripImageMetadata** — removes location, camera and other hidden info from JPEG, PNG and WebP images before they upload, without touching the picture itself.
 
 ## Installing
 
