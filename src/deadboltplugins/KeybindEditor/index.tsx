@@ -16,7 +16,7 @@ import { Devs, IS_MAC } from "@utils/constants";
 import { classNameFactory } from "@utils/css";
 import { humanFriendlyJoin } from "@utils/text";
 import definePlugin, { OptionType } from "@utils/types";
-import { findByPropsLazy } from "@webpack";
+import { findByPropsLazy, findLazy } from "@webpack";
 import { SettingsRouter, TextInput, useEffect, useState } from "@webpack/common";
 
 const cl = classNameFactory("vc-keybindeditor-");
@@ -39,7 +39,7 @@ interface Action {
     run(): void;
 }
 
-const layout: Record<string, Shortcut> = findByPropsLazy("SERVER_NEXT", "MARK_CHANNEL_READ");
+const layout: Record<string, Shortcut> = findLazy(m => m.SERVER_NEXT?.binds && m.TOGGLE_CHANNEL_PINS?.binds);
 const registrar: Registrar = findByPropsLazy("setLayout", "enableTemp", "checkDupes");
 
 const defaults: Record<string, string[]> = {};
