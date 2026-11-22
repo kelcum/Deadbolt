@@ -61,6 +61,7 @@ New Deadbolt plugins:
 - **ProfileHistory** — remembers the usernames, display names and avatars people had before, as your client sees them change, and lists them in their profile.
 - **CopyMessageRange** — shift click two messages, or use the right click menu, to copy everything between them as a plain text transcript with names and times.
 - **OnlineAlerts** — notifies you when people you pick (right click them, or all friends) come online or start playing a game, with an optional list of games to watch for.
+- **JoinMuted** — mutes your mic (or deafens you, if you pick that) whenever you join a voice channel or call, so nobody hears you until you unmute.
 
 ## Installing
 
