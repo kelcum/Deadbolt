@@ -6,6 +6,7 @@
 
 import img_2e9aa52581c65bcc from "file://2e9aa52581c65bcc.jpg?base64";
 import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
+import img_7ba5be8fd879e304 from "file://7ba5be8fd879e304.gif?base64";
 import img_9f947d83963d1a8b from "file://9f947d83963d1a8b.jpg?base64";
 import img_13dfcbf5f6640ac6 from "file://13dfcbf5f6640ac6.png?base64";
 import img_17b954e0cb2b20b8 from "file://17b954e0cb2b20b8.jpg?base64";
@@ -157,5 +158,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Shiny Zekrom",
         image: `data:image/webp;base64,${img_c5228d5c86d5d501}`,
         design: { shape: "none", background: "gradient", colors: [0x546a6e, 0x3ebf55], effects: [], speed: 1, zoom: 1.37, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "7ba5be8fd879e304",
+        users: ["195516525631897600"],
+        name: "Shiny Hisuian Zoroark",
+        image: `data:image/gif;base64,${img_7ba5be8fd879e304}`,
+        design: { shape: "none", background: "gradient", colors: [0xf6f6f6, 0xbda1de, 0x7b48ac, 0x70716a], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];

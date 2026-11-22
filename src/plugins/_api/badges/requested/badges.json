@@ -435,5 +435,28 @@
             "for": "kochajacy"
         },
         "imageHash": "6d57c6092b37f47a"
+    },
+    {
+        "id": "7ba5be8fd879e304",
+        "users": ["195516525631897600"],
+        "name": "Shiny Hisuian Zoroark",
+        "colors": ["#f6f6f6", "#bda1de", "#7b48ac", "#70716a"],
+        "image": "7ba5be8fd879e304.gif",
+        "imageType": "image/gif",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Shiny Hisuian Zoroark",
+            "for": "kochajacy"
+        },
+        "imageHash": "1b3555168b126c15"
     }
 ]
