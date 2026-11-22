@@ -1,0 +1,179 @@
+.vc-badge-share-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.vc-badge-share-stage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    height: 160px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 12px;
+    background-color: #111214;
+    background-image: radial-gradient(circle at 50% 42%, rgb(255 255 255 / 8%), transparent 62%);
+}
+
+.vc-badge-share-names {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 14px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.vc-badge-share-owner {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 10px;
+    background: var(--background-mod-subtle, rgb(128 128 128 / 10%));
+    color: var(--text-default, var(--text-normal));
+    font-size: 14px;
+}
+
+.vc-badge-share-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+}
+
+.vc-badge-share-hint {
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.vc-badge-share-compose {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.vc-badge-share-label {
+    color: var(--text-default, var(--text-normal));
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.vc-badge-share-optional {
+    margin-left: 4px;
+    color: var(--text-muted);
+    font-weight: 400;
+}
+
+.vc-badge-share-count {
+    align-self: flex-end;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.vc-badge-share-result {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+}
+
+.vc-badge-share-note-shown {
+    width: 100%;
+    padding: 8px 10px;
+    border-left: 3px solid var(--border-strong, rgb(128 128 128 / 50%));
+    border-radius: 4px;
+    color: var(--text-default, var(--text-normal));
+    font-size: 14px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.vc-badge-share-status {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: rgb(128 128 128 / 22%);
+    color: var(--text-default, var(--text-normal));
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.vc-badge-share-status-pending {
+    background: rgb(124 111 240 / 25%);
+}
+
+.vc-badge-share-status-accepted {
+    background: rgb(74 222 128 / 28%);
+}
+
+.vc-badge-share-status-declined,
+.vc-badge-share-status-revoked {
+    background: rgb(248 113 113 / 25%);
+}
+
+.vc-badge-share-section {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-top: 1.25em;
+    color: black;
+}
+
+.vc-badge-share-section-title {
+    font-weight: 700;
+    color: black;
+}
+
+.vc-badge-share-section-hint {
+    color: rgb(0 0 0 / 70%);
+    font-size: 13px;
+}
+
+.vc-badge-share-list-title {
+    margin-top: 4px;
+    color: rgb(0 0 0 / 70%);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+
+.vc-badge-share-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 4px 6px 4px 8px;
+    border-radius: 10px;
+    background-color: color-mix(in srgb, #b3abf7 45%, white);
+    color: black;
+    font-size: 14px;
+}
+
+.vc-badge-share-row .vc-badge-share-status {
+    background: rgb(0 0 0 / 10%);
+    color: black;
+}
+
+.vc-badge-share-row .vc-badge-share-status-accepted {
+    background: rgb(74 222 128 / 55%);
+}
+
+.vc-badge-share-row .vc-badge-share-status-pending {
+    background: rgb(124 111 240 / 35%);
+}
+
+.vc-badge-share-row-text {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-badge-share-mini {
+    display: flex;
+    gap: 2px;
+    pointer-events: none;
+}

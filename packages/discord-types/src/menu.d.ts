@@ -29,6 +29,7 @@ export interface Menu {
         style?: CSSProperties;
         hideScroller?: boolean;
         onSelect?(): void;
+        contextMenuAPIArguments?: unknown[];
     }>;
     MenuSeparator: ComponentType;
     MenuGroup: RC<{

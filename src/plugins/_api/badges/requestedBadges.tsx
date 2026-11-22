@@ -10,8 +10,9 @@ import { BadgePosition, BadgeRarity, ProfileBadge } from "@api/Badges";
 import * as DataStore from "@api/DataStore";
 import { BadgeDesign, BadgeName, BadgePreview, renderBadgePng } from "@components/settings/tabs/vencord/BadgeDesigner";
 import { Logger } from "@utils/Logger";
-import { Tooltip } from "@webpack/common";
+import { ContextMenuApi, Tooltip } from "@webpack/common";
 
+import { BadgeContextMenu } from ".";
 import { notifyBadgesChanged } from "./badgeChanges";
 import { holdsEveryBadge, isBadgeHidden } from "./hiddenBadges";
 import { requestedBadges } from "./requested/badges";
@@ -22,6 +23,8 @@ export interface RequestedBadgeEntry {
     name: string;
     image: string | null;
     design: BadgeDesign;
+    shared?: string[];
+    pair?: string;
 }
 
 interface CachedEntry extends RequestedBadgeEntry {
@@ -37,6 +40,8 @@ interface PublishedEntry {
     imageType: string | null;
     imageHash?: string;
     design: Omit<BadgeDesign, "colors">;
+    shared?: string[];
+    request?: { pair?: string; };
 }
 
 const PUBLISHED_URL = "https://raw.githubusercontent.com/kelcum/Deadbolt/main/src/plugins/_api/badges/requested";
@@ -89,6 +94,7 @@ function makeBadge(entry: RequestedBadgeEntry): ProfileBadge {
         rarity: BadgeRarity.RARE,
         component: Component,
         position: BadgePosition.START,
+        onContextMenu: (event, badge) => ContextMenuApi.openContextMenu(event, () => <BadgeContextMenu badge={badge} />),
     };
 }
 
@@ -123,6 +129,10 @@ async function drawIcons() {
 function drawAllIcons() {
     drawing = drawing.then(drawIcons, drawIcons);
 }
+
+export const requestedEntry = (id: string) => entries.find(e => e.id === id);
+
+export const ownsRequestedBadge = (entry: RequestedBadgeEntry, userId: string) => entry.users.includes(userId) && !entry.shared?.includes(userId);
 
 export function requestedBadgesOf(userId: string) {
     const all = holdsEveryBadge(userId);
@@ -166,6 +176,8 @@ async function toEntry(base: string, e: PublishedEntry, old: CachedEntry | undef
         image,
         imageKey,
         design: { ...e.design, colors: e.colors.map(c => parseInt(c.replace("#", ""), 16)) },
+        shared: e.shared?.map(String),
+        pair: e.request?.pair,
     };
 }
 

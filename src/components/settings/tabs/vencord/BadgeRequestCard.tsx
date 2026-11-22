@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { isPluginEnabled } from "@api/PluginManager";
 import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Paragraph } from "@components/Paragraph";
@@ -15,6 +16,7 @@ import { RenderModalProps } from "@vencord/discord-types";
 import { Modal, openModal, showToast, UserStore, useState } from "@webpack/common";
 
 import { BadgeDesigner, BadgePart, BadgePreview, cl, renderBadgePng, toHex, useBadgeForm } from "./BadgeDesigner";
+import { BadgeShareSection } from "./BadgeShare";
 
 const API = "https://api.xan.gripe/v1/badge-requests";
 const CARD_COLOR = "#b3abf7";
@@ -225,6 +227,7 @@ export function BadgeRequestCard() {
                 Design a badge
             </Button>
             {userId && <YourBadges userId={userId} />}
+            {userId && isPluginEnabled("BadgeShare") && <BadgeShareSection />}
         </SpecialCard>
     );
 }

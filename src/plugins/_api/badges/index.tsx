@@ -644,6 +644,7 @@ export function BadgeContextMenu({ badge }: { badge: Omit<ProfileBadge, "id"> & 
         <Menu.Menu
             navId="vc-badge-context"
             onClose={ContextMenuApi.closeContextMenu}
+            contextMenuAPIArguments={[{ badge }]}
             aria-label="Badge Options"
         >
             {badge.description && (
