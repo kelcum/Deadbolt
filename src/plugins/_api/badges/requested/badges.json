@@ -552,5 +552,53 @@
             "pair": "e1109634f824d9be"
         },
         "imageHash": "68c099d24b7ecc05"
+    },
+    {
+        "id": "6416591f7ec53a25",
+        "users": ["195516525631897600"],
+        "name": "Tai Lung",
+        "colors": ["#2e2438", "#565651", "#694329"],
+        "image": "6416591f7ec53a25.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Tai Lung",
+            "for": "kochajacy",
+            "pair": "7bc3b700ec18e4b6"
+        },
+        "imageHash": "9ceede30916d28bb"
+    },
+    {
+        "id": "7bc3b700ec18e4b6",
+        "users": ["195516525631897600"],
+        "name": "Lord Shen",
+        "colors": ["#ca9690", "#ffffff", "#858282"],
+        "image": "7bc3b700ec18e4b6.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Lord Shen",
+            "for": "kochajacy",
+            "pair": "6416591f7ec53a25"
+        },
+        "imageHash": "60a40dfdae1d9fe6"
     }
 ]

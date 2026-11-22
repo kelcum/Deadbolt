@@ -8,6 +8,7 @@ import img_2e9aa52581c65bcc from "file://2e9aa52581c65bcc.jpg?base64";
 import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
 import img_4aa034ff71d29f41 from "file://4aa034ff71d29f41.png?base64";
 import img_7ba5be8fd879e304 from "file://7ba5be8fd879e304.gif?base64";
+import img_7bc3b700ec18e4b6 from "file://7bc3b700ec18e4b6.png?base64";
 import img_9f947d83963d1a8b from "file://9f947d83963d1a8b.jpg?base64";
 import img_13dfcbf5f6640ac6 from "file://13dfcbf5f6640ac6.png?base64";
 import img_17b954e0cb2b20b8 from "file://17b954e0cb2b20b8.jpg?base64";
@@ -17,6 +18,7 @@ import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
 import img_303af8f410632e09 from "file://303af8f410632e09.gif?base64";
 import img_390d4897f131034b from "file://390d4897f131034b.gif?base64";
 import img_887115c504ee800b from "file://887115c504ee800b.webp?base64";
+import img_6416591f7ec53a25 from "file://6416591f7ec53a25.png?base64";
 import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
 import img_a3d29a87f2975bbf from "file://a3d29a87f2975bbf.png?base64";
 import img_a3426277639ce221 from "file://a3426277639ce221.gif?base64";
@@ -197,5 +199,19 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Decepticon insignia",
         image: `data:image/png;base64,${img_4aa034ff71d29f41}`,
         design: { shape: "none", background: "gradient", colors: [0x443576], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "6416591f7ec53a25",
+        users: ["195516525631897600"],
+        name: "Tai Lung",
+        image: `data:image/png;base64,${img_6416591f7ec53a25}`,
+        design: { shape: "none", background: "gradient", colors: [0x2e2438, 0x565651, 0x694329], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "7bc3b700ec18e4b6",
+        users: ["195516525631897600"],
+        name: "Lord Shen",
+        image: `data:image/png;base64,${img_7bc3b700ec18e4b6}`,
+        design: { shape: "none", background: "gradient", colors: [0xca9690, 0xffffff, 0x858282], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];
