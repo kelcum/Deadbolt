@@ -18,6 +18,7 @@ import img_390d4897f131034b from "file://390d4897f131034b.gif?base64";
 import img_887115c504ee800b from "file://887115c504ee800b.webp?base64";
 import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
 import img_a3d29a87f2975bbf from "file://a3d29a87f2975bbf.png?base64";
+import img_a3426277639ce221 from "file://a3426277639ce221.gif?base64";
 import img_b5495ef6ab812999 from "file://b5495ef6ab812999.png?base64";
 import img_c5228d5c86d5d501 from "file://c5228d5c86d5d501.webp?base64";
 import img_c59680f86e5ee683 from "file://c59680f86e5ee683.webp?base64";
@@ -165,5 +166,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Shiny Hisuian Zoroark",
         image: `data:image/gif;base64,${img_7ba5be8fd879e304}`,
         design: { shape: "none", background: "gradient", colors: [0xf6f6f6, 0xbda1de, 0x7b48ac, 0x70716a], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "a3426277639ce221",
+        users: ["195516525631897600"],
+        name: "Empress of Light",
+        image: `data:image/gif;base64,${img_a3426277639ce221}`,
+        design: { shape: "none", background: "gradient", colors: [0xf7e52c, 0x1580fb, 0x8bf6c7, 0xe73d96], effects: [], speed: 1, zoom: 1.59, x: 0, y: 0, rotate: 0 },
     },
 ];

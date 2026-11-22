@@ -458,5 +458,28 @@
             "for": "kochajacy"
         },
         "imageHash": "1b3555168b126c15"
+    },
+    {
+        "id": "a3426277639ce221",
+        "users": ["195516525631897600"],
+        "name": "Empress of Light",
+        "colors": ["#f7e52c", "#1580fb", "#8bf6c7", "#e73d96"],
+        "image": "a3426277639ce221.gif",
+        "imageType": "image/gif",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1.59,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Empress of Light",
+            "for": "kochajacy"
+        },
+        "imageHash": "b0531bc95ee6e367"
     }
 ]
