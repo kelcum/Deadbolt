@@ -14,7 +14,7 @@ import { getUniqueUsername } from "@utils/discord";
 import { isObject } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import type { RenderModalProps, User } from "@vencord/discord-types";
-import { Constants, GuildMemberStore, Menu, Modal, openModal, PermissionsBits, PermissionStore, RestAPI, Select, showToast, TextInput, UserStore, useState } from "@webpack/common";
+import { Constants, GuildMemberStore, GuildStore, Menu, Modal, openModal, PermissionsBits, PermissionStore, RestAPI, Select, showToast, TextInput, UserStore, useState } from "@webpack/common";
 import type { ReactElement } from "react";
 
 const UNITS = { s: [1000, "second"], m: [60_000, "minute"], h: [3_600_000, "hour"], d: [86_400_000, "day"], w: [604_800_000, "week"] } as const;
@@ -148,7 +148,9 @@ function ActionModal({ modalProps, action, guildId, user }: { modalProps: Render
 const patchUserMenu: NavContextMenuPatchCallback = (children, { user, guildId }: { user?: User; guildId?: string; }) => {
     if (!user || !guildId || user.id === UserStore.getCurrentUser().id) return;
 
-    const guild = { id: guildId };
+    const guild = GuildStore.getGuild(guildId);
+    if (!guild) return;
+
     const member = GuildMemberStore.getMember(guildId, user.id);
     const open = (action: Action) => openModal(props => <ActionModal modalProps={props} action={action} guildId={guildId} user={user} />);
     const items: ReactElement[] = [];
