@@ -1,0 +1,40 @@
+.vc-pastecrop-toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.vc-pastecrop-hint {
+    margin-bottom: 12px;
+}
+
+.vc-pastecrop-stage {
+    position: relative;
+    width: fit-content;
+    margin: 0 auto;
+    line-height: 0;
+    overflow: hidden;
+}
+
+.vc-pastecrop-canvas {
+    display: block;
+    max-width: 100%;
+    max-height: 60vh;
+    cursor: crosshair;
+    touch-action: none;
+}
+
+.vc-pastecrop-box {
+    position: absolute;
+    box-sizing: border-box;
+    pointer-events: none;
+    border: 2px dashed var(--white);
+}
+
+.vc-pastecrop-crop {
+    box-shadow: 0 0 0 9999px rgb(0 0 0 / 50%);
+}
+
+.vc-pastecrop-hide {
+    background: rgb(0 0 0 / 35%);
+}
