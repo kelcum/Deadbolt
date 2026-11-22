@@ -32,6 +32,15 @@ interface Box {
     h: number;
 }
 
+interface UploadProps {
+    upload: CloudUpload;
+    draftType: number;
+}
+
+interface EditorProps extends UploadProps {
+    modalProps: RenderModalProps;
+}
+
 type Tool = "crop" | "hide";
 
 const ActionBarIcon = findComponentByCodeLazy<ActionBarIconProps>("Children.map", "isValidElement", "dangerous:");
@@ -112,12 +121,12 @@ function toFile(canvas: HTMLCanvasElement, name: string, type: string) {
     ));
 }
 
-async function replaceUpload(upload: CloudUpload, file: File) {
+async function replaceUpload(upload: CloudUpload, draftType: number, file: File) {
     const { channelId } = upload;
-    const before = [...UploadAttachmentStore.getUploads(channelId, DraftType.ChannelMessage)];
-    await UploadHandler.promptToUpload([file], ChannelStore.getChannel(channelId), DraftType.ChannelMessage);
+    const before = [...UploadAttachmentStore.getUploads(channelId, draftType)];
+    await UploadHandler.promptToUpload([file], ChannelStore.getChannel(channelId), draftType);
 
-    const uploads = UploadAttachmentStore.getUploads(channelId, DraftType.ChannelMessage);
+    const uploads = UploadAttachmentStore.getUploads(channelId, draftType);
     const added = uploads.find(u => !before.includes(u));
     if (!added) return;
 
@@ -126,12 +135,12 @@ async function replaceUpload(upload: CloudUpload, file: File) {
     added.filename = upload.filename;
     UploadManager.setUploads({
         channelId,
-        draftType: DraftType.ChannelMessage,
+        draftType,
         uploads: uploads.filter(u => u !== added).map(u => u === upload ? added : u)
     });
 }
 
-function Editor({ modalProps, upload }: { modalProps: RenderModalProps; upload: CloudUpload; }) {
+function Editor({ modalProps, upload, draftType }: EditorProps) {
     const [history, setHistory] = useState<HTMLCanvasElement[]>([]);
     const [tool, setTool] = useState<Tool>("hide");
     const [box, setBox] = useState<Box | null>(null);
@@ -197,7 +206,7 @@ function Editor({ modalProps, upload }: { modalProps: RenderModalProps; upload: 
     const save = async () => {
         setSaving(true);
         try {
-            await replaceUpload(upload, await toFile(current, upload.filename, upload.item.file.type));
+            await replaceUpload(upload, draftType, await toFile(current, upload.filename, upload.item.file.type));
             modalProps.onClose();
         } catch (err) {
             logger.error("Could not save the edited image", err);
@@ -271,14 +280,14 @@ export default definePlugin({
         }
     ],
 
-    CropButton: ErrorBoundary.wrap(({ upload }: { upload: CloudUpload; }) => {
+    CropButton: ErrorBoundary.wrap(({ upload, draftType }: UploadProps) => {
         if (!upload.isImage || !EDITABLE.has(upload.item.file.type)) return null;
-        if (!UploadAttachmentStore.getUploads(upload.channelId, DraftType.ChannelMessage).includes(upload)) return null;
+        if (draftType === DraftType.SlashCommand) return null;
 
         return (
             <ActionBarIcon
                 tooltip="Crop or hide parts"
-                onClick={() => openModal(props => <Editor modalProps={props} upload={upload} />)}
+                onClick={() => openModal(props => <Editor modalProps={props} upload={upload} draftType={draftType} />)}
             >
                 <CropIcon />
             </ActionBarIcon>
