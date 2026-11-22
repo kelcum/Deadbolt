@@ -52,6 +52,7 @@ New Deadbolt plugins:
 - **SharedMedia** — a Shared Media button next to pins (or right-click a channel or DM) opens every image, video, file and link shared there, with Discord's viewer for flipping through them with the arrow keys.
 - **ReplyChainView** — hover a reply and pick View Reply Chain to read the whole conversation it belongs to, from the first message down to its replies, in one window.
 - **DraftHistory** — keeps earlier versions of each chat's draft, so text lost to a stray clear or select all and delete comes back from a button in the chat bar.
+- **CopyMessageRange** — shift click two messages, or use the right click menu, to copy everything between them as a plain text transcript with names and times.
 
 ## Installing
 
