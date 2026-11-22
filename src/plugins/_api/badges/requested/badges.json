@@ -481,5 +481,28 @@
             "for": "kochajacy"
         },
         "imageHash": "b0531bc95ee6e367"
+    },
+    {
+        "id": "fce5706106476910",
+        "users": ["1193711027456589864"],
+        "name": "Shiny Zekrom",
+        "colors": ["#5d7679", "#4bae64"],
+        "image": "fce5706106476910.webp",
+        "imageType": "image/webp",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1.17,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Shiny Zekrom",
+            "for": "mawsbawsdraws"
+        },
+        "imageHash": "6d57c6092b37f47a"
     }
 ]

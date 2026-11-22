@@ -23,6 +23,7 @@ import img_b5495ef6ab812999 from "file://b5495ef6ab812999.png?base64";
 import img_c5228d5c86d5d501 from "file://c5228d5c86d5d501.webp?base64";
 import img_c59680f86e5ee683 from "file://c59680f86e5ee683.webp?base64";
 import img_eba83c3c42fe5637 from "file://eba83c3c42fe5637.jpg?base64";
+import img_fce5706106476910 from "file://fce5706106476910.webp?base64";
 
 import type { RequestedBadgeEntry } from "../requestedBadges";
 
@@ -173,5 +174,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Empress of Light",
         image: `data:image/gif;base64,${img_a3426277639ce221}`,
         design: { shape: "none", background: "gradient", colors: [0xf7e52c, 0x1580fb, 0x8bf6c7, 0xe73d96], effects: [], speed: 1, zoom: 1.59, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "fce5706106476910",
+        users: ["1193711027456589864"],
+        name: "Shiny Zekrom",
+        image: `data:image/webp;base64,${img_fce5706106476910}`,
+        design: { shape: "none", background: "gradient", colors: [0x5d7679, 0x4bae64], effects: [], speed: 1, zoom: 1.17, x: 0, y: 0, rotate: 0 },
     },
 ];
