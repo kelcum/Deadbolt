@@ -37,15 +37,15 @@ function keepJpegSegment(marker: number, segment: Uint8Array) {
     return marker === 0xe2 && ascii(segment, 4, 11) === "ICC_PROFILE";
 }
 
-function exifOrientation(segment: Uint8Array) {
-    if (ascii(segment, 4, 6) !== "Exif\0\0" || segment.length < 18) return 1;
-    const data = view(segment);
-    const little = ascii(segment, 10, 2) === "II";
-    const ifd = 10 + data.getUint32(14, little);
-    if (ifd + 2 > segment.length) return 1;
+function exifOrientation(bytes: Uint8Array, tiff: number) {
+    if (tiff + 8 > bytes.length) return 1;
+    const data = view(bytes);
+    const little = ascii(bytes, tiff, 2) === "II";
+    const ifd = tiff + data.getUint32(tiff + 4, little);
+    if (ifd + 2 > bytes.length) return 1;
 
     const count = data.getUint16(ifd, little);
-    for (let entry = ifd + 2; entry < ifd + 2 + count * 12 && entry + 10 <= segment.length; entry += 12) {
+    for (let entry = ifd + 2; entry < ifd + 2 + count * 12 && entry + 10 <= bytes.length; entry += 12) {
         if (data.getUint16(entry, little) !== 0x0112) continue;
         const orientation = data.getUint16(entry + 8, little);
         return orientation >= 2 && orientation <= 8 ? orientation : 1;
@@ -53,15 +53,28 @@ function exifOrientation(segment: Uint8Array) {
     return 1;
 }
 
-function orientationSegment(orientation: number) {
-    return Uint8Array.of(
-        0xff, 0xe1, 0x00, 0x22,
-        0x45, 0x78, 0x69, 0x66, 0x00, 0x00,
+function orientationTiff(orientation: number) {
+    return [
         0x4d, 0x4d, 0x00, 0x2a, 0x00, 0x00, 0x00, 0x08,
         0x00, 0x01,
         0x01, 0x12, 0x00, 0x03, 0x00, 0x00, 0x00, 0x01, 0x00, orientation, 0x00, 0x00,
         0x00, 0x00, 0x00, 0x00
-    );
+    ];
+}
+
+function crc32(bytes: Uint8Array) {
+    let crc = ~0;
+    for (const byte of bytes) {
+        crc ^= byte;
+        for (let bit = 0; bit < 8; bit++) crc = (crc >>> 1) ^ (0xedb88320 & -(crc & 1));
+    }
+    return ~crc >>> 0;
+}
+
+function orientationPngChunk(orientation: number) {
+    const chunk = Uint8Array.of(0x00, 0x00, 0x00, 0x1a, 0x65, 0x58, 0x49, 0x66, ...orientationTiff(orientation), 0, 0, 0, 0);
+    view(chunk).setUint32(34, crc32(chunk.subarray(4, 34)));
+    return chunk;
 }
 
 function stripJpeg(bytes: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer>[] | null {
@@ -84,8 +97,8 @@ function stripJpeg(bytes: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer>[] | 
         if (keepJpegSegment(marker, segment)) parts.push(segment);
         else {
             removed = true;
-            const orientation = marker === 0xe1 ? exifOrientation(segment) : 1;
-            if (orientation > 1) parts.push(orientationSegment(orientation));
+            const orientation = marker === 0xe1 && ascii(segment, 4, 6) === "Exif\0\0" ? exifOrientation(segment, 10) : 1;
+            if (orientation > 1) parts.push(Uint8Array.of(0xff, 0xe1, 0x00, 0x22, 0x45, 0x78, 0x69, 0x66, 0x00, 0x00, ...orientationTiff(orientation)));
         }
         pos = end;
     }
@@ -105,8 +118,11 @@ function stripPng(bytes: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer>[] | n
         const end = pos + 12 + view(bytes).getUint32(pos);
         if (end > bytes.length) return null;
 
-        if (PNG_PRIVATE_CHUNKS.has(type)) removed = true;
-        else parts.push(bytes.subarray(pos, end));
+        if (PNG_PRIVATE_CHUNKS.has(type)) {
+            removed = true;
+            const orientation = type === "eXIf" ? exifOrientation(bytes.subarray(pos + 8, end - 4), 0) : 1;
+            if (orientation > 1) parts.push(orientationPngChunk(orientation));
+        } else parts.push(bytes.subarray(pos, end));
         pos = end;
         if (type === "IEND") break;
     }
