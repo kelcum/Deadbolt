@@ -30,7 +30,7 @@ const useSeen: SeenStore = proxyLazy(() => zustandCreate(() => ({ seen: {} })));
 
 const online = new Set<string>();
 
-const save = lodash.throttle(() => DataStore.set(STORE_KEY, useSeen.getState().seen), 30_000);
+const save = proxyLazy(() => lodash.throttle(() => DataStore.set(STORE_KEY, useSeen.getState().seen), 30_000));
 
 function sync() {
     const now = Date.now();
