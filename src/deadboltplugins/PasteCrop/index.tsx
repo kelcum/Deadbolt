@@ -185,22 +185,27 @@ function Editor({ modalProps, upload, draftType }: EditorProps) {
         setBox(null);
     };
 
-    const onPointerMove = (e: PointerEvent<HTMLCanvasElement>) => {
-        if (!start.current) return;
+    const boxTo = (e: PointerEvent, from: { x: number; y: number; }): Box => {
         const end = point(e);
-        setBox({
-            x: Math.min(start.current.x, end.x),
-            y: Math.min(start.current.y, end.y),
-            w: Math.abs(end.x - start.current.x),
-            h: Math.abs(end.y - start.current.y)
-        });
+        return {
+            x: Math.min(from.x, end.x),
+            y: Math.min(from.y, end.y),
+            w: Math.abs(end.x - from.x),
+            h: Math.abs(end.y - from.y)
+        };
     };
 
-    const onPointerUp = () => {
+    const onPointerMove = (e: PointerEvent<HTMLCanvasElement>) => {
+        if (start.current) setBox(boxTo(e, start.current));
+    };
+
+    const onPointerUp = (e: PointerEvent<HTMLCanvasElement>) => {
+        if (!start.current) return;
+        const final = boxTo(e, start.current);
         start.current = null;
         setBox(null);
-        if (!box || box.w < 4 || box.h < 4) return;
-        setHistory([...history, tool === "crop" ? crop(current, box) : cover(current, box)]);
+        if (final.w < 4 || final.h < 4) return;
+        setHistory([...history, tool === "crop" ? crop(current, final) : cover(current, final)]);
     };
 
     const save = async () => {
