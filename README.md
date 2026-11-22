@@ -52,6 +52,7 @@ New Deadbolt plugins:
 - **SharedMedia** — a Shared Media button next to pins (or right-click a channel or DM) opens every image, video, file and link shared there, with Discord's viewer for flipping through them with the arrow keys.
 - **ReplyChainView** — hover a reply and pick View Reply Chain to read the whole conversation it belongs to, from the first message down to its replies, in one window.
 - **DraftHistory** — keeps earlier versions of each chat's draft, so text lost to a stray clear or select all and delete comes back from a button in the chat bar.
+- **JoinMuted** — mutes your mic (or deafens you, if you pick that) whenever you join a voice channel or call, so nobody hears you until you unmute.
 
 ## Installing
 
