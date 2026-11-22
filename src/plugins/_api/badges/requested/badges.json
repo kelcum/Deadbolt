@@ -412,5 +412,28 @@
             "for": "kochajacy"
         },
         "imageHash": "47f1646f33571f31"
+    },
+    {
+        "id": "c5228d5c86d5d501",
+        "users": ["195516525631897600"],
+        "name": "Shiny Zekrom",
+        "colors": ["#546a6e", "#3ebf55"],
+        "image": "c5228d5c86d5d501.webp",
+        "imageType": "image/webp",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1.37,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Shiny Zekrom",
+            "for": "kochajacy"
+        },
+        "imageHash": "6d57c6092b37f47a"
     }
 ]

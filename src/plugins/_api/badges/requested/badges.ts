@@ -18,6 +18,7 @@ import img_887115c504ee800b from "file://887115c504ee800b.webp?base64";
 import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
 import img_a3d29a87f2975bbf from "file://a3d29a87f2975bbf.png?base64";
 import img_b5495ef6ab812999 from "file://b5495ef6ab812999.png?base64";
+import img_c5228d5c86d5d501 from "file://c5228d5c86d5d501.webp?base64";
 import img_c59680f86e5ee683 from "file://c59680f86e5ee683.webp?base64";
 import img_eba83c3c42fe5637 from "file://eba83c3c42fe5637.jpg?base64";
 
@@ -149,5 +150,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Shiny Gardevoir",
         image: `data:image/png;base64,${img_13dfcbf5f6640ac6}`,
         design: { shape: "none", background: "gradient", colors: [0xfeedfd, 0x80bbdb, 0xe78232], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "c5228d5c86d5d501",
+        users: ["195516525631897600"],
+        name: "Shiny Zekrom",
+        image: `data:image/webp;base64,${img_c5228d5c86d5d501}`,
+        design: { shape: "none", background: "gradient", colors: [0x546a6e, 0x3ebf55], effects: [], speed: 1, zoom: 1.37, x: 0, y: 0, rotate: 0 },
     },
 ];
