@@ -14,8 +14,8 @@ import { getUniqueUsername } from "@utils/discord";
 import { isObject } from "@utils/misc";
 import definePlugin, { OptionType } from "@utils/types";
 import type { RenderModalProps, User } from "@vencord/discord-types";
-import type { ReactElement } from "react";
 import { Constants, GuildMemberStore, Menu, Modal, openModal, PermissionsBits, PermissionStore, RestAPI, Select, showToast, TextInput, UserStore, useState } from "@webpack/common";
+import type { ReactElement } from "react";
 
 const UNITS = { s: [1000, "second"], m: [60_000, "minute"], h: [3_600_000, "hour"], d: [86_400_000, "day"], w: [604_800_000, "week"] } as const;
 const MAX_TIMEOUT = 28 * 86_400_000;
