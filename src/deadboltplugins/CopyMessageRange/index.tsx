@@ -80,9 +80,10 @@ function copyRange(channel: Channel, endId: string) {
         return;
     }
 
+    const kept = picked.filter(m => m.content || m.attachments.length);
     copyWithToast(
-        picked.map(m => formatMessage(m, channel.guild_id)).join("\n"),
-        picked.length === 1 ? "Copied 1 message." : `Copied ${picked.length} messages.`
+        kept.map(m => formatMessage(m, channel.guild_id)).join("\n"),
+        kept.length === 1 ? "Copied 1 message." : `Copied ${kept.length} messages.`
     );
 }
 
