@@ -119,3 +119,8 @@
     font-family: var(--font-code, Consolas, monospace);
     font-size: 12px;
 }
+
+.vc-doctor-row.vc-doctor-saved {
+    align-items: center;
+    justify-content: space-between;
+}

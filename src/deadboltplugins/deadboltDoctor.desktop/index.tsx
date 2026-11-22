@@ -39,6 +39,18 @@ const settings = definePluginSettings({
         type: OptionType.BOOLEAN,
         description: "When a Discord update breaks plugins, tell the Deadbolt team so a fix can start right away. Only the plugin names and Discord's build number are sent.",
         default: false
+    },
+    autoBackup: {
+        type: OptionType.BOOLEAN,
+        description: "Save a backup of your settings, QuickCSS, themes and userplugins once a day, only when something changed.",
+        default: true
+    },
+    keepBackups: {
+        type: OptionType.SLIDER,
+        description: "How many automatic backups to keep.",
+        markers: [3, 7, 14, 30],
+        default: 7,
+        disabled: () => !settings.store.autoBackup
     }
 });
 
@@ -247,6 +259,11 @@ export function openHealth() {
 
 let checkTimer: ReturnType<typeof setTimeout> | undefined;
 let breakageTimer: ReturnType<typeof setInterval> | undefined;
+let backupTimer: ReturnType<typeof setInterval> | undefined;
+
+function autoBackup() {
+    if (settings.store.autoBackup) Native.autoBackup(settings.store.keepBackups).catch(e => logger.warn("Couldn't save the automatic backup", e));
+}
 
 async function reportBreakage() {
     const build = getBuildNumber();
@@ -278,7 +295,7 @@ async function startupCheck() {
 
 export default definePlugin({
     name: "DeadboltDoctor",
-    description: "Shows whether Deadbolt survived Discord's updates and fixes it in one click: re-inject, repair, update, and a heads-up when a new Discord version is missing Deadbolt.",
+    description: "Shows whether Deadbolt survived Discord's updates and fixes it in one click: re-inject, repair, update, a heads-up when a new Discord version is missing Deadbolt, and daily backups you can restore in one click.",
     tags: ["Utility"],
     authors: [Devs.K3],
     enabledByDefault: true,
@@ -301,11 +318,16 @@ export default definePlugin({
         }
     ],
     start() {
-        checkTimer = setTimeout(startupCheck, 20_000);
+        checkTimer = setTimeout(() => {
+            startupCheck();
+            autoBackup();
+        }, 20_000);
+        backupTimer = setInterval(autoBackup, 36e5);
         breakageTimer = setInterval(() => reportBreakage().catch(e => logger.warn("Couldn't send the breakage report", e)), 120_000);
     },
     stop() {
         clearTimeout(checkTimer);
         clearInterval(breakageTimer);
+        clearInterval(backupTimer);
     }
 });
