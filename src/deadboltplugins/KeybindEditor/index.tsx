@@ -45,7 +45,7 @@ const registrar: Registrar = findByPropsLazy("setLayout", "enableTemp", "checkDu
 const defaults: Record<string, string[]> = {};
 let recording = false;
 
-const KEYS = ["discord", "deadbolt"] as const;
+const KEYS: ("discord" | "deadbolt")[] = ["discord", "deadbolt"];
 const MODIFIERS = ["ctrl", "meta", "alt", "shift"];
 const ALIASES: Record<string, string> = { mod: IS_MAC ? "meta" : "ctrl", cmd: "meta", command: "meta", option: "alt", return: "enter", escape: "esc", plus: "=", minus: "-" };
 const PRETTY: Record<string, string> = { ctrl: "Ctrl", meta: IS_MAC ? "Cmd" : "Win", alt: IS_MAC ? "Option" : "Alt", shift: "Shift", esc: "Esc", enter: "Enter", pageup: "Page Up", pagedown: "Page Down", del: "Delete", ins: "Insert" };
