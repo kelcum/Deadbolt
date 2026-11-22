@@ -51,6 +51,7 @@ New Deadbolt plugins:
 - **ScamLinkGuard** — warns under a message when a link imitates Discord, Steam or another big site, offers fake Nitro, hides behind misleading link text or uses lookalike letters.
 - **SharedMedia** — a Shared Media button next to pins (or right-click a channel or DM) opens every image, video, file and link shared there, with Discord's viewer for flipping through them with the arrow keys.
 - **ReplyChainView** — hover a reply and pick View Reply Chain to read the whole conversation it belongs to, from the first message down to its replies, in one window.
+- **DraftHistory** — keeps earlier versions of each chat's draft, so text lost to a stray clear or select all and delete comes back from a button in the chat bar.
 
 ## Installing
 
