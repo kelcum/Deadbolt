@@ -1,0 +1,29 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-profile-history-section {
+    gap: 4px;
+}
+
+.vc-profile-history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.vc-profile-history-avatars {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 4px;
+}
+
+.vc-profile-history-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+}
