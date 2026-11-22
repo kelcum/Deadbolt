@@ -14,7 +14,7 @@ import { classNameFactory } from "@utils/css";
 import { getTheme, Theme } from "@utils/discord";
 import definePlugin from "@utils/types";
 import type { Channel, RenderModalProps } from "@vencord/discord-types";
-import { MessageActions, Menu, Modal, moment, NavigationRouter, openModal, SelectedChannelStore, showToast, SnowflakeUtils, Toasts, useState } from "@webpack/common";
+import { Menu, MessageActions, Modal, moment, NavigationRouter, openModal, SelectedChannelStore, showToast, SnowflakeUtils, useState } from "@webpack/common";
 
 const cl = classNameFactory("vc-jumptodate-");
 const DAY = "YYYY-MM-DD";
@@ -34,7 +34,7 @@ function parseDate(input: string) {
 
 function jumpToDate(channel: Channel, time: number) {
     if (time > Date.now()) {
-        showToast("That date is still in the future.", Toasts.Type.FAILURE);
+        showToast({ text: "That date is still in the future.", variant: "critical" });
         return;
     }
     const messageId = time <= SnowflakeUtils.extractTimestamp(channel.id) ? channel.id : SnowflakeUtils.fromTimestamp(time);
@@ -79,10 +79,10 @@ function DateModal({ modalProps, channel }: { modalProps: RenderModalProps; chan
     );
 }
 
-const canJump = (channel: Channel | undefined): channel is Channel => channel != null && !channel.isCategory() && !channel.isForumLikeChannel();
+const canJump = (channel: Channel) => !channel.isCategory() && !channel.isForumLikeChannel();
 
 const addMenuItem: NavContextMenuPatchCallback = (children, { channel }: { channel?: Channel; }) => {
-    if (!canJump(channel)) return;
+    if (!channel || !canJump(channel)) return;
     children.push(
         <Menu.MenuItem
             id="vc-jump-to-date"
