@@ -52,6 +52,11 @@ New Deadbolt plugins:
 - **SharedMedia** — a Shared Media button next to pins (or right-click a channel or DM) opens every image, video, file and link shared there, with Discord's viewer for flipping through them with the arrow keys.
 - **ReplyChainView** — hover a reply and pick View Reply Chain to read the whole conversation it belongs to, from the first message down to its replies, in one window.
 - **DraftHistory** — keeps earlier versions of each chat's draft, so text lost to a stray clear or select all and delete comes back from a button in the chat bar.
+- **MutedSpeakingAlert** — plays a sound and shows a notification you can click to unmute when you start talking while muted in voice, even with Discord in the background.
+- **TokenGuard** — holds back a message that contains your Discord token, a private key, an API key or a password, and only sends it if you press send again.
+- **LastSeen** — shows on a friend's profile when they were last online, remembered on your device from what Discord shows while you're connected.
+- **JumpToDate** — right click a chat and pick Jump to Date, or type /jumptodate yesterday, to open it at the messages from any day.
+- **StripImageMetadata** — removes location, camera and other hidden info from JPEG, PNG and WebP images before they upload, without touching the picture itself.
 - **InputModePerChannel** — right click a voice channel or server to pick push to talk or voice activity there, and it switches for you when you join, then switches back when you leave.
 
 ## Installing

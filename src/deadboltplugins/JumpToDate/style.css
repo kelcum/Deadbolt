@@ -1,0 +1,17 @@
+.vc-jumptodate-hint {
+    margin-bottom: 12px;
+}
+
+.vc-jumptodate-input {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 8px 12px;
+    margin-bottom: 8px;
+    border: 1px solid var(--input-background-default);
+    border-radius: 4px;
+    outline: none;
+    background-color: var(--input-background-default);
+    color: var(--text-default);
+    font: inherit;
+    font-weight: 500;
+}
