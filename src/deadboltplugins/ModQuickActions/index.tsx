@@ -149,8 +149,6 @@ const patchUserMenu: NavContextMenuPatchCallback = (children, { user, guildId }:
     if (!user || !guildId || user.id === UserStore.getCurrentUser().id) return;
 
     const guild = GuildStore.getGuild(guildId);
-    if (!guild) return;
-
     const member = GuildMemberStore.getMember(guildId, user.id);
     const open = (action: Action) => openModal(props => <ActionModal modalProps={props} action={action} guildId={guildId} user={user} />);
     const items: ReactElement[] = [];
