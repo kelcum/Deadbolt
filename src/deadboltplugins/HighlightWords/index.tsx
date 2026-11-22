@@ -87,7 +87,7 @@ function getRegex() {
     return cachedRegex;
 }
 
-function splitText(text: string, regex: RegExp, color: string): AstNode[] {
+function splitText(text: string, regex: RegExp, style: CSSProperties): AstNode[] {
     const nodes: AstNode[] = [];
     let last = 0;
     for (const match of text.matchAll(regex)) {
@@ -95,7 +95,7 @@ function splitText(text: string, regex: RegExp, color: string): AstNode[] {
         nodes.push({
             type: "highlight",
             content: (
-                <span key={`vc-hw-${nodes.length}-${match.index}`} className={cl("word")} style={{ "--vc-highlightwords-color": color } as CSSProperties}>
+                <span key={`vc-hw-${nodes.length}-${match.index}`} className={cl("word")} style={style}>
                     {match[0]}
                 </span>
             )
@@ -107,11 +107,11 @@ function splitText(text: string, regex: RegExp, color: string): AstNode[] {
     return nodes;
 }
 
-function walk(nodes: AstNode[], regex: RegExp, color: string): AstNode[] {
+function walk(nodes: AstNode[], regex: RegExp, style: CSSProperties): AstNode[] {
     return nodes.flatMap(node => {
         if (SKIPPED.has(node.type)) return [node];
-        if (node.type === "text" && typeof node.content === "string") return splitText(node.content, regex, color);
-        if (Array.isArray(node.content)) return [{ ...node, content: walk(node.content, regex, color) }];
+        if (node.type === "text" && typeof node.content === "string") return splitText(node.content, regex, style);
+        if (Array.isArray(node.content)) return [{ ...node, content: walk(node.content, regex, style) }];
         return [node];
     });
 }
@@ -136,6 +136,8 @@ export default definePlugin({
     highlight(ast: AstNode[]) {
         const regex = getRegex();
         if (!regex) return ast;
-        return walk(ast, regex, `#${settings.store.color.toString(16).padStart(6, "0")}`);
+        const { color } = settings.store;
+        const brightness = 0.299 * ((color >> 16) & 255) + 0.587 * ((color >> 8) & 255) + 0.114 * (color & 255);
+        return walk(ast, regex, { background: `#${color.toString(16).padStart(6, "0")}`, color: brightness > 150 ? "#000" : "#fff" });
     }
 });
