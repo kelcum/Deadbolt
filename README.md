@@ -57,6 +57,7 @@ New Deadbolt plugins:
 - **LastSeen** — shows on a friend's profile when they were last online, remembered on your device from what Discord shows while you're connected.
 - **JumpToDate** — right click a chat and pick Jump to Date, or type /jumptodate yesterday, to open it at the messages from any day.
 - **StripImageMetadata** — removes location, camera and other hidden info from JPEG, PNG and WebP images before they upload, without touching the picture itself.
+- **InputModePerChannel** — right click a voice channel or server to pick push to talk or voice activity there, and it switches for you when you join, then switches back when you leave.
 
 ## Installing
 
