@@ -504,5 +504,53 @@
             "for": "mawsbawsdraws"
         },
         "imageHash": "6d57c6092b37f47a"
+    },
+    {
+        "id": "e1109634f824d9be",
+        "users": ["195516525631897600"],
+        "name": "Autobot insignia",
+        "colors": ["#fe0000"],
+        "image": "e1109634f824d9be.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Autobot insignia",
+            "for": "kochajacy",
+            "pair": "4aa034ff71d29f41"
+        },
+        "imageHash": "23cf399099fb4b6f"
+    },
+    {
+        "id": "4aa034ff71d29f41",
+        "users": ["195516525631897600"],
+        "name": "Decepticon insignia",
+        "colors": ["#443576"],
+        "image": "4aa034ff71d29f41.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Decepticon insignia",
+            "for": "kochajacy",
+            "pair": "e1109634f824d9be"
+        },
+        "imageHash": "68c099d24b7ecc05"
     }
 ]

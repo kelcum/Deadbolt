@@ -6,6 +6,7 @@
 
 import img_2e9aa52581c65bcc from "file://2e9aa52581c65bcc.jpg?base64";
 import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
+import img_4aa034ff71d29f41 from "file://4aa034ff71d29f41.png?base64";
 import img_7ba5be8fd879e304 from "file://7ba5be8fd879e304.gif?base64";
 import img_9f947d83963d1a8b from "file://9f947d83963d1a8b.jpg?base64";
 import img_13dfcbf5f6640ac6 from "file://13dfcbf5f6640ac6.png?base64";
@@ -22,6 +23,7 @@ import img_a3426277639ce221 from "file://a3426277639ce221.gif?base64";
 import img_b5495ef6ab812999 from "file://b5495ef6ab812999.png?base64";
 import img_c5228d5c86d5d501 from "file://c5228d5c86d5d501.webp?base64";
 import img_c59680f86e5ee683 from "file://c59680f86e5ee683.webp?base64";
+import img_e1109634f824d9be from "file://e1109634f824d9be.png?base64";
 import img_eba83c3c42fe5637 from "file://eba83c3c42fe5637.jpg?base64";
 import img_fce5706106476910 from "file://fce5706106476910.webp?base64";
 
@@ -181,5 +183,19 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Shiny Zekrom",
         image: `data:image/webp;base64,${img_fce5706106476910}`,
         design: { shape: "none", background: "gradient", colors: [0x5d7679, 0x4bae64], effects: [], speed: 1, zoom: 1.17, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "e1109634f824d9be",
+        users: ["195516525631897600"],
+        name: "Autobot insignia",
+        image: `data:image/png;base64,${img_e1109634f824d9be}`,
+        design: { shape: "none", background: "gradient", colors: [0xfe0000], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "4aa034ff71d29f41",
+        users: ["195516525631897600"],
+        name: "Decepticon insignia",
+        image: `data:image/png;base64,${img_4aa034ff71d29f41}`,
+        design: { shape: "none", background: "gradient", colors: [0x443576], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];
