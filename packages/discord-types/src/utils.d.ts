@@ -106,6 +106,7 @@ interface RestRequestData {
     body?: Record<string, any>;
     oldFormErrors?: boolean;
     retries?: number;
+    reason?: string;
 }
 
 export type RestAPI = Record<"del" | "get" | "patch" | "post" | "put", (data: RestRequestData | string) => Promise<any>>;
