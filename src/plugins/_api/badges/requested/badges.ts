@@ -15,6 +15,8 @@ import img_303af8f410632e09 from "file://303af8f410632e09.gif?base64";
 import img_390d4897f131034b from "file://390d4897f131034b.gif?base64";
 import img_887115c504ee800b from "file://887115c504ee800b.webp?base64";
 import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
+import img_a3d29a87f2975bbf from "file://a3d29a87f2975bbf.png?base64";
+import img_b5495ef6ab812999 from "file://b5495ef6ab812999.png?base64";
 import img_c59680f86e5ee683 from "file://c59680f86e5ee683.webp?base64";
 import img_eba83c3c42fe5637 from "file://eba83c3c42fe5637.jpg?base64";
 
@@ -125,5 +127,19 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Shiny Rayquaza",
         image: `data:image/gif;base64,${img_303af8f410632e09}`,
         design: { shape: "none", background: "gradient", colors: [0x636e63, 0xb7b12c, 0xde8180, 0xee9cad], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "b5495ef6ab812999",
+        users: ["195516525631897600"],
+        name: "Shiny Ralts",
+        image: `data:image/png;base64,${img_b5495ef6ab812999}`,
+        design: { shape: "none", background: "gradient", colors: [0xe0d7e5, 0x63bdef, 0xdf8a37], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "a3d29a87f2975bbf",
+        users: ["195516525631897600"],
+        name: "Shiny Kirlia",
+        image: `data:image/png;base64,${img_a3d29a87f2975bbf}`,
+        design: { shape: "none", background: "gradient", colors: [0xfefefd, 0x82bcd4, 0xf5792f], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];

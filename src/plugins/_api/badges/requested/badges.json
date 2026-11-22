@@ -341,5 +341,53 @@
             "for": "kochajacy"
         },
         "imageHash": "a5a7eb18a36fe13e"
+    },
+    {
+        "id": "b5495ef6ab812999",
+        "users": ["195516525631897600"],
+        "name": "Shiny Ralts",
+        "colors": ["#e0d7e5", "#63bdef", "#df8a37"],
+        "image": "b5495ef6ab812999.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Shiny Ralts",
+            "for": "kochajacy",
+            "pair": "a3d29a87f2975bbf"
+        },
+        "imageHash": "634657cb7a849a36"
+    },
+    {
+        "id": "a3d29a87f2975bbf",
+        "users": ["195516525631897600"],
+        "name": "Shiny Kirlia",
+        "colors": ["#fefefd", "#82bcd4", "#f5792f"],
+        "image": "a3d29a87f2975bbf.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Shiny Kirlia",
+            "for": "kochajacy",
+            "pair": "b5495ef6ab812999"
+        },
+        "imageHash": "ca02427f348d2a28"
     }
 ]
