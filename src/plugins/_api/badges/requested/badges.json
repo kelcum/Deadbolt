@@ -9,7 +9,7 @@
         "design": {
             "shape": "none",
             "background": "none",
-            "effects": ["shine", "glint", "pulse"],
+            "effects": [],
             "speed": 1,
             "zoom": 1,
             "x": 0,
