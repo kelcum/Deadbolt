@@ -11,6 +11,7 @@ import img_17b954e0cb2b20b8 from "file://17b954e0cb2b20b8.jpg?base64";
 import img_72bd506d4970fa4f from "file://72bd506d4970fa4f.png?base64";
 import img_76a226e52e1d8120 from "file://76a226e52e1d8120.gif?base64";
 import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
+import img_303af8f410632e09 from "file://303af8f410632e09.gif?base64";
 import img_390d4897f131034b from "file://390d4897f131034b.gif?base64";
 import img_887115c504ee800b from "file://887115c504ee800b.webp?base64";
 import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
@@ -117,5 +118,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Shiny Umbreon",
         image: `data:image/gif;base64,${img_390d4897f131034b}`,
         design: { shape: "none", background: "gradient", colors: [0x5b696a, 0x8dd9e4], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "303af8f410632e09",
+        users: ["195516525631897600"],
+        name: "Shiny Rayquaza",
+        image: `data:image/gif;base64,${img_303af8f410632e09}`,
+        design: { shape: "none", background: "gradient", colors: [0x636e63, 0xb7b12c, 0xde8180, 0xee9cad], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];

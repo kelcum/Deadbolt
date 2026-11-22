@@ -318,5 +318,28 @@
             "for": "kochajacy"
         },
         "imageHash": "88d77de42b28f9ee"
+    },
+    {
+        "id": "303af8f410632e09",
+        "users": ["195516525631897600"],
+        "name": "Shiny Rayquaza",
+        "colors": ["#636e63", "#b7b12c", "#de8180", "#ee9cad"],
+        "image": "303af8f410632e09.gif",
+        "imageType": "image/gif",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Shiny Rayquaza",
+            "for": "kochajacy"
+        },
+        "imageHash": "a5a7eb18a36fe13e"
     }
 ]
