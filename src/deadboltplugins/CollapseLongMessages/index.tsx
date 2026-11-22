@@ -16,7 +16,7 @@ import { Message } from "@vencord/discord-types";
 import { zustandCreate } from "@webpack/common";
 
 const CHARS_PER_LINE = 120;
-const KEYS = ["lines"] as const;
+const KEYS: "lines"[] = ["lines"];
 
 const settings = definePluginSettings({
     lines: {
