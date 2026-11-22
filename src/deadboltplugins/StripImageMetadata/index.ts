@@ -64,7 +64,7 @@ function orientationSegment(orientation: number) {
     );
 }
 
-function stripJpeg(bytes: Uint8Array): Uint8Array[] | null {
+function stripJpeg(bytes: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer>[] | null {
     const parts = [bytes.subarray(0, 2)];
     let removed = false;
     let pos = 2;
@@ -95,7 +95,7 @@ function stripJpeg(bytes: Uint8Array): Uint8Array[] | null {
     return parts;
 }
 
-function stripPng(bytes: Uint8Array): Uint8Array[] | null {
+function stripPng(bytes: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer>[] | null {
     const parts = [bytes.subarray(0, 8)];
     let removed = false;
     let pos = 8;
@@ -114,8 +114,8 @@ function stripPng(bytes: Uint8Array): Uint8Array[] | null {
     return removed ? parts : null;
 }
 
-function stripWebp(bytes: Uint8Array): Uint8Array[] | null {
-    const parts: Uint8Array[] = [];
+function stripWebp(bytes: Uint8Array<ArrayBuffer>): Uint8Array<ArrayBuffer>[] | null {
+    const parts: Uint8Array<ArrayBuffer>[] = [];
     let removed = false;
     let pos = 12;
 
@@ -141,7 +141,7 @@ function stripWebp(bytes: Uint8Array): Uint8Array[] | null {
     return [header, ...parts];
 }
 
-function strip(bytes: Uint8Array) {
+function strip(bytes: Uint8Array<ArrayBuffer>) {
     if (bytes[0] === 0xff && bytes[1] === 0xd8) return stripJpeg(bytes);
     if (ascii(bytes, 0, 8) === "\x89PNG\r\n\x1a\n") return stripPng(bytes);
     if (ascii(bytes, 0, 4) === "RIFF" && ascii(bytes, 8, 4) === "WEBP") return stripWebp(bytes);
