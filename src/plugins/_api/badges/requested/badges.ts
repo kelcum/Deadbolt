@@ -9,6 +9,7 @@ import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
 import img_4aa034ff71d29f41 from "file://4aa034ff71d29f41.png?base64";
 import img_7ba5be8fd879e304 from "file://7ba5be8fd879e304.gif?base64";
 import img_7bc3b700ec18e4b6 from "file://7bc3b700ec18e4b6.png?base64";
+import img_8a1b71709664c8bd from "file://8a1b71709664c8bd.png?base64";
 import img_9f947d83963d1a8b from "file://9f947d83963d1a8b.jpg?base64";
 import img_13dfcbf5f6640ac6 from "file://13dfcbf5f6640ac6.png?base64";
 import img_17b954e0cb2b20b8 from "file://17b954e0cb2b20b8.jpg?base64";
@@ -213,5 +214,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Lord Shen",
         image: `data:image/png;base64,${img_7bc3b700ec18e4b6}`,
         design: { shape: "none", background: "gradient", colors: [0xca9690, 0xffffff, 0x858282], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "8a1b71709664c8bd",
+        users: ["195516525631897600"],
+        name: "Thestral",
+        image: `data:image/png;base64,${img_8a1b71709664c8bd}`,
+        design: { shape: "none", background: "gradient", colors: [0x000000, 0xffffff], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];

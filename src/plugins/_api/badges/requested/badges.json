@@ -600,5 +600,28 @@
             "pair": "6416591f7ec53a25"
         },
         "imageHash": "60a40dfdae1d9fe6"
+    },
+    {
+        "id": "8a1b71709664c8bd",
+        "users": ["195516525631897600"],
+        "name": "Thestral",
+        "colors": ["#000000", "#ffffff"],
+        "image": "8a1b71709664c8bd.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Thestral",
+            "for": "kochajacy"
+        },
+        "imageHash": "8f94ecac9b07b8bd"
     }
 ]
