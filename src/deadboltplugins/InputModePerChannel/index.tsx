@@ -39,7 +39,7 @@ function targetFor(channel: Channel | undefined): VoiceMode | undefined {
     if (!channel) return;
     const rules = settings.store.rules ?? {};
     if (channel.guild_id) return rules[channel.id] ?? rules[channel.guild_id];
-    return settings.store.callMode || undefined;
+    return (settings.store.callMode || undefined) as VoiceMode | undefined;
 }
 
 function apply(channelId: string | null | undefined) {
