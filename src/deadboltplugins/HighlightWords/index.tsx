@@ -93,7 +93,7 @@ function splitText(text: string, regex: RegExp, color: string): AstNode[] {
     for (const match of text.matchAll(regex)) {
         if (match.index > last) nodes.push({ type: "text", content: text.slice(last, match.index) });
         nodes.push({
-            type: "text",
+            type: "highlight",
             content: (
                 <span key={`vc-hw-${nodes.length}-${match.index}`} className={cl("word")} style={{ "--vc-highlightwords-color": color } as CSSProperties}>
                     {match[0]}
