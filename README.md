@@ -52,6 +52,7 @@ New Deadbolt plugins:
 - **SharedMedia** — a Shared Media button next to pins (or right-click a channel or DM) opens every image, video, file and link shared there, with Discord's viewer for flipping through them with the arrow keys.
 - **ReplyChainView** — hover a reply and pick View Reply Chain to read the whole conversation it belongs to, from the first message down to its replies, in one window.
 - **DraftHistory** — keeps earlier versions of each chat's draft, so text lost to a stray clear or select all and delete comes back from a button in the chat bar.
+- **InputModePerChannel** — right click a voice channel or server to pick push to talk or voice activity there, and it switches for you when you join, then switches back when you leave.
 
 ## Installing
 
