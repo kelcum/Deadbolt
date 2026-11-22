@@ -58,6 +58,7 @@ New Deadbolt plugins:
 - **JumpToDate** — right click a chat and pick Jump to Date, or type /jumptodate yesterday, to open it at the messages from any day.
 - **StripImageMetadata** — removes location, camera and other hidden info from JPEG, PNG and WebP images before they upload, without touching the picture itself.
 - **InputModePerChannel** — right click a voice channel or server to pick push to talk or voice activity there, and it switches for you when you join, then switches back when you leave.
+- **ProfileHistory** — remembers the usernames, display names and avatars people had before, as your client sees them change, and lists them in their profile.
 
 ## Installing
 
