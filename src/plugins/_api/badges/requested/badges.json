@@ -671,5 +671,51 @@
             "pair": "92d46af597578d72"
         },
         "imageHash": "882bf832131b3bc8"
+    },
+    {
+        "id": "dead5ba7e0000001",
+        "users": ["195516525631897600"],
+        "name": "Share test A",
+        "colors": ["#7c6ff0", "#4ade80"],
+        "image": null,
+        "imageType": null,
+        "design": {
+            "shape": "circle",
+            "background": "gradient",
+            "effects": ["shine"],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Share test A",
+            "for": "share-test",
+            "pair": "dead5ba7e0000002"
+        }
+    },
+    {
+        "id": "dead5ba7e0000002",
+        "users": ["195516525631897600"],
+        "name": "Share test B",
+        "colors": ["#fbbf24", "#f87171"],
+        "image": null,
+        "imageType": null,
+        "design": {
+            "shape": "rounded",
+            "background": "gradient",
+            "effects": ["glint"],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Share test B",
+            "for": "share-test",
+            "pair": "dead5ba7e0000001"
+        }
     }
 ]

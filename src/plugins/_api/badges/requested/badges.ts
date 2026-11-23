@@ -238,4 +238,18 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         image: `data:image/webp;base64,${img_65727ab54f2ac6f1}`,
         design: { shape: "none", background: "gradient", colors: [0xc60202, 0xffffff], effects: ["spin"], speed: 1.15, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
+    {
+        id: "dead5ba7e0000001",
+        users: ["195516525631897600"],
+        name: "Share test A",
+        image: null,
+        design: { shape: "circle", background: "gradient", colors: [0x7c6ff0, 0x4ade80], effects: ["shine"], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "dead5ba7e0000002",
+        users: ["195516525631897600"],
+        name: "Share test B",
+        image: null,
+        design: { shape: "rounded", background: "gradient", colors: [0xfbbf24, 0xf87171], effects: ["glint"], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
 ];
