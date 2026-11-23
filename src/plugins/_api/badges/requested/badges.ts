@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import img_0a17108bb5b80dae from "file://0a17108bb5b80dae.png?base64";
 import img_2e9aa52581c65bcc from "file://2e9aa52581c65bcc.jpg?base64";
 import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
 import img_4aa034ff71d29f41 from "file://4aa034ff71d29f41.png?base64";
@@ -237,5 +238,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Umbrella Corporation",
         image: `data:image/webp;base64,${img_65727ab54f2ac6f1}`,
         design: { shape: "none", background: "gradient", colors: [0xc60202, 0xffffff], effects: ["spin"], speed: 1.15, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "0a17108bb5b80dae",
+        users: ["1531412914005606513"],
+        name: "Tung Tung Tung Sahur",
+        image: `data:image/png;base64,${img_0a17108bb5b80dae}`,
+        design: { shape: "none", background: "gradient", colors: [0xcb7d40, 0xefecea], effects: ["spin"], speed: 3, zoom: 5, x: 0, y: 0, rotate: 0 },
     },
 ];

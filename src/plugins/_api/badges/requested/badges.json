@@ -671,5 +671,28 @@
             "pair": "92d46af597578d72"
         },
         "imageHash": "882bf832131b3bc8"
+    },
+    {
+        "id": "0a17108bb5b80dae",
+        "users": ["1531412914005606513"],
+        "name": "Tung Tung Tung Sahur",
+        "colors": ["#cb7d40", "#efecea"],
+        "image": "0a17108bb5b80dae.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": ["spin"],
+            "speed": 3,
+            "zoom": 5,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Tung Tung Tung Sahur",
+            "for": "zot"
+        },
+        "imageHash": "af21028f7769f207"
     }
 ]
