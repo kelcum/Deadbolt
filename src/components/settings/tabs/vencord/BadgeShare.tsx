@@ -106,6 +106,7 @@ async function startSession(location: string) {
 
 function linkAccount() {
     return new Promise<string>((resolve, reject) => {
+        let answered = false;
         openModal(props => (
             <OAuth2AuthorizeModal
                 {...props}
@@ -115,9 +116,12 @@ function linkAccount() {
                 permissions={0n}
                 clientId={CLIENT_ID}
                 cancelCompletesFlow={false}
-                callback={({ location }: { location: string; }) => startSession(location).then(resolve, reject)}
+                callback={({ location }: { location: string; }) => {
+                    answered = true;
+                    startSession(location).then(resolve, reject);
+                }}
             />
-        ), { onCloseCallback: () => reject(new Error("Linking was cancelled.")) });
+        ), { onCloseCallback: () => setTimeout(() => answered || reject(new Error("Linking was cancelled.")), 500) });
     });
 }
 

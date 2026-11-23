@@ -812,19 +812,20 @@ export default definePlugin({
 
     renderBadgeComponent: ErrorBoundary.wrap((badge: ProfileBadge & BadgeUserArgs) => {
         const Component = badge.component!;
-        const { onClick } = badge;
+        const { onClick, onContextMenu } = badge;
+        const onMenu = onContextMenu && ((e: React.MouseEvent) => onContextMenu(e, badge));
         if (onClick) {
             return (
-                <span style={{ display: "contents" }} onClick={e => onClick(e, badge)}>
+                <span style={{ display: "contents" }} onClick={e => onClick(e, badge)} onContextMenu={onMenu}>
                     <Component {...badge} />
                 </span>
             );
         }
-        if (!badge.iconSrc || !badge.userId) return <Component {...badge} />;
+        if (!badge.iconSrc || !badge.userId) return onMenu ? <span style={{ display: "contents" }} onContextMenu={onMenu}><Component {...badge} /></span> : <Component {...badge} />;
 
         const badgeId = toDirectoryBadge(badge, badge.userId).badge_id;
         return (
-            <span style={{ display: "contents" }} onClick={() => openBadgeDirectory(badge, badgeId)}>
+            <span style={{ display: "contents" }} onClick={() => openBadgeDirectory(badge, badgeId)} onContextMenu={onMenu}>
                 <Component {...badge} />
             </span>
         );
