@@ -130,7 +130,7 @@ function onPaste(e: ClipboardEvent) {
     const { target, clipboardData } = e;
     if (!clipboardData || clipboardData.files.length || !(target instanceof Element)) return;
 
-    const editor = target.closest("[data-slate-editor=\"true\"][aria-multiline=\"true\"]");
+    const editor = target.closest("[data-slate-editor=\"true\"][role=\"textbox\"]");
     if (!editor || insideOpenCodeblock()) return;
 
     const fenced = wrap(clipboardData.getData("text/plain"), clipboardData);
