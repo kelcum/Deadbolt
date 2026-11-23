@@ -674,7 +674,7 @@
     },
     {
         "id": "dead5ba7e0000001",
-        "users": ["195516525631897600"],
+        "users": ["195516525631897600", "763131019557339157"],
         "name": "Share test A",
         "colors": ["#7c6ff0", "#4ade80"],
         "image": null,
@@ -693,11 +693,12 @@
             "badge": "Share test A",
             "for": "share-test",
             "pair": "dead5ba7e0000002"
-        }
+        },
+        "shared": ["763131019557339157"]
     },
     {
         "id": "dead5ba7e0000002",
-        "users": ["195516525631897600"],
+        "users": ["195516525631897600", "763131019557339157"],
         "name": "Share test B",
         "colors": ["#fbbf24", "#f87171"],
         "image": null,
@@ -716,6 +717,7 @@
             "badge": "Share test B",
             "for": "share-test",
             "pair": "dead5ba7e0000001"
-        }
+        },
+        "shared": ["763131019557339157"]
     }
 ]

@@ -240,14 +240,14 @@ export const requestedBadges: RequestedBadgeEntry[] = [
     },
     {
         id: "dead5ba7e0000001",
-        users: ["195516525631897600"],
+        users: ["195516525631897600", "763131019557339157"],
         name: "Share test A",
         image: null,
         design: { shape: "circle", background: "gradient", colors: [0x7c6ff0, 0x4ade80], effects: ["shine"], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
     {
         id: "dead5ba7e0000002",
-        users: ["195516525631897600"],
+        users: ["195516525631897600", "763131019557339157"],
         name: "Share test B",
         image: null,
         design: { shape: "rounded", background: "gradient", colors: [0xfbbf24, 0xf87171], effects: ["glint"], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
