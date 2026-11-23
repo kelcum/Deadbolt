@@ -1,0 +1,9 @@
+[data-vc-collapse-long-messages] {
+    max-height: calc(var(--vc-collapse-long-messages-lines) * 1.375rem);
+    overflow: hidden;
+    mask-image: linear-gradient(to bottom, #000 calc(100% - 2.75rem), transparent);
+}
+
+.vc-collapse-long-messages-toggle {
+    margin-top: 2px;
+}
