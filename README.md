@@ -68,6 +68,7 @@ New Deadbolt plugins:
 - **KeybindEditor** — change the keys for any of Discord's own shortcuts, turn ones you don't want off, and give Deadbolt actions like QuickCSS or DeadboltDoctor keys of their own. It warns you when two things share the same keys.
 - **ModQuickActions** — right click a member and pick Quick Mod to time them out for one of your preset lengths, kick or ban them, with a saved reason for the audit log.
 - **HighlightWords** — colors words and names you pick, including your own name, wherever they show up in chat, without pinging or notifying you.
+- **ChatExport** — right click a channel or DM and pick Export Chat to save its recent messages, plus a few hundred older ones loaded like scrolling up, as a text, HTML or JSON file.
 
 ## Installing
 
