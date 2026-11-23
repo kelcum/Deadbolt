@@ -23,7 +23,7 @@ What sets this fork apart from vanilla Equicord:
 
 - **Survives Discord updates** — Discord's updater resets client mods, the icon, splash and shortcuts. Deadbolt puts it all back on its own: on Windows the [one-click installer](#windows) checks every time you sign in, and [`scripts/reapply-branding.ps1`](scripts/reapply-branding.ps1) does it on demand.
 - **DeadboltDoctor** — `/deadbolt` (or the toolbox, or the plugin's settings) shows whether every installed Discord version still has Deadbolt, whether the build and background tasks are healthy, and fixes it in one click: re-inject, repair everything, update now. If Discord installs an update without Deadbolt in it, a banner offers to fix it before your next restart.
-- **Backup and restore** — DeadboltDoctor saves your settings, QuickCSS and your own plugins to one file and restores them later. Before restoring it shows exactly what will change, and if your plugins from the backup don't build, nothing is touched.
+- **Backup and restore** — DeadboltDoctor saves your settings, QuickCSS, themes and your own plugins to one file and restores them later. It also keeps a daily automatic backup whenever something changed (the last 7 by default), listed in `/deadbolt` with one click restore. Before restoring it shows exactly what will change, and if your plugins from the backup don't build, nothing is touched.
 - **Crash safe mode** — if Discord fails to start twice in a row, Deadbolt starts with only its core plugins, tells you which plugin it suspects, and lets you go back to normal in one click.
 - **Breakage alerts, opt-in** — turn on Breakage alerts in DeadboltDoctor and, when a Discord update breaks plugins, Deadbolt reports which ones so a fix can start right away. Only plugin names and Discord's build number are sent, and your own plugins are never included. Off by default.
 - **A boot splash that's actually Deadbolt's** — replaces Discord's own connecting screen with an animated chrome crest and Deadbolt-branded quotes, instead of just retexting Discord's default one.
@@ -62,6 +62,13 @@ New Deadbolt plugins:
 - **CopyMessageRange** — shift click two messages, or use the right click menu, to copy everything between them as a plain text transcript with names and times.
 - **OnlineAlerts** — notifies you when people you pick (right click them, or all friends) come online or start playing a game, with an optional list of games to watch for.
 - **JoinMuted** — mutes your mic (or deafens you, if you pick that) whenever you join a voice channel or call, so nobody hears you until you unmute.
+- **CollapseLongMessages** — folds very long messages down to a few lines with a Show more button under them, so walls of text don't take over the chat.
+- **WrongChannelGuard** — holds back a message you send right after switching chats when it looks meant for somewhere else, like an old draft or a reply you were typing in another chat, and sends it if you press send again.
+- **PasteCrop** — a crop button on images waiting to be sent lets you trim a pasted screenshot or blur out private parts before it uploads.
+- **KeybindEditor** — change the keys for any of Discord's own shortcuts, turn ones you don't want off, and give Deadbolt actions like QuickCSS or DeadboltDoctor keys of their own. It warns you when two things share the same keys.
+- **ModQuickActions** — right click a member and pick Quick Mod to time them out for one of your preset lengths, kick or ban them, with a saved reason for the audit log.
+- **HighlightWords** — colors words and names you pick, including your own name, wherever they show up in chat, without pinging or notifying you.
+- **ChatExport** — right click a channel or DM and pick Export Chat to save its recent messages, plus a few hundred older ones loaded like scrolling up, as a text, HTML or JSON file.
 - **BadgeShare** — right click someone's custom badge on their profile and pick Request this badge to ask them to share it. They answer from a Lockdown DM, and your requests and shares show in the Your badges card.
 
 ## Installing

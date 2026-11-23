@@ -1,10 +1,19 @@
 .vc-deadbolt-chat-badges {
     display: inline-flex;
+    flex: none;
     align-items: center;
     vertical-align: top;
     position: relative;
-    gap: 2px;
-    margin: 6px 2px 0 -1px !important;
+    gap: 3px;
+    top: -1px;
+    min-width: max-content;
+    text-indent: 0;
+    margin: 0 2px 0 -1px !important;
+}
+
+.vc-deadbolt-chat-badges > * {
+    flex: none;
+    max-width: none;
 }
 
 .vc-deadbolt-chat-badges img {
@@ -15,10 +24,27 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    zoom: 0.91;
     line-height: 0;
 }
 
 .vc-deadbolt-chat-badge img {
     border-radius: 0;
+}
+
+.vc-deadbolt-chat-badges-more {
+    display: inline-flex;
+    align-items: center;
+    height: calc(var(--vc-deadbolt-chat-badge-size) - 2px);
+    padding: 0 5px;
+    border-radius: 999px;
+    background: var(--background-modifier-accent);
+    color: var(--text-normal);
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.vc-deadbolt-chat-badges-more:hover {
+    background: var(--background-modifier-selected);
 }
