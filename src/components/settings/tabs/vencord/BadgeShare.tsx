@@ -71,7 +71,7 @@ const nameOf = (id: string) => {
     return u ? u.globalName || u.username : id;
 };
 
-const errorText = (e: unknown) =>
+export const errorText = (e: unknown) =>
     e instanceof TypeError ? "Couldn't reach xan.gripe. Check your connection and try again." : e instanceof Error ? e.message : String(e);
 
 async function savedToken() {
@@ -166,6 +166,9 @@ function pairOf(entry: RequestedBadgeEntry, ownerId: string) {
     const pair = entry.pair ? requestedEntry(entry.pair) : undefined;
     return pair && ownsRequestedBadge(pair, ownerId) ? pair : undefined;
 }
+
+export const shareBadgeDirect = (badge: string, to: string) =>
+    api<Share>("/direct", { method: "POST", body: JSON.stringify({ badge, to }) });
 
 export function canRequestBadge(entryId: string, ownerId: string) {
     const me = UserStore.getCurrentUser()?.id;

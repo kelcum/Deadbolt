@@ -134,6 +134,8 @@ export const requestedEntry = (id: string) => entries.find(e => e.id === id);
 
 export const ownsRequestedBadge = (entry: RequestedBadgeEntry, userId: string) => entry.users.includes(userId) && !entry.shared?.includes(userId);
 
+export const requestedEntries = () => entries;
+
 export const ownedRequestedEntries = (userId: string) => entries.filter(e => ownsRequestedBadge(e, userId));
 
 export function requestedBadgesOf(userId: string) {
