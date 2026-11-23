@@ -684,7 +684,7 @@
             "background": "gradient",
             "effects": ["spin"],
             "speed": 3,
-            "zoom": 5,
+            "zoom": 1,
             "x": 0,
             "y": 0,
             "rotate": 0

@@ -244,6 +244,6 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         users: ["1531412914005606513"],
         name: "Tung Tung Tung Sahur",
         image: `data:image/png;base64,${img_0a17108bb5b80dae}`,
-        design: { shape: "none", background: "gradient", colors: [0xcb7d40, 0xefecea], effects: ["spin"], speed: 3, zoom: 5, x: 0, y: 0, rotate: 0 },
+        design: { shape: "none", background: "gradient", colors: [0xcb7d40, 0xefecea], effects: ["spin"], speed: 3, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];
