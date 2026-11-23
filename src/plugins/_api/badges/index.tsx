@@ -606,7 +606,7 @@ async function loadAllBadges(noCache = false) {
 
 const BadgeDirectoryModal = findByPropsLazy("openBadgeDirectoryModal");
 
-function openBadgeDirectory(badge: ProfileBadge & BadgeUserArgs, badgeId: string) {
+export function openBadgeDirectory(badge: ProfileBadge & BadgeUserArgs, badgeId?: string) {
     const user = UserStore.getUser(badge.userId);
     BadgeDirectoryModal.openBadgeDirectoryModal({
         initialBadgeId: badgeId,
