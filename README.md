@@ -62,6 +62,7 @@ New Deadbolt plugins:
 - **CopyMessageRange** — shift click two messages, or use the right click menu, to copy everything between them as a plain text transcript with names and times.
 - **OnlineAlerts** — notifies you when people you pick (right click them, or all friends) come online or start playing a game, with an optional list of games to watch for.
 - **JoinMuted** — mutes your mic (or deafens you, if you pick that) whenever you join a voice channel or call, so nobody hears you until you unmute.
+- **AutoCodeblock** — code you paste into the chat box gets wrapped in a code block with its language picked for you, so it keeps its formatting and gets highlighted.
 - **CollapseLongMessages** — folds very long messages down to a few lines with a Show more button under them, so walls of text don't take over the chat.
 - **WrongChannelGuard** — holds back a message you send right after switching chats when it looks meant for somewhere else, like an old draft or a reply you were typing in another chat, and sends it if you press send again.
 - **PasteCrop** — a crop button on images waiting to be sent lets you trim a pasted screenshot or blur out private parts before it uploads.
