@@ -11,6 +11,7 @@ $RepoRoot = Split-Path -Parent $PSScriptRoot
 $PatcherPath = Join-Path $RepoRoot "dist\desktop\patcher.js"
 $DeadboltIco = Join-Path $RepoRoot "browser\deadbolt.ico"
 $SplashSvg = Join-Path $RepoRoot "browser\splash.svg"
+$DistRequireKey = ((Join-Path $RepoRoot "dist\desktop") -replace '\\', '/').ToLowerInvariant()
 $StubPackage = '{"name":"discord","main":"index.js"}'
 $VersionPattern = '^app-\d+(\.\d+)+$'
 
@@ -82,6 +83,12 @@ function ConvertTo-StubKey($text) {
     ($text.Trim() -replace '\\\\', '/').ToLowerInvariant()
 }
 
+function Test-PackedShim($app) {
+    $file = Get-Item -LiteralPath $app -Force -ErrorAction SilentlyContinue
+    if (-not $file -or $file.PSIsContainer -or $file.Length -gt 64KB) { return $false }
+    (ConvertTo-StubKey ([System.IO.File]::ReadAllText($app))) -match ('require\("' + [regex]::Escape($DistRequireKey) + '(/patcher\.js)?"\)')
+}
+
 function New-ShimFolder($app, $orig, $stub) {
     $origName = Split-Path -Leaf $orig
     Rename-Item -LiteralPath $app -NewName $origName
@@ -106,6 +113,7 @@ function Set-Shim($resources, $stub) {
     $hasOrig = Test-Path -LiteralPath $orig
 
     if (-not $isDir) {
+        if ($hasOrig -and (Test-PackedShim $app)) { return "same" }
         if ($hasOrig) { throw "both a packed app.asar and _app.asar exist in $resources" }
         New-ShimFolder $app $orig $stub
         return "shimmed"
@@ -134,7 +142,7 @@ function Set-Shim($resources, $stub) {
 
 function Test-Injected($versionDir, $stub) {
     $resources = Join-Path $versionDir "resources"
-    (Test-Path -LiteralPath (Join-Path $resources "_app.asar")) -and ((ConvertTo-StubKey (Read-Text (Join-Path $resources "app.asar\index.js"))) -eq (ConvertTo-StubKey $stub))
+    (Test-Path -LiteralPath (Join-Path $resources "_app.asar")) -and ((Test-PackedShim (Join-Path $resources "app.asar")) -or ((ConvertTo-StubKey (Read-Text (Join-Path $resources "app.asar\index.js"))) -eq (ConvertTo-StubKey $stub)))
 }
 
 function Get-VersionNumber($name) {
