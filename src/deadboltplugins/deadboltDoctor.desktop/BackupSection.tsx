@@ -7,12 +7,12 @@
 import { Button } from "@components/Button";
 import { Paragraph } from "@components/Paragraph";
 import { classNameFactory } from "@utils/css";
-import { relaunch } from "@utils/native";
+import { relaunch, showItemInFolder } from "@utils/native";
 import { PluginNative } from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
-import { Modal, moment, openModal, showToast, useState } from "@webpack/common";
+import { Modal, moment, openModal, showToast, useEffect, useState } from "@webpack/common";
 
-import type { BackupPreview } from "./backup";
+import type { BackupPreview, SavedBackup } from "./backup";
 
 const Native = VencordNative.pluginHelpers.DeadboltDoctor as PluginNative<typeof import("./native")>;
 const cl = classNameFactory("vc-doctor-");
@@ -30,9 +30,10 @@ function FileList({ files }: { files: string[]; }) {
 function RestoreModal({ modalProps, data, preview }: { modalProps: RenderModalProps; data: Uint8Array; preview: BackupPreview; }) {
     const [busy, setBusy] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const { settings, quickCss, userplugins } = preview;
+    const { settings, quickCss, userplugins, themes } = preview;
     const pluginChanges = userplugins ? userplugins.overwritten.length + userplugins.added.length : 0;
-    const nothing = !settings?.changed && !quickCss?.changed && !pluginChanges;
+    const themeChanges = themes ? themes.overwritten.length + themes.added.length : 0;
+    const nothing = !settings?.changed && !quickCss?.changed && !pluginChanges && !themeChanges;
 
     async function restore() {
         setBusy(true);
@@ -89,6 +90,31 @@ function RestoreModal({ modalProps, data, preview }: { modalProps: RenderModalPr
                             </div>
                         </div>
                     )}
+                    {themes && (
+                        <div className={cl("row")}>
+                            <span className={cl("dot", themeChanges ? "warn" : "ok")} />
+                            <div>
+                                <div className={cl("title")}>Themes</div>
+                                <div className={cl("detail")}>
+                                    {themeChanges
+                                        ? `${themes.unchanged} files already match. Themes that aren't in the backup are kept.`
+                                        : "Same as now."}
+                                </div>
+                                {themes.overwritten.length > 0 && (
+                                    <>
+                                        <div className={cl("detail")}>Overwritten:</div>
+                                        <FileList files={themes.overwritten} />
+                                    </>
+                                )}
+                                {themes.added.length > 0 && (
+                                    <>
+                                        <div className={cl("detail")}>Added:</div>
+                                        <FileList files={themes.added} />
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    )}
                     {userplugins && (
                         <div className={cl("row")}>
                             <span className={cl("dot", pluginChanges ? "warn" : "ok")} />
@@ -133,6 +159,26 @@ function RestoreModal({ modalProps, data, preview }: { modalProps: RenderModalPr
 
 export function BackupSection() {
     const [busy, setBusy] = useState<string | null>(null);
+    const [saved, setSaved] = useState<SavedBackup[]>([]);
+
+    useEffect(() => {
+        Native.listBackups().then(setSaved);
+    }, []);
+
+    async function openRestore(data: Uint8Array) {
+        const preview = await Native.inspectBackup(data);
+        setBusy(null);
+        if ("error" in preview) return showToast({ text: preview.error, variant: "critical" });
+        openModal(props => <RestoreModal modalProps={props} data={data} preview={preview} />);
+    }
+
+    async function restoreSaved(b: SavedBackup) {
+        setBusy(b.name);
+        const data = await Native.readSavedBackup(b.name);
+        if (data) return openRestore(data);
+        setBusy(null);
+        showToast({ text: "That backup can't be read anymore.", variant: "critical" });
+    }
 
     async function exportZip() {
         setBusy("export");
@@ -147,16 +193,13 @@ export function BackupSection() {
         });
         if (!file) return;
         setBusy("restore");
-        const preview = await Native.inspectBackup(file.data);
-        setBusy(null);
-        if ("error" in preview) return showToast({ text: preview.error, variant: "critical" });
-        openModal(props => <RestoreModal modalProps={props} data={file.data} preview={preview} />);
+        await openRestore(file.data);
     }
 
     return (
         <div className={cl("backup")}>
             <div className={cl("title")}>Backup</div>
-            <div className={cl("detail")}>Your settings, QuickCSS and userplugins in one zip. Restoring shows what changes before anything is touched.</div>
+            <div className={cl("detail")}>Your settings, QuickCSS, themes and userplugins in one zip. Restoring shows what changes before anything is touched.</div>
             <div className={cl("actions")}>
                 <Button size="small" variant="secondary" disabled={!!busy} onClick={exportZip}>
                     {busy === "export" ? "Exporting…" : "Export backup"}
@@ -164,7 +207,25 @@ export function BackupSection() {
                 <Button size="small" variant="secondary" disabled={!!busy} onClick={pickRestore}>
                     {busy === "restore" ? "Reading…" : "Restore from backup"}
                 </Button>
+                {saved.length > 0 && (
+                    <Button size="small" variant="secondary" onClick={() => showItemInFolder(saved[0].path)}>Open backups folder</Button>
+                )}
             </div>
+            {saved.length > 0 && (
+                <div className={cl("rows")}>
+                    {saved.slice(0, 8).map(b => (
+                        <div key={b.name} className={cl("row", "saved")}>
+                            <div>
+                                <div className={cl("title")}>{moment(b.created).format("LLL")}</div>
+                                <div className={cl("detail")}>{b.auto ? "Automatic" : "Saved before a restore"}, {(b.size / 1024).toFixed(0)} KB</div>
+                            </div>
+                            <Button size="small" variant="secondary" disabled={!!busy} onClick={() => restoreSaved(b)}>
+                                {busy === b.name ? "Reading…" : "Restore"}
+                            </Button>
+                        </div>
+                    ))}
+                </div>
+            )}
         </div>
     );
 }

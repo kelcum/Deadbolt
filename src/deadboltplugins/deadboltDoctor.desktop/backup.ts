@@ -5,12 +5,12 @@
  */
 
 import { NativeSettings, RendererSettings } from "@main/settings";
-import { DATA_DIR, NATIVE_SETTINGS_FILE, QUICK_CSS_PATH, SETTINGS_FILE } from "@main/utils/constants";
+import { DATA_DIR, NATIVE_SETTINGS_FILE, QUICK_CSS_PATH, SETTINGS_FILE, THEMES_DIR } from "@main/utils/constants";
 import { exec } from "child_process";
 import { IpcMainInvokeEvent } from "electron";
 import { strFromU8, strToU8, unzipSync, zipSync } from "fflate";
 import { existsSync } from "fs";
-import { mkdir, readdir, readFile, rm, writeFile } from "fs/promises";
+import { mkdir, readdir, readFile, rm, stat, utimes, writeFile } from "fs/promises";
 import { dirname, join, normalize, relative, sep } from "path";
 
 const repoRoot = join(__dirname, "..", "..");
@@ -21,18 +21,38 @@ const SETTINGS = "settings/settings.json";
 const NATIVE_SETTINGS = "settings/native-settings.json";
 const QUICK_CSS = "settings/quickCss.css";
 const PLUGINS = "userplugins/";
+const THEMES = "themes/";
+const BACKUPS_DIR = join(DATA_DIR, "backups");
+const AUTO = /^auto-[\w-]+\.zip$/;
+const SAVED = /^(auto|before-restore)-[\w-]+\.zip$/;
+
+export interface FileDiff {
+    overwritten: string[];
+    added: string[];
+    unchanged: number;
+}
+
+export interface SavedBackup {
+    name: string;
+    path: string;
+    auto: boolean;
+    created: string;
+    size: number;
+}
 
 export interface BackupPreview {
     created: string | null;
     settings: { changed: boolean; enabledNow: number; enabledAfter: number; } | null;
     quickCss: { changed: boolean; linesNow: number; linesAfter: number; } | null;
-    userplugins: { overwritten: string[]; added: string[]; unchanged: number; } | null;
+    userplugins: FileDiff | null;
+    themes: FileDiff | null;
     userpluginsSkipped: boolean;
 }
 
 export type RestoreResult = { error: string; } | { buildError: string; } | { safetyCopy: string; };
 
 const hasSource = () => existsSync(join(repoRoot, "src"));
+const stamp = () => new Date().toISOString().replace(/[:.]/g, "-");
 
 async function listFiles(dir: string, base = dir): Promise<string[]> {
     const out: string[] = [];
@@ -58,15 +78,23 @@ async function currentFiles() {
             files[PLUGINS + rel] = await readFile(join(userPluginsDir, ...rel.split("/")));
         }
     }
+    if (existsSync(THEMES_DIR)) {
+        for (const rel of await listFiles(THEMES_DIR)) {
+            files[THEMES + rel] = await readFile(join(THEMES_DIR, ...rel.split("/")));
+        }
+    }
     return files;
 }
 
-function pluginTarget(name: string) {
-    const rel = name.slice(PLUGINS.length);
+function safeTarget(name: string, prefix: string, root: string) {
+    const rel = name.slice(prefix.length);
     if (!rel || rel.endsWith("/") || rel.includes("\\") || rel.split("/").some(p => !p || p === "." || p === "..")) return null;
-    const full = normalize(join(userPluginsDir, ...rel.split("/")));
-    return full.startsWith(userPluginsDir + sep) ? full : null;
+    const full = normalize(join(root, ...rel.split("/")));
+    return full.startsWith(root + sep) ? full : null;
 }
+
+const pluginTarget = (name: string) => safeTarget(name, PLUGINS, userPluginsDir);
+const themeTarget = (name: string) => safeTarget(name, THEMES, THEMES_DIR);
 
 function parseSettings(data: Uint8Array | undefined) {
     if (!data) return null;
@@ -96,7 +124,9 @@ function readBackup(data: unknown) {
     }
     const plugins = Object.keys(files).filter(n => n.startsWith(PLUGINS) && !n.endsWith("/"));
     if (plugins.some(n => !pluginTarget(n))) throw new Error("That backup has userplugins files with unsafe paths, so nothing was restored.");
-    return { files, settings, nativeSettings, plugins, created: createdAt(files[MANIFEST]) };
+    const themes = Object.keys(files).filter(n => n.startsWith(THEMES) && !n.endsWith("/"));
+    if (themes.some(n => !themeTarget(n))) throw new Error("That backup has theme files with unsafe paths, so nothing was restored.");
+    return { files, settings, nativeSettings, plugins, themes, created: createdAt(files[MANIFEST]) };
 }
 
 function createdAt(manifest: Uint8Array) {
@@ -115,27 +145,28 @@ function enabledCount(settings: unknown) {
 const sameBytes = (a: Uint8Array | null, b: Uint8Array) => !!a && a.length === b.length && a.every((v, i) => v === b[i]);
 const lines = (s: string) => s ? s.split(/\r?\n/).length : 0;
 
+async function diffFiles(files: Record<string, Uint8Array>, names: string[], prefix: string, target: (name: string) => string | null) {
+    const diff: FileDiff = { overwritten: [], added: [], unchanged: 0 };
+    for (const name of names) {
+        const now = await readFile(target(name) as string).catch(() => null);
+        const rel = name.slice(prefix.length);
+        if (!now) diff.added.push(rel);
+        else if (sameBytes(now, files[name])) diff.unchanged++;
+        else diff.overwritten.push(rel);
+    }
+    return diff;
+}
+
 export async function exportBackup(_: IpcMainInvokeEvent): Promise<Uint8Array> {
     return zipSync(await currentFiles(), { level: 6 });
 }
 
 export async function inspectBackup(_: IpcMainInvokeEvent, data: Uint8Array): Promise<{ error: string; } | BackupPreview> {
     try {
-        const { files, settings, plugins, created } = readBackup(data);
+        const { files, settings, plugins, themes, created } = readBackup(data);
         const cssAfter = files[QUICK_CSS] ? strFromU8(files[QUICK_CSS]) : null;
         const cssNow = await readFile(QUICK_CSS_PATH, "utf8").catch(() => "");
         const source = hasSource();
-        let userplugins: BackupPreview["userplugins"] = null;
-        if (source && plugins.length) {
-            userplugins = { overwritten: [], added: [], unchanged: 0 };
-            for (const name of plugins) {
-                const now = await readFile(pluginTarget(name) as string).catch(() => null);
-                const rel = name.slice(PLUGINS.length);
-                if (!now) userplugins.added.push(rel);
-                else if (sameBytes(now, files[name])) userplugins.unchanged++;
-                else userplugins.overwritten.push(rel);
-            }
-        }
         return {
             created,
             settings: settings && {
@@ -144,7 +175,8 @@ export async function inspectBackup(_: IpcMainInvokeEvent, data: Uint8Array): Pr
                 enabledAfter: enabledCount(settings)
             },
             quickCss: cssAfter === null ? null : { changed: cssAfter !== cssNow, linesNow: lines(cssNow), linesAfter: lines(cssAfter) },
-            userplugins,
+            userplugins: source && plugins.length ? await diffFiles(files, plugins, PLUGINS, pluginTarget) : null,
+            themes: themes.length ? await diffFiles(files, themes, THEMES, themeTarget) : null,
             userpluginsSkipped: !source && plugins.length > 0
         };
     } catch (e) {
@@ -171,9 +203,9 @@ export async function restoreBackup(_: IpcMainInvokeEvent, data: Uint8Array): Pr
     } catch (e) {
         return { error: e instanceof Error ? e.message : String(e) };
     }
-    const { files, settings, nativeSettings, plugins } = backup;
+    const { files, settings, nativeSettings, plugins, themes } = backup;
 
-    const safetyCopy = join(DATA_DIR, "backups", `before-restore-${new Date().toISOString().replace(/[:.]/g, "-")}.zip`);
+    const safetyCopy = join(BACKUPS_DIR, `before-restore-${stamp()}.zip`);
     try {
         await mkdir(dirname(safetyCopy), { recursive: true });
         await writeFile(safetyCopy, zipSync(await currentFiles(), { level: 6 }));
@@ -204,6 +236,11 @@ export async function restoreBackup(_: IpcMainInvokeEvent, data: Uint8Array): Pr
                 return { buildError };
             }
         }
+        for (const name of themes) {
+            const target = themeTarget(name) as string;
+            await mkdir(dirname(target), { recursive: true });
+            await writeFile(target, files[name]);
+        }
         if (files[QUICK_CSS]) await writeFile(QUICK_CSS_PATH, files[QUICK_CSS]);
         if (nativeSettings) NativeSettings.setData(nativeSettings as typeof NativeSettings.plain);
         if (settings) RendererSettings.setData(settings as typeof RendererSettings.plain);
@@ -211,4 +248,43 @@ export async function restoreBackup(_: IpcMainInvokeEvent, data: Uint8Array): Pr
         return { error: `Restoring stopped partway (${e instanceof Error ? e.message : String(e)}). Your setup from before is saved in ${safetyCopy}` };
     }
     return { safetyCopy };
+}
+
+function sameContent(a: Record<string, Uint8Array>, b: Record<string, Uint8Array>) {
+    const keys = Object.keys(a).filter(k => k !== MANIFEST);
+    return keys.length === Object.keys(b).filter(k => k !== MANIFEST).length && keys.every(k => b[k] && sameBytes(a[k], b[k]));
+}
+
+export async function autoBackup(_: IpcMainInvokeEvent, keep: unknown): Promise<boolean> {
+    if (typeof keep !== "number" || !Number.isInteger(keep) || keep < 1 || keep > 100) return false;
+    await mkdir(BACKUPS_DIR, { recursive: true });
+    const autos = (await readdir(BACKUPS_DIR)).filter(n => AUTO.test(n)).sort();
+    const last = autos.length ? join(BACKUPS_DIR, autos[autos.length - 1]) : null;
+    if (last && Date.now() - (await stat(last)).mtimeMs < 24 * 36e5) return false;
+    const files = await currentFiles();
+    const previous = last ? await readFile(last).then(d => unzipSync(d)).catch(() => null) : null;
+    if (last && previous && sameContent(files, previous)) {
+        await utimes(last, new Date(), new Date());
+        return false;
+    }
+    const name = `auto-${stamp()}.zip`;
+    await writeFile(join(BACKUPS_DIR, name), zipSync(files, { level: 6 }));
+    for (const old of [...autos, name].slice(0, -keep)) await rm(join(BACKUPS_DIR, old), { force: true });
+    return true;
+}
+
+export async function listBackups(_: IpcMainInvokeEvent): Promise<SavedBackup[]> {
+    const names = (await readdir(BACKUPS_DIR).catch(() => [] as string[])).filter(n => SAVED.test(n));
+    const list = await Promise.all(names.map(async name => {
+        const path = join(BACKUPS_DIR, name);
+        const { size, mtime } = await stat(path);
+        const m = /(\d{4}-\d\d-\d\d)T(\d\d)-(\d\d)-(\d\d)-(\d{3})Z/.exec(name);
+        return { name, path, auto: name.startsWith("auto-"), created: m ? `${m[1]}T${m[2]}:${m[3]}:${m[4]}.${m[5]}Z` : mtime.toISOString(), size };
+    }));
+    return list.sort((a, b) => b.created.localeCompare(a.created));
+}
+
+export async function readSavedBackup(_: IpcMainInvokeEvent, name: unknown): Promise<Uint8Array | null> {
+    if (typeof name !== "string" || !SAVED.test(name)) return null;
+    return readFile(join(BACKUPS_DIR, name)).catch(() => null);
 }
