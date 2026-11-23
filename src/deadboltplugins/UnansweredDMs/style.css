@@ -1,0 +1,77 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-unanswered-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.vc-unanswered-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 10px;
+    border-radius: 8px;
+}
+
+.vc-unanswered-row:hover {
+    background: var(--background-modifier-hover);
+}
+
+.vc-unanswered-main {
+    display: flex;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+    cursor: pointer;
+}
+
+.vc-unanswered-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.vc-unanswered-body {
+    min-width: 0;
+    flex: 1;
+}
+
+.vc-unanswered-meta {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+}
+
+.vc-unanswered-name {
+    color: var(--header-primary);
+    font-weight: 600;
+}
+
+.vc-unanswered-time {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.vc-unanswered-text {
+    color: var(--text-normal);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-unanswered-empty {
+    padding: 16px 0;
+    text-align: center;
+}
+
+.vc-unanswered-dot {
+    fill: var(--status-danger);
+}
