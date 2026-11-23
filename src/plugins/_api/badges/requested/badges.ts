@@ -20,6 +20,7 @@ import img_92d46af597578d72 from "file://92d46af597578d72.png?base64";
 import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
 import img_303af8f410632e09 from "file://303af8f410632e09.gif?base64";
 import img_390d4897f131034b from "file://390d4897f131034b.gif?base64";
+import img_7828a0d7dc3f810b from "file://7828a0d7dc3f810b.webp?base64";
 import img_65727ab54f2ac6f1 from "file://65727ab54f2ac6f1.webp?base64";
 import img_887115c504ee800b from "file://887115c504ee800b.webp?base64";
 import img_6416591f7ec53a25 from "file://6416591f7ec53a25.png?base64";
@@ -245,5 +246,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Tung Tung Tung Sahur",
         image: `data:image/png;base64,${img_0a17108bb5b80dae}`,
         design: { shape: "none", background: "gradient", colors: [0xcb7d40, 0xefecea], effects: ["spin"], speed: 3, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "7828a0d7dc3f810b",
+        users: ["1531412914005606513"],
+        name: "Lil Uzi Vert Sprite",
+        image: `data:image/webp;base64,${img_7828a0d7dc3f810b}`,
+        design: { shape: "none", background: "gradient", colors: [0xf78e68, 0xf7c58d, 0x33200e], effects: [], speed: 3, zoom: 1.3, x: 0, y: 0, rotate: 0 },
     },
 ];

@@ -694,5 +694,28 @@
             "for": "zot"
         },
         "imageHash": "af21028f7769f207"
+    },
+    {
+        "id": "7828a0d7dc3f810b",
+        "users": ["1531412914005606513"],
+        "name": "Lil Uzi Vert Sprite",
+        "colors": ["#f78e68", "#f7c58d", "#33200e"],
+        "image": "7828a0d7dc3f810b.webp",
+        "imageType": "image/webp",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 3,
+            "zoom": 1.3,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Lil Uzi Vert Sprite",
+            "for": "zot"
+        },
+        "imageHash": "ec9cb64db9989638"
     }
 ]
