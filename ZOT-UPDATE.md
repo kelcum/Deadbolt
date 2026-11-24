@@ -77,3 +77,7 @@ These changes still require type, lint, build and focused runtime verification.
 - FocusTimer and ChannelHistory: account/logout cleanup.
 
 All new plugins remain opt-in. No production release or core, updater, installer, or dependency changes were made in this expansion. Use the existing dev branch test workflow for automated checks if Actions are enabled in the fork.
+
+## AppLock
+
+An optional, local screen lock with password setup, startup locking, an optional account-panel lock button and toolbox action. Uses a salted PBKDF2-SHA-256 verifier (600,000 iterations) stored only in the client's local storage, not in synced plugin settings. Never use your Discord password. Does not sign out, encrypt Discord data, protect notifications or other windows, or resist someone who can modify the client or use developer tools. If the password is forgotten, disable or uninstall Deadbolt and reset the local credential before reenabling. Use the operating system's device lock for security. Startup failures or unsupported APIs leave the client accessible. Requires actual client runtime testing before release.

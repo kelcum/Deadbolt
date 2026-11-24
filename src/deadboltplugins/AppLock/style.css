@@ -1,0 +1,109 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 Zot
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.db-app-lock {
+    position: fixed;
+    inset: 0;
+    margin: 0;
+    width: 100%;
+    max-width: none;
+    height: 100%;
+    max-height: none;
+    box-sizing: border-box;
+    border: 0;
+    padding: 24px;
+    background: var(--background-base-lowest, #111214);
+    color: var(--text-default, #eee);
+    font-family: var(--font-primary, sans-serif);
+    overflow: auto;
+}
+
+.db-app-lock[open] {
+    display: grid;
+    place-items: center;
+}
+
+.db-app-lock::backdrop {
+    background: #111214;
+}
+
+.db-app-lock-card {
+    width: min(100%, 340px);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 28px;
+    box-sizing: border-box;
+    border: 1px solid var(--border-subtle, #34363b);
+    border-radius: 12px;
+    background: var(--background-base-lower, #1e1f22);
+}
+
+.db-app-lock-card h1 {
+    font-size: 25px;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.db-app-lock-card p {
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: center;
+    color: var(--text-muted, #b5bac1);
+}
+
+.db-app-lock-card input,
+.db-app-lock-settings input {
+    box-sizing: border-box;
+    min-width: 0;
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border-subtle, #45464b);
+    border-radius: 6px;
+    background: var(--input-background, #111214);
+    color: var(--text-default, #eee);
+    font: inherit;
+}
+
+.db-app-lock-card input:focus-visible,
+.db-app-lock-settings input:focus-visible,
+.db-app-lock-card button:focus-visible {
+    outline: 2px solid var(--brand-500, #5865f2);
+    outline-offset: 2px;
+}
+
+.db-app-lock-card button {
+    padding: 12px;
+    border-radius: 6px;
+    background: var(--brand-500, #5865f2);
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.db-app-lock-card button:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.db-app-lock-card .db-app-lock-status {
+    min-height: 20px;
+    font-size: 12px;
+}
+
+.db-app-lock-settings {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.db-app-lock-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
