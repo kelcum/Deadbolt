@@ -1,0 +1,71 @@
+.zot-workspace {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--text-normal);
+}
+.zot-workspace-tabs,
+.zot-workspace-tools {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.zot-workspace-editor,
+.zot-workspace-list,
+.zot-workspace-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.zot-workspace-list {
+    max-height: 300px;
+    overflow-y: auto;
+}
+.zot-workspace-item {
+    background: var(--background-secondary);
+    border-radius: 8px;
+    padding: 12px;
+    overflow-wrap: anywhere;
+}
+.zot-workspace-preview {
+    white-space: pre-wrap;
+    max-height: 120px;
+    overflow-y: auto;
+}
+.zot-workspace-check {
+    flex-direction: row;
+    align-items: center;
+}
+.zot-workspace button,
+.zot-workspace input:not([type="checkbox"]),
+.zot-workspace textarea {
+    border-radius: 6px;
+    padding: 8px;
+    color: var(--text-normal);
+    background: var(--background-tertiary);
+}
+.zot-workspace input:not([type="checkbox"]) {
+    flex: 1;
+    min-width: 100px;
+}
+.zot-workspace button {
+    cursor: pointer;
+    align-self: flex-start;
+}
+.zot-workspace button[aria-pressed="true"] {
+    background: var(--brand-500);
+    color: white;
+}
+.zot-workspace button:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+.zot-workspace button:focus-visible,
+.zot-workspace input:focus-visible,
+.zot-workspace textarea:focus-visible {
+    outline: 2px solid var(--brand-500);
+}
+.zot-workspace-status {
+    min-height: 18px;
+    color: var(--text-muted);
+}
