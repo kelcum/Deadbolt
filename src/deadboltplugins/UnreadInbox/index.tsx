@@ -5,7 +5,9 @@
  */
 
 import { HeaderBarButton } from "@api/HeaderBar";
+import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Text } from "@components/Text";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
@@ -70,24 +72,24 @@ const InboxModal = ErrorBoundary.wrap(({ modalProps, userId }: { modalProps: Ren
         modalProps.onClose();
         NavigationRouter.transitionTo("/channels/" + (channel.guild_id || "@me") + "/" + channel.id);
     }
-    return <Modal {...modalProps} size="md" title="Unread inbox" subtitle="Find unread channels and mentions from Discord’s local read-state cache. Nothing is marked read by this list."
+    return <Modal {...modalProps} size="md" title="Unread inbox" subtitle="Unread channels and mentions. Select a channel to open it."
         actions={[{ text: "Refresh", variant: "secondary", onClick: refresh }, { text: "Close", variant: "primary", onClick: modalProps.onClose }]}>
-        {account === userId ? <div style={{ display: "flex", flexDirection: "column", gap: 10, color: "var(--text-normal)" }}>
+        {account === userId ? <div style={{ display: "flex", flexDirection: "column", gap: 10, color: "var(--text-default)" }}>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                <input aria-label="Filter channels" placeholder="Search channels or servers" value={query} onChange={e => { setQuery(e.target.value); setLimit(50); }} style={{ flex: 1, padding: 10, borderRadius: 6, color: "var(--text-normal)", background: "var(--background-tertiary)" }} />
-                <select aria-label="Unread category" value={filter} onChange={e => { setFilter(e.target.value); setLimit(50); }} style={{ color: "var(--text-normal)", background: "var(--background-tertiary)", borderRadius: 6 }}>
+                <input aria-label="Filter channels" placeholder="Search channels or servers" value={query} onChange={e => { setQuery(e.target.value); setLimit(50); }} style={{ flex: 1, padding: 10, borderRadius: 6, color: "var(--text-normal)", background: "var(--input-background, var(--background-base-lower))", border: "1px solid var(--border-subtle, var(--background-modifier-accent))" }} />
+                <select aria-label="Unread category" value={filter} onChange={e => { setFilter(e.target.value); setLimit(50); }} style={{ color: "var(--text-normal)", background: "var(--input-background, var(--background-base-lower))", border: "1px solid var(--border-subtle, var(--background-modifier-accent))", borderRadius: 6 }}>
                     <option value="all">All unread</option><option value="mentions">Mentions</option><option value="dms">DMs</option>
                 </select>
             </div>
-            <p>{filtered.length} cached unread channels</p>
+            <Text size="xs" color="text-muted">{filtered.length} unread channels in cache</Text>
             <div style={{ maxHeight: 380, overflowY: "auto", display: "flex", flexDirection: "column", gap: 6 }}>
-                {filtered.slice(0, limit).map(row => <button type="button" key={row.id} onClick={() => jump(row)} style={{ padding: 10, textAlign: "left", borderRadius: 8, color: "var(--text-normal)", background: "var(--background-secondary)", cursor: "pointer" }}>
-                    <strong>{row.label}</strong>
-                    <div style={{ color: "var(--text-muted)", fontSize: 12 }}>{row.group}{row.mentions ? " · " + row.mentions + " mentions" : ""}</div>
+                {filtered.slice(0, limit).map(row => <button type="button" key={row.id} onClick={() => jump(row)} style={{ padding: 10, textAlign: "left", borderRadius: 8, color: "var(--text-normal)", borderBottom: "1px solid var(--border-subtle, var(--background-modifier-accent))", cursor: "pointer" }}>
+                    <Text size="sm" weight="semibold">{row.label}</Text>
+                    <Text size="xs" color="text-muted">{row.group}{row.mentions ? " · " + row.mentions + " mentions" : ""}</Text>
                 </button>)}
-                {!filtered.length && <p>No matching unread channels in the cache.</p>}
+                {!filtered.length && <Text size="sm" color="text-muted">No matching unread channels.</Text>}
             </div>
-            {limit < filtered.length && <button type="button" onClick={() => setLimit(n => n + 50)} style={{ color: "var(--text-link)", cursor: "pointer" }}>Show more</button>}
+            {limit < filtered.length && <Button size="small" variant="secondary" onClick={() => setLimit(n => n + 50)}>Show more</Button>}
         </div> : <p>Account changed. Reopen the inbox.</p>}
     </Modal>;
 });

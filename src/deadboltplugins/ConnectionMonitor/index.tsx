@@ -6,6 +6,7 @@
 
 import { HeaderBarButton } from "@api/HeaderBar";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Text } from "@components/Text";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { RenderModalProps } from "@vencord/discord-types";
@@ -43,22 +44,27 @@ const MonitorModal = ErrorBoundary.wrap(({ modalProps, userId }: { modalProps: R
         setRows(snapshot(userId));
         setOnline(navigator.onLine);
     }
-    return <Modal {...modalProps} size="md" title="Connection monitor" subtitle="Observe local Discord connection events. This does not measure latency or make network requests."
+    return <Modal {...modalProps} size="md" title="Connection monitor" subtitle="Local network status and recent Discord events."
         actions={[{ text: "Refresh", variant: "secondary", onClick: refresh }, { text: "Close", variant: "primary", onClick: modalProps.onClose }]}>
-        {account === userId ? <div style={{ color: "var(--text-normal)", display: "flex", flexDirection: "column", gap: 10 }}>
-            <div style={{ padding: 12, borderRadius: 8, background: "var(--background-secondary)" }}>
-                <strong>Network indicator: {online ? "Online" : "Offline"}</strong>
-                <p>Latest Discord event: {rows[0]?.label ?? "None observed yet"}</p>
-                <p style={{ color: "var(--text-muted)" }}>Online does not guarantee Discord is reachable.</p>
+        {account === userId ? <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Text weight="semibold" size="sm">Network</Text>
+                <Text weight="semibold" size="sm" color={online ? "text-feedback-positive" : "text-danger"}>{online ? "● Online" : "● Offline"}</Text>
             </div>
-            <strong>Recent connection events (session only)</strong>
-            <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 280, overflowY: "auto" }}>
-                {!rows.length && <p>No connection events recorded. The monitor records events only while enabled.</p>}
-                {rows.map((entry, i) => <div key={entry.time + "-" + i} style={{ padding: 8, background: "var(--background-secondary)", borderRadius: 6 }}>
-                    {new Date(entry.time).toLocaleTimeString()} · {entry.label}
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Text size="sm" color="text-muted">Last Discord event</Text>
+                <Text size="sm">{rows[0]?.label ?? "Not observed"}</Text>
+            </div>
+            <Text size="xs" weight="semibold" color="text-muted">EVENT HISTORY</Text>
+            <div style={{ maxHeight: 240, overflowY: "auto" }}>
+                {!rows.length && <Text size="sm" color="text-muted">No events recorded yet.</Text>}
+                {rows.map((entry, i) => <div key={entry.time + "-" + i} style={{ display: "flex", justifyContent: "space-between", gap: 12, padding: "10px 0", borderBottom: "1px solid var(--border-subtle, var(--background-modifier-accent))" }}>
+                    <Text size="sm">{entry.label}</Text>
+                    <Text size="xs" color="text-muted">{new Date(entry.time).toLocaleTimeString()}</Text>
                 </div>)}
             </div>
-        </div> : <p>Account changed. Reopen the monitor.</p>}
+            <Text size="xs" color="text-muted">Session only. Network status does not confirm Discord reachability.</Text>
+        </div> : <Text size="sm">Account changed. Reopen the monitor.</Text>}
     </Modal>;
 });
 

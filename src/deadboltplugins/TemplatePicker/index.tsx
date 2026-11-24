@@ -4,9 +4,13 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import "./style.css";
+
 import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import * as DataStore from "@api/DataStore";
+import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Text } from "@components/Text";
 import { copyToClipboard } from "@utils/clipboard";
 import { Devs } from "@utils/constants";
 import { insertTextIntoChatInputBox } from "@utils/discord";
@@ -27,6 +31,10 @@ const PickerModal = ErrorBoundary.wrap(({ modalProps, channelId, userId }: { mod
     const [entries, setEntries] = useState<Template[] | null>(null);
     const [query, setQuery] = useState("");
     const [status, setStatus] = useState("");
+    const [editing, setEditing] = useState(false);
+    const [name, setName] = useState("");
+    const [draft, setDraft] = useState("");
+    const [busy, setBusy] = useState(false);
     useEffect(() => {
         let active = true;
         DataStore.get<Template[]>("zot:MessageTemplates:" + userId).then(data => {
@@ -47,25 +55,71 @@ const PickerModal = ErrorBoundary.wrap(({ modalProps, channelId, userId }: { mod
         try { await copyToClipboard(text); setStatus("Copied."); }
         catch { setStatus("Clipboard access failed."); }
     }
+    async function save() {
+        if (UserStore.getCurrentUser()?.id !== userId || busy) return;
+        const title = name.trim();
+        if (!/^[a-zA-Z0-9 _-]{1,32}$/.test(title) || !draft.trim() || draft.length > 1500) {
+            setStatus("Enter a title (1–32 characters) and a message (1–1500 characters).");
+            return;
+        }
+        setBusy(true);
+        try {
+            const key = "zot:MessageTemplates:" + userId;
+            let saved = false;
+            await DataStore.update<Template[]>(key, old => {
+                const list = old ?? [];
+                if (list.length >= 40 && !list.some(e => e.name === title)) return list;
+                saved = true;
+                return [...list.filter(e => e.name !== title), { name: title, text: draft }];
+            });
+            if (UserStore.getCurrentUser()?.id !== userId) return;
+            if (!saved) {
+                setStatus("Template limit reached.");
+                return;
+            }
+            const list = await DataStore.get<Template[]>(key);
+            if (UserStore.getCurrentUser()?.id !== userId) return;
+            setEntries(list ?? []);
+            setEditing(false);
+            setName("");
+            setDraft("");
+            setQuery("");
+            setStatus("Saved.");
+        } catch {
+            setStatus("Could not save template.");
+        } finally {
+            setBusy(false);
+        }
+    }
+
     const matches = entries?.filter(e => e.name.toLowerCase().includes(query.toLowerCase()) || e.text.toLowerCase().includes(query.toLowerCase()));
-    return <Modal {...modalProps} size="md" title="Message templates" subtitle="Insert text into your current draft or copy it. Nothing is sent automatically."
+    return <Modal {...modalProps} size="md" title="Message templates" subtitle="Save messages you use often. Select Insert to add one to your draft."
         actions={[{ text: "Close", variant: "primary", onClick: modalProps.onClose }]}>
-        {account === userId ? <div style={{ display: "flex", flexDirection: "column", gap: 10, color: "var(--text-normal)" }}>
-            <input aria-label="Search templates" placeholder="Search templates" value={query} onChange={e => setQuery(e.target.value)} style={{ padding: 10, borderRadius: 6, color: "var(--text-normal)", background: "var(--background-tertiary)" }} />
-            <div style={{ maxHeight: 320, overflowY: "auto", display: "flex", flexDirection: "column", gap: 8 }}>
-                {!entries && <p>Loading templates…</p>}
-                {matches?.length === 0 && <p>No matching templates. Save one using MessageTemplates.</p>}
-                {matches?.map(e => <div key={e.name} style={{ padding: 12, borderRadius: 8, background: "var(--background-secondary)", overflowWrap: "anywhere" }}>
-                    <strong>{e.name}</strong>
-                    <p style={{ whiteSpace: "pre-wrap", margin: "8px 0" }}>{e.text}</p>
-                    <div style={{ display: "flex", gap: 16 }}>
-                        <button type="button" style={{ color: "var(--text-link)", cursor: "pointer" }} onClick={() => insert(e.text)}>Insert into draft</button>
-                        <button type="button" style={{ color: "var(--text-link)", cursor: "pointer" }} onClick={() => void copy(e.text)}>Copy</button>
-                    </div>
+        {account === userId ? <div className="zot-template-picker">
+            <div className="zot-template-tools">
+                <input aria-label="Search templates" placeholder="Search" value={query} onChange={e => setQuery(e.target.value)} />
+                <Button size="small" onClick={() => { setName(""); setDraft(""); setStatus(""); setEditing(true); }}>New template</Button>
+            </div>
+            {editing && <div className="zot-template-editor">
+                <input aria-label="Template name" placeholder="Title" maxLength={32} value={name} onChange={e => setName(e.target.value)} />
+                <textarea aria-label="Template message" placeholder="Message to reuse" maxLength={1500} rows={3} value={draft} onChange={e => setDraft(e.target.value)} />
+                <div className="zot-template-tools">
+                    <Button size="small" disabled={busy} onClick={() => void save()}>Save</Button>
+                    <Button size="small" variant="secondary" disabled={busy} onClick={() => setEditing(false)}>Cancel</Button>
+                </div>
+            </div>}
+            <div className="zot-template-list">
+                {!entries && <Text size="sm" color="text-muted" className="zot-template-empty">Loading…</Text>}
+                {matches?.length === 0 && <Text size="sm" color="text-muted" className="zot-template-empty">{entries?.length ? "No matching templates." : "No templates yet. Create one to get started."}</Text>}
+                {matches?.map(e => <div key={e.name} className="zot-template-row">
+                    <div className="zot-template-body"><Text size="sm" weight="semibold">{e.name}</Text><Text size="sm" color="text-muted" lineClamp={2}>{e.text}</Text></div>
+                    <Button size="xs" onClick={() => insert(e.text)}>Insert</Button>
+                    <Button size="xs" variant="secondary" onClick={() => void copy(e.text)}>Copy</Button>
+                    <Button size="xs" variant="none" onClick={() => { setName(e.name); setDraft(e.text); setEditing(true); }}>Edit</Button>
                 </div>)}
             </div>
-            <div role="status">{status}</div>
-        </div> : <p>Account changed. Close and reopen the picker.</p>}
+            {status && <Text size="xs" color="text-muted" role="status">{status}</Text>}
+        </div> : <Text size="sm">Account changed. Reopen the picker.</Text>}
     </Modal>;
 });
 
