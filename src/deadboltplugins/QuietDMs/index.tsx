@@ -12,6 +12,7 @@ import { User } from "@vencord/discord-types";
 import { findByPropsLazy } from "@webpack";
 import { Menu, showToast, UserStore } from "@webpack/common";
 
+// Adapted from reqon’s QuietDMs (GPL-3.0-or-later).
 const logger = new Logger("QuietDMs");
 const ChannelActions = findByPropsLazy("openPrivateChannel", "ensurePrivateChannel");
 

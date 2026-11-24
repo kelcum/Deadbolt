@@ -45,6 +45,10 @@ export default definePlugin({
     flux: {
         CHANNEL_SELECT({ channelId }: { channelId: string | null; }) {
             remember(channelId);
+        },
+        LOGOUT() {
+            accountId = undefined;
+            visits = [];
         }
     },
     commands: [{

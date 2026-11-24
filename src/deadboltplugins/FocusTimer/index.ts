@@ -8,13 +8,17 @@ import { ApplicationCommandInputType, ApplicationCommandOptionType, findOption, 
 import { showNotification } from "@api/Notifications";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
+import { UserStore } from "@webpack/common";
+
 let timer: ReturnType<typeof setTimeout> | undefined;
 let end = 0;
+let owner: string | undefined;
 
 function cancel() {
     clearTimeout(timer);
     timer = undefined;
     end = 0;
+    owner = undefined;
 }
 
 export default definePlugin({
@@ -24,6 +28,7 @@ export default definePlugin({
     tags: ["Utility", "Notifications"],
     dependencies: ["CommandsAPI"],
     stop() { cancel(); },
+    flux: { LOGOUT() { cancel(); } },
     commands: [{
         name: "dbfocus",
         description: "Start, inspect or cancel a focus timer.",
@@ -33,6 +38,9 @@ export default definePlugin({
             { name: "minutes", description: "Timer length in minutes.", type: ApplicationCommandOptionType.INTEGER }
         ],
         async execute(opts, ctx) {
+            const userId = UserStore.getCurrentUser()?.id;
+            if (!userId) return;
+            if (owner && owner !== userId) cancel();
             const action = findOption<string>(opts, "action", "status");
             const reply = (content: string) => { sendBotMessage(ctx.channel.id, { content }); };
             if (action === "cancel") {
@@ -43,9 +51,12 @@ export default definePlugin({
             const minutes = Number(findOption(opts, "minutes", 25));
             if (!Number.isInteger(minutes) || minutes < 1 || minutes > 240) return reply("Choose 1 to 240 minutes.");
             cancel();
+            owner = userId;
             end = Date.now() + minutes * 60_000;
             timer = setTimeout(() => {
+                const notify = UserStore.getCurrentUser()?.id === userId;
                 cancel();
+                if (!notify) return;
                 void showNotification({ title: "Focus timer", body: "Your timer is complete.", noPersist: true }).catch(() => {});
             }, minutes * 60_000);
             return reply("Focus timer started for " + minutes + " minutes.");

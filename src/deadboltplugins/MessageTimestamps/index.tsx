@@ -37,7 +37,6 @@ function relativeAge(ms: number): string {
     return `${Math.floor(day / 365)}y ago`;
 }
 
-
 const settings = definePluginSettings({
     alwaysShow: {
         type: OptionType.BOOLEAN,
@@ -59,7 +58,7 @@ function updateStyle() {
         styleEl = undefined;
         return;
     }
-    const className = MessageClasses.latin24CompactTimeStamp;
+    const { latin24CompactTimeStamp: className } = MessageClasses;
     if (!className || !/^[\w-]+$/.test(className)) return;
     if (!styleEl) {
         styleEl = document.createElement("style");

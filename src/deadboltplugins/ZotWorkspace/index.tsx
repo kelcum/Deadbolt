@@ -22,6 +22,7 @@ interface Entry { name: string; text: string; }
 interface Task { id: string; text: string; done: boolean; }
 interface Bookmark { link: string; folder: string; }
 interface Workspace { name: string; link: string; }
+interface AttachmentBookmark { id: string; link: string; names: string[]; }
 interface Reminder { id: string; text: string; due: number; notified: boolean; }
 interface Snapshot {
     notes: Entry[];
@@ -30,12 +31,14 @@ interface Snapshot {
     pins: Bookmark[];
     workspaces: Workspace[];
     reminders: Reminder[];
+    attachments: AttachmentBookmark[];
 }
 type Tab = keyof Snapshot;
 const tabs: { id: Tab; label: string; }[] = [
     { id: "notes", label: "Notes" }, { id: "tasks", label: "Tasks" },
     { id: "templates", label: "Templates" }, { id: "pins", label: "Bookmarks" },
-    { id: "workspaces", label: "Workspaces" }, { id: "reminders", label: "Reminders" }
+    { id: "workspaces", label: "Workspaces" }, { id: "reminders", label: "Reminders" },
+    { id: "attachments", label: "Attachments" }
 ];
 
 function keyFor(feature: string, userId: string) {
@@ -64,21 +67,24 @@ function WorkspacePanel({ userId, modalProps }: { userId: string; modalProps: Re
     const [draft, setDraft] = useState("");
     const [task, setTask] = useState("");
     const [editing, setEditing] = useState(false);
+    const [reminder, setReminder] = useState("");
+    const [minutes, setMinutes] = useState("15");
     useEffect(() => {
         let active = true;
         async function load() {
             try {
-                const [notes, tasks, templates, pins, workspaces, reminders] = await Promise.all([
+                const [notes, tasks, templates, pins, workspaces, reminders, attachments] = await Promise.all([
                     DataStore.get<Entry[]>(keyFor("QuickNotes", userId)),
                     DataStore.get<Task[]>(keyFor("PersonalChecklist", userId)),
                     DataStore.get<Entry[]>(keyFor("MessageTemplates", userId)),
                     DataStore.get<Bookmark[]>(keyFor("PersonalPins", userId)),
                     DataStore.get<Workspace[]>(keyFor("WorkspaceProfiles", userId)),
-                    DataStore.get<Reminder[]>(keyFor("MessageReminders", userId))
+                    DataStore.get<Reminder[]>(keyFor("MessageReminders", userId)),
+                    DataStore.get<AttachmentBookmark[]>(keyFor("AttachmentOrganizer", userId))
                 ]);
                 if (active && owns(userId)) setData({
                     notes: notes ?? [], tasks: tasks ?? [], templates: templates ?? [],
-                    pins: pins ?? [], workspaces: workspaces ?? [], reminders: reminders ?? []
+                    pins: pins ?? [], workspaces: workspaces ?? [], reminders: reminders ?? [], attachments: attachments ?? []
                 });
             } catch {
                 if (active) setStatus("Could not read local workspace data.");
@@ -129,6 +135,20 @@ function WorkspacePanel({ userId, modalProps }: { userId: string; modalProps: Re
         }), "Task added.", () => setTask(current => current === task ? "" : current));
     }
 
+    function addReminder() {
+        const text = reminder.trim();
+        const delay = Number(minutes);
+        if (!text || text.length > 200 || !Number.isInteger(delay) || delay < 1 || delay > 525600) {
+            setStatus("Enter reminder text and a valid number of minutes.");
+            return;
+        }
+        void mutate(() => DataStore.update<Reminder[]>(keyFor("MessageReminders", userId), old => {
+            const entries = old ?? [];
+            if (entries.length >= 50) throw new Error("Reminder limit");
+            return [...entries, { id: crypto.randomUUID().slice(0, 12), text, due: Date.now() + delay * 60_000, notified: false }];
+        }), "Reminder saved. Enable MessageReminders to receive alerts.", () => setReminder(current => current === reminder ? "" : current));
+    }
+
     function go(link: string) {
         if (!owns(userId)) return;
         const match = /^https:\/\/discord\.com(\/channels\/(?:@me|\d{17,20})\/\d{17,20}(?:\/\d{17,20})?)\/?$/.exec(link);
@@ -177,6 +197,14 @@ function WorkspacePanel({ userId, modalProps }: { userId: string; modalProps: Re
             <input aria-label="New task" placeholder="New task" maxLength={150} value={task} onChange={e => setTask(e.target.value)} />
             <Button size="small" disabled={busy || !task.trim()} onClick={addTask}>Add</Button>
         </div>}
+        {tab === "reminders" && <div className="zot-workspace-editor">
+            <input aria-label="Reminder" placeholder="Remind me to…" maxLength={200} value={reminder} onChange={e => setReminder(e.target.value)} />
+            <div className="zot-workspace-tools">
+                <input aria-label="Minutes until reminder" type="number" min={1} max={525600} value={minutes} onChange={e => setMinutes(e.target.value)} />
+                <Text size="xs" color="text-muted">minutes</Text>
+                <Button size="small" disabled={busy || !reminder.trim()} onClick={addReminder}>Add</Button>
+            </div>
+        </div>}
         <div className="zot-workspace-list">
             {!data && <Text size="sm" color="text-muted" className="zot-workspace-empty">Loading…</Text>}
             {data && !data[tab].length && <Text size="sm" color="text-muted" className="zot-workspace-empty">No saved items.</Text>}
@@ -199,6 +227,10 @@ function WorkspacePanel({ userId, modalProps }: { userId: string; modalProps: Re
             </div>)}
             {tab === "workspaces" && data?.workspaces.filter(e => matches(e.name, e.link)).map(e => <div className="zot-workspace-item" key={e.name}>
                 <div className="zot-workspace-body"><Text size="sm" weight="semibold">{e.name}</Text></div><Button size="xs" variant="secondary" onClick={() => go(e.link)}>Open</Button>
+            </div>)}
+            {tab === "attachments" && data?.attachments.filter(e => matches(...e.names, e.link)).map(e => <div className="zot-workspace-item" key={e.id}>
+                <div className="zot-workspace-body"><Text size="sm" weight="semibold" lineClamp={2}>{e.names.join(", ")}</Text><Text size="xs" color="text-muted">{e.names.length} attachment(s)</Text></div>
+                <Button size="xs" variant="secondary" onClick={() => go(e.link)}>Open</Button>
             </div>)}
             {tab === "reminders" && data?.reminders.filter(e => matches(e.text)).map(e => <div className="zot-workspace-item" key={e.id}>
                 <div className="zot-workspace-body"><Text size="sm" weight="semibold">{e.text}</Text><Text size="xs" color="text-muted">{new Date(e.due).toLocaleString()} · {e.notified ? "Notified" : "Pending"}</Text></div>
