@@ -352,6 +352,12 @@ export default definePlugin({
     authors: [Devs.K3],
     enabledByDefault: true,
     settings,
+    flux: {
+        LOGOUT() {
+            close();
+            seenByChannel.clear();
+        }
+    },
     start() {
         document.addEventListener("keydown", onKeyDown, true);
     },

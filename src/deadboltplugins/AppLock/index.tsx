@@ -35,6 +35,7 @@ const settings = definePluginSettings({
 
 let dialog: HTMLDialogElement | undefined;
 let running = false;
+let saving = false;
 let generation = 0;
 
 function unlock() {
@@ -47,7 +48,7 @@ function unlock() {
 }
 
 function lock(record: Credential) {
-    if (!running || dialog) return;
+    if (!running || dialog || saving) return;
     try {
         if (!globalThis.crypto?.subtle || typeof HTMLDialogElement.prototype.showModal !== "function") return;
         const run = ++generation;
@@ -151,11 +152,13 @@ const PasswordSettings = ErrorBoundary.wrap(() => {
     }, []);
 
     async function save(remove = false) {
-        if (busy || !running || !ready) return;
+        if (busy || saving || !running || !ready || dialog) return;
         if (!remove && (password.length < 8 || password.length > 128 || password !== confirm)) {
             setStatus("Use at least 8 characters and enter matching passwords.");
             return;
         }
+        saving = true;
+        generation++;
         setBusy(true);
         setStatus("");
         const run = generation;
@@ -180,6 +183,7 @@ const PasswordSettings = ErrorBoundary.wrap(() => {
         } catch {
             setStatus("Could not save the local password.");
         } finally {
+            saving = false;
             setBusy(false);
         }
     }
@@ -202,6 +206,10 @@ const PasswordSettings = ErrorBoundary.wrap(() => {
 
 async function manualLock() {
     if (!running || dialog) return;
+    if (saving) {
+        showToast({ text: "Finish saving your password first." });
+        return;
+    }
     const run = generation;
     try {
         const record = await readCredential();

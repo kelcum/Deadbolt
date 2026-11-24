@@ -90,6 +90,10 @@ export default definePlugin({
     onBeforeMessageSend: onSend,
 
     flux: {
+        LOGOUT() {
+            reset();
+            accountId = undefined;
+        },
         MESSAGE_CREATE({ channelId, message, optimistic }: { channelId: string; message: { id: string; author: { id: string; }; content?: string; state?: string; }; optimistic?: boolean; }) {
             const id = currentAccount();
             if (!id || optimistic || message.author.id !== id || !/^\d{17,20}$/.test(message.id) || (message.state && message.state !== "SENT")) return;

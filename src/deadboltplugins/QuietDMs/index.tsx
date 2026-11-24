@@ -13,6 +13,7 @@ import { findByPropsLazy } from "@webpack";
 import { Menu, showToast, UserStore } from "@webpack/common";
 
 // Adapted from reqon’s QuietDMs (GPL-3.0-or-later).
+// Original source copyright (c) 2026 Vendicated and contributors.
 const logger = new Logger("QuietDMs");
 const ChannelActions = findByPropsLazy("getOrEnsurePrivateChannel");
 

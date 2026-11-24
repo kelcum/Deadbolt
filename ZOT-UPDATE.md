@@ -80,7 +80,7 @@ All new plugins remain opt-in. No production release or core, updater, installer
 
 ## AppLock
 
-An optional, local screen lock with password setup, startup locking, an optional account-panel lock button and toolbox action. Uses a salted PBKDF2-SHA-256 verifier (600,000 iterations) stored only in the client's local storage, not in synced plugin settings. Never use your Discord password. Does not sign out, encrypt Discord data, protect notifications or other windows, or resist someone who can modify the client or use developer tools. If the password is forgotten, disable or uninstall Deadbolt and reset the local credential before reenabling. Use the operating system's device lock for security. Startup failures or unsupported APIs leave the client accessible. Requires actual client runtime testing before release.
+An optional, local screen lock with password setup, startup locking, an optional top-bar lock button and toolbox action. Uses a salted PBKDF2-SHA-256 verifier (600,000 iterations) stored only in a separate local IndexedDB database, not in synced plugin settings. Never use your Discord password. Does not sign out, encrypt Discord data, protect notifications or other windows, or resist someone who can modify the client or use developer tools. If the password is forgotten, disable or uninstall Deadbolt and reset the local credential before reenabling. Use the operating system's device lock for security. Startup failures or unsupported APIs leave the client accessible. Requires actual client runtime testing before release.
 
 - ChannelDetails: a compact channel information panel from the right-click menu.
 - QuickRestart: restart via the toolbox with confirmation.
@@ -91,3 +91,7 @@ Password logic was checked with local Node/TypeScript assertions for correct and
 ### AppLock storage and toolbar fix
 
 AppLock uses a separate IndexedDB database outside the default settings/data backup. The previous localStorage accessor may be unavailable. Accessible old verifiers are migrated; removal writes a null marker. AppLock, QuickRestart and FocusTimer use the same top-bar API as Workspace. Client runtime verification is still needed.
+
+### Final review
+
+Reviewed the author entries and SPDX headers for all 32 additions. 30 list only Zot; MessageTimestamps and QuietDMs list their original authors alongside Zot. Added logout cleanup to QuickFind and message guards, handled rejected DraftHistory storage promises, and blocked AppLock activation during password changes. No additional dependencies or production changes. Full CI and cross-platform runtime validation remain outstanding.

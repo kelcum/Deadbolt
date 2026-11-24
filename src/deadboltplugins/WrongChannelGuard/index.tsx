@@ -82,6 +82,13 @@ export default definePlugin({
     settings,
 
     flux: {
+        LOGOUT() {
+            currentChannelId = null;
+            arrivedAt = 0;
+            typedBeforeArrival = null;
+            lastTyped = null;
+            clearArmed();
+        },
         CHANNEL_SELECT({ channelId }: { channelId: string | null; }) {
             arrive(channelId);
         },

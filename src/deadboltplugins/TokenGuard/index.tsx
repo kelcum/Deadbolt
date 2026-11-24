@@ -139,6 +139,8 @@ export default definePlugin({
         if (settings.store.checkEdits) return guard(channelId, messageObj.content);
     },
 
+    flux: { LOGOUT() { clearArmed(); } },
+
     stop() {
         clearArmed();
     }
