@@ -85,3 +85,5 @@ An optional, local screen lock with password setup, startup locking, an optional
 - ChannelDetails: a compact channel information panel from the right-click menu.
 - QuickRestart: restart via the toolbox with confirmation.
 - FocusTimer: a visual timer panel in the toolbox, with quick presets.
+
+Password logic was checked with local Node/TypeScript assertions for correct and wrong passwords, randomized salts, length bounds and malformed credential records. Run `node --test scripts/applock.test.mjs` with Node 24+ to repeat. The full client build and actual lock-screen behavior still need verification.
