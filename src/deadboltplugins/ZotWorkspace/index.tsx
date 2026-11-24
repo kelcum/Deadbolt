@@ -8,7 +8,10 @@ import "./style.css";
 
 import * as DataStore from "@api/DataStore";
 import { HeaderBarButton } from "@api/HeaderBar";
+import { migratePluginSettings } from "@api/Settings";
+import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
+import { Text } from "@components/Text";
 import { copyToClipboard } from "@utils/clipboard";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
@@ -60,6 +63,7 @@ function WorkspacePanel({ userId, modalProps }: { userId: string; modalProps: Re
     const [name, setName] = useState("");
     const [draft, setDraft] = useState("");
     const [task, setTask] = useState("");
+    const [editing, setEditing] = useState(false);
     useEffect(() => {
         let active = true;
         async function load() {
@@ -112,7 +116,7 @@ function WorkspacePanel({ userId, modalProps }: { userId: string; modalProps: Re
             const entries = old ?? [];
             if (entries.length >= 40 && !entries.some(e => e.name === title)) throw new Error("Note limit");
             return [...entries.filter(e => e.name !== title), { name: title, text: draft }];
-        }), "Note saved.");
+        }), "Note saved.", () => { setEditing(false); setName(""); setDraft(""); });
     }
 
     function addTask() {
@@ -149,67 +153,79 @@ function WorkspacePanel({ userId, modalProps }: { userId: string; modalProps: Re
     const matches = (...values: string[]) => values.some(value => value.toLowerCase().includes(query.trim().toLowerCase()));
 
     return <div className="zot-workspace">
-        <div className="zot-workspace-tabs" aria-label="Workspace sections">
-            {tabs.map(item => <button type="button" key={item.id} aria-pressed={tab === item.id} onClick={() => { setTab(item.id); setQuery(""); setStatus(""); }}>
-                {item.label} {data ? "(" + data[item.id].length + ")" : ""}
-            </button>)}
-        </div>
         <div className="zot-workspace-tools">
-            <input aria-label="Filter workspace items" placeholder="Search this section" value={query} onChange={e => setQuery(e.target.value)} />
-            <button type="button" onClick={() => setRevision(n => n + 1)}>Refresh</button>
+            <select aria-label="Workspace section" value={tab} onChange={e => {
+                setTab(e.target.value as Tab);
+                setQuery("");
+                setStatus("");
+                setEditing(false);
+            }}>
+                {tabs.map(item => <option key={item.id} value={item.id}>{item.label}{data ? " (" + data[item.id].length + ")" : ""}</option>)}
+            </select>
+            <input aria-label="Search items" placeholder="Search" value={query} onChange={e => setQuery(e.target.value)} />
         </div>
-        {tab === "notes" && <div className="zot-workspace-editor">
-            <input aria-label="Note name" placeholder="Note name" maxLength={32} value={name} onChange={e => setName(e.target.value)} />
-            <textarea aria-label="Note text" placeholder="Write a note..." maxLength={1500} rows={4} value={draft} onChange={e => setDraft(e.target.value)} />
-            <button type="button" disabled={busy} onClick={saveNote}>Save note</button>
+        {tab === "notes" && !editing && <Button size="small" onClick={() => { setName(""); setDraft(""); setEditing(true); }}>New note</Button>}
+        {tab === "notes" && editing && <div className="zot-workspace-editor">
+            <input aria-label="Note name" placeholder="Title" maxLength={32} value={name} onChange={e => setName(e.target.value)} />
+            <textarea aria-label="Note text" placeholder="Write a note…" maxLength={1500} rows={4} value={draft} onChange={e => setDraft(e.target.value)} />
+            <div className="zot-workspace-actions">
+                <Button size="small" disabled={busy} onClick={saveNote}>Save</Button>
+                <Button size="small" variant="secondary" disabled={busy} onClick={() => setEditing(false)}>Cancel</Button>
+            </div>
         </div>}
         {tab === "tasks" && <div className="zot-workspace-tools">
             <input aria-label="New task" placeholder="New task" maxLength={150} value={task} onChange={e => setTask(e.target.value)} />
-            <button type="button" disabled={busy || !task.trim()} onClick={addTask}>Add</button>
+            <Button size="small" disabled={busy || !task.trim()} onClick={addTask}>Add</Button>
         </div>}
         <div className="zot-workspace-list">
-            {!data && <p>Loading local workspace…</p>}
-            {data && !data[tab].length && <p>No saved items in this section.</p>}
+            {!data && <Text size="sm" color="text-muted" className="zot-workspace-empty">Loading…</Text>}
+            {data && !data[tab].length && <Text size="sm" color="text-muted" className="zot-workspace-empty">No saved items.</Text>}
             {tab === "notes" && data?.notes.filter(e => matches(e.name, e.text)).map(e => <div className="zot-workspace-item" key={e.name}>
-                <strong>{e.name}</strong><div className="zot-workspace-preview">{e.text}</div>
-                <div className="zot-workspace-tools"><button type="button" onClick={() => { setName(e.name); setDraft(e.text); }}>Edit</button><button type="button" onClick={() => void copy(e.text)}>Copy</button></div>
+                <div className="zot-workspace-body"><Text size="sm" weight="semibold">{e.name}</Text><Text size="sm" color="text-muted" lineClamp={2}>{e.text}</Text></div>
+                <Button size="xs" variant="secondary" onClick={() => { setName(e.name); setDraft(e.text); setEditing(true); }}>Edit</Button>
+                <Button size="xs" variant="secondary" onClick={() => void copy(e.text)}>Copy</Button>
             </div>)}
-            {tab === "tasks" && data?.tasks.filter(e => matches(e.text)).map(e => <label className="zot-workspace-item zot-workspace-check" key={e.id}>
+            {tab === "tasks" && data?.tasks.filter(e => matches(e.text)).map(e => <label className="zot-workspace-item" key={e.id}>
                 <input type="checkbox" disabled={busy} checked={e.done} onChange={() => void mutate(() => DataStore.update<Task[]>(keyFor("PersonalChecklist", userId), old => (old ?? []).map(t => t.id === e.id ? { ...t, done: !t.done } : t)), "Task updated.")} />
-                <span>{e.text}</span>
+                <Text tag="span" size="sm" color={e.done ? "text-muted" : "text-default"} className={e.done ? "zot-workspace-done" : undefined}>{e.text}</Text>
             </label>)}
             {tab === "templates" && data?.templates.filter(e => matches(e.name, e.text)).map(e => <div className="zot-workspace-item" key={e.name}>
-                <strong>{e.name}</strong><div className="zot-workspace-preview">{e.text}</div><button type="button" onClick={() => void copy(e.text)}>Copy template</button>
+                <div className="zot-workspace-body"><Text size="sm" weight="semibold">{e.name}</Text><Text size="sm" color="text-muted" lineClamp={2}>{e.text}</Text></div>
+                <Button size="xs" variant="secondary" onClick={() => void copy(e.text)}>Copy</Button>
             </div>)}
             {tab === "pins" && data?.pins.filter(e => matches(e.folder, e.link)).map(e => <div className="zot-workspace-item" key={e.link}>
-                <strong>{e.folder}</strong><div>{e.link}</div><button type="button" onClick={() => go(e.link)}>Open message</button>
+                <div className="zot-workspace-body"><Text size="sm" weight="semibold">{e.folder || "Bookmark"}</Text><Text size="xs" color="text-muted" lineClamp={1}>{e.link}</Text></div>
+                <Button size="xs" variant="secondary" onClick={() => go(e.link)}>Open</Button>
             </div>)}
             {tab === "workspaces" && data?.workspaces.filter(e => matches(e.name, e.link)).map(e => <div className="zot-workspace-item" key={e.name}>
-                <strong>{e.name}</strong><button type="button" onClick={() => go(e.link)}>Open channel</button>
+                <div className="zot-workspace-body"><Text size="sm" weight="semibold">{e.name}</Text></div><Button size="xs" variant="secondary" onClick={() => go(e.link)}>Open</Button>
             </div>)}
             {tab === "reminders" && data?.reminders.filter(e => matches(e.text)).map(e => <div className="zot-workspace-item" key={e.id}>
-                <strong>{e.text}</strong><div>{new Date(e.due).toLocaleString()} · {e.notified ? "Notified" : "Pending"}</div>
+                <div className="zot-workspace-body"><Text size="sm" weight="semibold">{e.text}</Text><Text size="xs" color="text-muted">{new Date(e.due).toLocaleString()} · {e.notified ? "Notified" : "Pending"}</Text></div>
             </div>)}
         </div>
-        <div role="status" className="zot-workspace-status">{status}</div>
+        {status && <Text size="xs" color="text-muted" role="status">{status}</Text>}
+        <div className="zot-workspace-footer"><Button size="xs" variant="none" onClick={() => setRevision(n => n + 1)}>Refresh</Button></div>
     </div>;
 }
 
 const WorkspaceModal = ErrorBoundary.wrap(({ modalProps }: { modalProps: RenderModalProps; }) => {
     const userId = useStateFromStores([UserStore], () => UserStore.getCurrentUser()?.id);
-    return <Modal {...modalProps} size="md" title="Deadbolt Workspace" subtitle="Your local notes, tasks, templates, bookmarks and reminders."
+    return <Modal {...modalProps} size="md" title="Workspace"
         actions={[{ text: "Close", variant: "primary", onClick: modalProps.onClose }]}>
         {userId ? <WorkspacePanel key={userId} userId={userId} modalProps={modalProps} /> : <p>Sign in to use your workspace.</p>}
     </Modal>;
 });
 
+migratePluginSettings("Workspace", "ZotWorkspace");
+
 export default definePlugin({
-    name: "ZotWorkspace",
-    description: "Adds a workspace dashboard for your existing Zot notes, checklists, templates, bookmarks and reminders.",
+    name: "Workspace",
+    description: "Manage your saved notes, tasks, templates, bookmarks and reminders in one place.",
     authors: [Devs.Zot],
     tags: ["Organisation", "Utility"],
     headerBarButton: {
         icon: WorkspaceIcon,
-        render: () => <HeaderBarButton icon={WorkspaceIcon} tooltip="Deadbolt Workspace" onClick={() => openModal(props => <WorkspaceModal modalProps={props} />)} />
+        render: () => <HeaderBarButton icon={WorkspaceIcon} tooltip="Workspace" onClick={() => openModal(props => <WorkspaceModal modalProps={props} />)} />
     }
 });

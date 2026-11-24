@@ -37,12 +37,12 @@ Local data is not encrypted and can be included in backups or sync. Never store 
 
 | Feature | Usage |
 | --- | --- |
-| ZotWorkspace | Header bar workspace with notes, task checkboxes, saved template copying, bookmarks, workspaces and reminder overview. |
+| Workspace | Header bar workspace with notes, task checkboxes, saved template copying, bookmarks, workspaces and reminder overview. |
 | TemplatePicker | Chat bar template search, copy and draft insertion; never automatically sends. |
 | UnreadInbox | Header bar panel to filter cached unread channels and mentions; opens only channels the local permission store allows. |
 | ConnectionMonitor | Header bar panel for the last 20 observed connection events and the browser network indicator. |
 
-The workspace shares the original plugins' account-specific DataStore keys. The new panels do not enable other plugins automatically. The reminder panel displays stored reminders; MessageReminders must be enabled to receive alerts.
+Workspace was renamed from ZotWorkspace using the existing settings migration helper. The workspace shares the original plugins' account-specific DataStore keys. The new panels do not enable other plugins automatically. The reminder panel displays stored reminders; MessageReminders must be enabled to receive alerts.
 
 ## Existing fixes
 
