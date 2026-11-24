@@ -16,7 +16,7 @@ import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType, ReporterTestable, StartAt } from "@utils/types";
 import { showToast, useEffect, useState } from "@webpack/common";
 
-import { type Credential, createCredential, verifyPassword } from "./password";
+import { createCredential, type Credential, verifyPassword } from "./password";
 import { readCredential, writeCredential } from "./storage";
 
 const logger = new Logger("AppLock");
@@ -161,12 +161,12 @@ const PasswordSettings = ErrorBoundary.wrap(() => {
         const run = generation;
         try {
             const existing = await readCredential();
-            if (existing && !await verifyPassword(current, existing)) {
-                setStatus("Current password is incorrect.");
-                return;
-            }
             if (!globalThis.crypto?.subtle) {
                 setStatus("Password verification is not supported in this client.");
+                return;
+            }
+            if (existing && !await verifyPassword(current, existing)) {
+                setStatus("Current password is incorrect.");
                 return;
             }
             const next = remove ? null : await createCredential(password);
