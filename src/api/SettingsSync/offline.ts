@@ -55,24 +55,13 @@ function isSafeObject(obj: any) {
 export async function importSettings(data: string, type: BackupType = "all", cloud = false) {
     try {
         var parsed = JSON.parse(data);
-    } catch {
-        throw new Error("Invalid backup JSON");
+    } catch (err) {
+        console.log(data);
+        throw new Error("Failed to parse JSON: " + String(err));
     }
-
-    if (!parsed || typeof parsed !== "object" || Array.isArray(parsed))
-        throw new Error("Invalid backup format");
 
     if (!isSafeObject(parsed))
         throw new Error("Unsafe Settings");
-
-    if ((type === "all" || type === "plugins") && parsed.settings !== undefined
-        && (!parsed.settings || typeof parsed.settings !== "object" || Array.isArray(parsed.settings)))
-        throw new Error("Invalid plugin settings");
-    if ((type === "all" || type === "css") && parsed.quickCss !== undefined && typeof parsed.quickCss !== "string")
-        throw new Error("Invalid QuickCSS");
-    if ((type === "all" || type === "datastore") && parsed.dataStore !== undefined
-        && (!Array.isArray(parsed.dataStore) || parsed.dataStore.some(entry => !Array.isArray(entry) || entry.length !== 2)))
-        throw new Error("Invalid DataStore entries");
 
     switch (type) {
         case "all": {
@@ -83,7 +72,7 @@ export async function importSettings(data: string, type: BackupType = "all", clo
                 deepMerge(PlainSettings, parsed.settings);
                 await VencordNative.settings.set(PlainSettings);
             }
-            if (typeof parsed.quickCss === "string") await VencordNative.quickCss.set(parsed.quickCss);
+            if (parsed.quickCss) await VencordNative.quickCss.set(parsed.quickCss);
             if (parsed.dataStore) await DataStore.setMany(parsed.dataStore);
             break;
         }
@@ -95,7 +84,7 @@ export async function importSettings(data: string, type: BackupType = "all", clo
             break;
         }
         case "css": {
-            if (typeof parsed.quickCss !== "string") throw new Error("CSS missing or invalid");
+            if (!parsed.quickCss) throw new Error("CSS missing");
 
             await VencordNative.quickCss.set(parsed.quickCss);
             break;

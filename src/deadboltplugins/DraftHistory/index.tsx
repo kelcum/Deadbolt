@@ -10,12 +10,10 @@ import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import { insertTextIntoChatInputBox } from "@utils/discord";
 import { proxyLazy } from "@utils/lazy";
-import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { ComponentDispatch, ContextMenuApi, DraftStore, DraftType, Menu, moment, zustandCreate } from "@webpack/common";
 
 const STORE_KEY = "DraftHistory_versions";
-const logger = new Logger("DraftHistory");
 
 const settings = definePluginSettings({
     maxVersions: {
@@ -55,7 +53,6 @@ const useHistory: HistoryStore = proxyLazy(() => zustandCreate(() => ({ versions
 
 const lastDraft = new Map<string, string>();
 const lastSent = new Map<string, string>();
-let historyRevision = 0;
 
 function prune(versions: Versions) {
     const { maxVersions, keepDays } = settings.store;
@@ -69,9 +66,8 @@ function prune(versions: Versions) {
 }
 
 function setVersions(versions: Versions) {
-    historyRevision++;
     useHistory.setState({ versions });
-    void DataStore.set(STORE_KEY, versions).catch(error => logger.error("Could not save draft history", error));
+    DataStore.set(STORE_KEY, versions);
 }
 
 function remember(channelId: string, text: string) {
@@ -177,19 +173,12 @@ export default definePlugin({
         lastSent.set(channelId, content.trim());
     },
 
-    start() {
+    async start() {
         for (const { channelId, draft } of DraftStore.getRecentlyEditedDrafts(DraftType.ChannelMessage)) lastDraft.set(channelId, draft);
-        const revision = ++historyRevision;
-        void DataStore.get<Versions>(STORE_KEY).then(stored => {
-            if (revision !== historyRevision) return;
-            const versions = prune(stored ?? {});
-            if (JSON.stringify(stored ?? {}) !== JSON.stringify(versions)) setVersions(versions);
-            else useHistory.setState({ versions });
-        }).catch(error => logger.error("Could not load draft history", error));
+        useHistory.setState({ versions: prune(await DataStore.get<Versions>(STORE_KEY) ?? {}) });
     },
 
     stop() {
-        historyRevision++;
         lastDraft.clear();
         lastSent.clear();
     }

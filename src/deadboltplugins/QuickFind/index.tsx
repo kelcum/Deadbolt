@@ -44,20 +44,13 @@ const settings = definePluginSettings({
 
 const seenByChannel = new Map<string, Map<string, Message>>();
 const MAX_SEEN_PER_CHANNEL = 20_000;
-const MAX_CACHED_CHANNELS = 12;
 const MAX_LISTED = 60;
 
 function remember(channelId: string) {
     const store = MessageStore.getMessages(channelId);
     if (!store) return;
     let seen = seenByChannel.get(channelId);
-    if (!seen) seen = new Map();
-    seenByChannel.delete(channelId);
-    seenByChannel.set(channelId, seen);
-    if (seenByChannel.size > MAX_CACHED_CHANNELS) {
-        const oldest = seenByChannel.keys().next().value;
-        if (oldest !== undefined) seenByChannel.delete(oldest);
-    }
+    if (!seen) seenByChannel.set(channelId, seen = new Map());
     const add = (m: Message) => {
         if (m?.id) seen!.set(m.id, m);
     };
@@ -352,12 +345,6 @@ export default definePlugin({
     authors: [Devs.K3],
     enabledByDefault: true,
     settings,
-    flux: {
-        LOGOUT() {
-            close();
-            seenByChannel.clear();
-        }
-    },
     start() {
         document.addEventListener("keydown", onKeyDown, true);
     },

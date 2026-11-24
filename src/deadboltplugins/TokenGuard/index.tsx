@@ -59,12 +59,7 @@ const API_KEY_RES = [
 const PASSWORD_RE = /\b(?:password|passwd|passwort|pwd)\s*[:=]\s*\S{4,}/i;
 
 const CONFIRM_WINDOW_MS = 15_000;
-const armed = new Map<string, { expires: number; timer: ReturnType<typeof setTimeout>; }>();
-
-function clearArmed() {
-    for (const entry of armed.values()) clearTimeout(entry.timer);
-    armed.clear();
-}
+const armed = new Set<string>();
 
 function looksLikeDiscordToken(content: string) {
     const own = TokenModule.getToken();
@@ -95,18 +90,13 @@ function guard(channelId: string, content: string) {
     if (!found.length) return;
 
     const key = `${channelId}:${content}`;
-    const prior = armed.get(key);
-    if (prior) {
-        clearTimeout(prior.timer);
+    if (armed.has(key)) {
         armed.delete(key);
-        if (prior.expires > Date.now()) return;
+        return;
     }
 
-    if (armed.size >= 100) clearArmed();
-    const timer = setTimeout(() => {
-        if (armed.get(key)?.timer === timer) armed.delete(key);
-    }, CONFIRM_WINDOW_MS);
-    armed.set(key, { expires: Date.now() + CONFIRM_WINDOW_MS, timer });
+    armed.add(key);
+    setTimeout(() => armed.delete(key), CONFIRM_WINDOW_MS);
 
     Alerts.show({
         title: "This looks like a secret",
@@ -139,9 +129,7 @@ export default definePlugin({
         if (settings.store.checkEdits) return guard(channelId, messageObj.content);
     },
 
-    flux: { LOGOUT() { clearArmed(); } },
-
     stop() {
-        clearArmed();
+        armed.clear();
     }
 });

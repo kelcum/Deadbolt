@@ -35,12 +35,7 @@ let arrivedAt = 0;
 let arrivalDraft = "";
 let typedBeforeArrival: { channelId: string; at: number; } | null = null;
 let lastTyped: { channelId: string; at: number; } | null = null;
-const armed = new Map<string, { expires: number; timer: ReturnType<typeof setTimeout>; }>();
-
-function clearArmed() {
-    for (const entry of armed.values()) clearTimeout(entry.timer);
-    armed.clear();
-}
+const armed = new Set<string>();
 
 function chatLabel(channelId: string) {
     const channel = ChannelStore.getChannel(channelId);
@@ -82,13 +77,6 @@ export default definePlugin({
     settings,
 
     flux: {
-        LOGOUT() {
-            currentChannelId = null;
-            arrivedAt = 0;
-            typedBeforeArrival = null;
-            lastTyped = null;
-            clearArmed();
-        },
         CHANNEL_SELECT({ channelId }: { channelId: string | null; }) {
             arrive(channelId);
         },
@@ -105,18 +93,13 @@ export default definePlugin({
         if (!why) return;
 
         const key = `${channelId}:${content}`;
-        const prior = armed.get(key);
-        if (prior) {
-            clearTimeout(prior.timer);
+        if (armed.has(key)) {
             armed.delete(key);
-            if (prior.expires > Date.now()) return;
+            return;
         }
 
-        if (armed.size >= 100) clearArmed();
-        const timer = setTimeout(() => {
-            if (armed.get(key)?.timer === timer) armed.delete(key);
-        }, CONFIRM_WINDOW_MS);
-        armed.set(key, { expires: Date.now() + CONFIRM_WINDOW_MS, timer });
+        armed.add(key);
+        setTimeout(() => armed.delete(key), CONFIRM_WINDOW_MS);
 
         Alerts.show({
             title: "Right chat?",
@@ -142,6 +125,6 @@ export default definePlugin({
         currentChannelId = null;
         typedBeforeArrival = null;
         lastTyped = null;
-        clearArmed();
+        armed.clear();
     }
 });
