@@ -10,6 +10,8 @@ import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { UserStore } from "@webpack/common";
 
+import { openFocusTimer } from "./panel";
+
 let timer: ReturnType<typeof setTimeout> | undefined;
 let end = 0;
 let owner: string | undefined;
@@ -21,12 +23,38 @@ function cancel() {
     owner = undefined;
 }
 
+function startTimer(userId: string, minutes: number) {
+    cancel();
+    owner = userId;
+    end = Date.now() + minutes * 60_000;
+    timer = setTimeout(() => {
+        const notify = UserStore.getCurrentUser()?.id === userId;
+        cancel();
+        if (!notify) return;
+        void showNotification({ title: "Focus timer", body: "Your timer is complete.", noPersist: true }).catch(() => {});
+    }, minutes * 60_000);
+}
+
+function remaining() {
+    return owner === UserStore.getCurrentUser()?.id && timer !== undefined ? Math.max(0, end - Date.now()) : 0;
+}
+
+function openPanel() {
+    openFocusTimer(remaining, minutes => {
+        const userId = UserStore.getCurrentUser()?.id;
+        if (userId) startTimer(userId, minutes);
+    }, () => {
+        if (owner === UserStore.getCurrentUser()?.id) cancel();
+    });
+}
+
 export default definePlugin({
     name: "FocusTimer",
-    description: "Start a local focus or break timer without modifying Discord notifications or status.",
+    description: "Set a timer for studying, working or taking a break.",
     authors: [Devs.Zot],
     tags: ["Utility", "Notifications"],
     dependencies: ["CommandsAPI"],
+    toolboxActions: { "Focus timer": openPanel },
     stop() { cancel(); },
     flux: { LOGOUT() { cancel(); } },
     commands: [{
@@ -50,15 +78,7 @@ export default definePlugin({
             if (action === "status") return reply(timer === undefined ? "No active focus timer." : "Focus timer ends <t:" + Math.floor(end / 1000) + ":R>.");
             const minutes = Number(findOption(opts, "minutes", 25));
             if (!Number.isInteger(minutes) || minutes < 1 || minutes > 240) return reply("Choose 1 to 240 minutes.");
-            cancel();
-            owner = userId;
-            end = Date.now() + minutes * 60_000;
-            timer = setTimeout(() => {
-                const notify = UserStore.getCurrentUser()?.id === userId;
-                cancel();
-                if (!notify) return;
-                void showNotification({ title: "Focus timer", body: "Your timer is complete.", noPersist: true }).catch(() => {});
-            }, minutes * 60_000);
+            startTimer(userId, minutes);
             return reply("Focus timer started for " + minutes + " minutes.");
         }
     }]
