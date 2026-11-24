@@ -29,9 +29,11 @@ function getInbox(): InboxEntry[] {
         if (channel.guild_id && !PermissionStore.can(PermissionsBits.VIEW_CHANNEL, channel)) continue;
         if (!channel.guild_id && !channel.isPrivate()) continue;
         const guild = channel.guild_id ? GuildStore.getGuild(channel.guild_id) : null;
+        const recipientId = channel.isDM() ? channel.getRecipientId() : undefined;
+        const recipient = recipientId ? UserStore.getUser(recipientId) : null;
         rows.push({
             id, guildId: channel.guild_id || "@me",
-            label: channel.name || (channel.guild_id ? "Channel" : "Direct message"),
+            label: channel.name || recipient?.username || (channel.guild_id ? "Channel" : "Direct message"),
             group: guild?.name || (channel.guild_id ? "Server" : "Direct messages"),
             mentions: ReadStateStore.getMentionCount(id)
         });
