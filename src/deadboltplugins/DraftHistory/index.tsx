@@ -53,6 +53,7 @@ const useHistory: HistoryStore = proxyLazy(() => zustandCreate(() => ({ versions
 
 const lastDraft = new Map<string, string>();
 const lastSent = new Map<string, string>();
+let historyRevision = 0;
 
 function prune(versions: Versions) {
     const { maxVersions, keepDays } = settings.store;
@@ -66,6 +67,7 @@ function prune(versions: Versions) {
 }
 
 function setVersions(versions: Versions) {
+    historyRevision++;
     useHistory.setState({ versions });
     DataStore.set(STORE_KEY, versions);
 }
@@ -175,10 +177,16 @@ export default definePlugin({
 
     async start() {
         for (const { channelId, draft } of DraftStore.getRecentlyEditedDrafts(DraftType.ChannelMessage)) lastDraft.set(channelId, draft);
-        useHistory.setState({ versions: prune(await DataStore.get<Versions>(STORE_KEY) ?? {}) });
+        const revision = ++historyRevision;
+        const stored = await DataStore.get<Versions>(STORE_KEY) ?? {};
+        if (revision !== historyRevision) return;
+        const versions = prune(stored);
+        if (JSON.stringify(stored) !== JSON.stringify(versions)) setVersions(versions);
+        else useHistory.setState({ versions });
     },
 
     stop() {
+        historyRevision++;
         lastDraft.clear();
         lastSent.clear();
     }

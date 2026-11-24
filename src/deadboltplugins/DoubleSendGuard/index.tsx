@@ -7,7 +7,7 @@
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
 import definePlugin, { OptionType } from "@utils/types";
-import { Alerts } from "@webpack/common";
+import { Alerts, UserStore } from "@webpack/common";
 
 const settings = definePluginSettings({
     windowSeconds: {
@@ -24,26 +24,50 @@ interface LastSent {
 
 const lastSentByChannel = new Map<string, LastSent>();
 
-const armed = new Set<string>();
+const armed = new Map<string, { expires: number; timer: ReturnType<typeof setTimeout>; }>();
+let accountId: string | undefined;
+
+function reset() {
+    lastSentByChannel.clear();
+    for (const entry of armed.values()) clearTimeout(entry.timer);
+    armed.clear();
+}
+
+function currentAccount() {
+    const id = UserStore.getCurrentUser()?.id;
+    if (id !== accountId) {
+        reset();
+        accountId = id;
+    }
+    return id;
+}
 const ARM_WINDOW_MS = 15_000;
 
 function onSend(channelId: string, messageObj: { content: string; }) {
+    if (!currentAccount()) return;
     const content = messageObj.content.trim();
     if (!content) return;
 
     const key = `${channelId}:${content}`;
-    if (armed.has(key)) {
+    const prior = armed.get(key);
+    if (prior) {
+        clearTimeout(prior.timer);
         armed.delete(key);
-        lastSentByChannel.set(channelId, { content, at: Date.now() });
-        return;
+        if (prior.expires > Date.now()) return;
     }
 
     const last = lastSentByChannel.get(channelId);
     const windowMs = Math.max(1, settings.store.windowSeconds) * 1000;
 
     if (last && last.content === content && Date.now() - last.at < windowMs) {
-        armed.add(key);
-        setTimeout(() => armed.delete(key), ARM_WINDOW_MS);
+        if (armed.size >= 100) {
+            for (const entry of armed.values()) clearTimeout(entry.timer);
+            armed.clear();
+        }
+        const timer = setTimeout(() => {
+            if (armed.get(key)?.timer === timer) armed.delete(key);
+        }, ARM_WINDOW_MS);
+        armed.set(key, { expires: Date.now() + ARM_WINDOW_MS, timer });
 
         Alerts.show({
             title: "Send it again?",
@@ -54,7 +78,6 @@ function onSend(channelId: string, messageObj: { content: string; }) {
         return { cancel: true };
     }
 
-    lastSentByChannel.set(channelId, { content, at: Date.now() });
 }
 
 export default definePlugin({
@@ -66,8 +89,23 @@ export default definePlugin({
 
     onBeforeMessageSend: onSend,
 
+    flux: {
+        MESSAGE_CREATE({ channelId, message, optimistic }: { channelId: string; message: { id: string; author: { id: string; }; content?: string; state?: string; }; optimistic?: boolean; }) {
+            const id = currentAccount();
+            if (!id || optimistic || message.author.id !== id || !/^\d{17,20}$/.test(message.id) || (message.state && message.state !== "SENT")) return;
+            const content = message.content?.trim();
+            if (!content) return;
+            lastSentByChannel.delete(channelId);
+            lastSentByChannel.set(channelId, { content, at: Date.now() });
+            if (lastSentByChannel.size > 100) {
+                const oldest = lastSentByChannel.keys().next().value;
+                if (oldest !== undefined) lastSentByChannel.delete(oldest);
+            }
+        }
+    },
+
     stop() {
-        lastSentByChannel.clear();
-        armed.clear();
+        reset();
+        accountId = undefined;
     }
 });
