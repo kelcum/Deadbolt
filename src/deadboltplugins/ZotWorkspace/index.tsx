@@ -253,7 +253,7 @@ migratePluginSettings("Workspace", "ZotWorkspace");
 
 export default definePlugin({
     name: "Workspace",
-    description: "Manage your saved notes, tasks, templates, bookmarks and reminders in one place.",
+    description: "Manage notes, tasks, templates, bookmarks and reminders.",
     authors: [Devs.Zot],
     tags: ["Organisation", "Utility"],
     headerBarButton: {

@@ -133,7 +133,7 @@ const PickerButton: ChatBarButtonFactory = ({ channel, isMainChat }) => {
 
 export default definePlugin({
     name: "TemplatePicker",
-    description: "Browse and search saved message templates from the chat bar, then insert or copy them without sending.",
+    description: "Save and insert messages you use often.",
     authors: [Devs.Zot],
     tags: ["Chat", "Utility"],
     chatBarButton: {

@@ -15,6 +15,7 @@ import { openFocusTimer } from "./panel";
 let timer: ReturnType<typeof setTimeout> | undefined;
 let end = 0;
 let owner: string | undefined;
+let running = false;
 
 function cancel() {
     clearTimeout(timer);
@@ -24,6 +25,7 @@ function cancel() {
 }
 
 function startTimer(userId: string, minutes: number) {
+    if (!running) return;
     cancel();
     owner = userId;
     end = Date.now() + minutes * 60_000;
@@ -40,11 +42,13 @@ function remaining() {
 }
 
 function openPanel() {
-    openFocusTimer(remaining, minutes => {
-        const userId = UserStore.getCurrentUser()?.id;
-        if (userId) startTimer(userId, minutes);
+    const account = UserStore.getCurrentUser()?.id;
+    if (!account) return;
+    const owns = () => UserStore.getCurrentUser()?.id === account;
+    openFocusTimer(() => owns() ? remaining() : 0, minutes => {
+        if (owns()) startTimer(account, minutes);
     }, () => {
-        if (owner === UserStore.getCurrentUser()?.id) cancel();
+        if (owns() && owner === account) cancel();
     });
 }
 
@@ -55,7 +59,8 @@ export default definePlugin({
     tags: ["Utility", "Notifications"],
     dependencies: ["CommandsAPI"],
     toolboxActions: { "Focus timer": openPanel },
-    stop() { cancel(); },
+    start() { running = true; },
+    stop() { running = false; cancel(); },
     flux: { LOGOUT() { cancel(); } },
     commands: [{
         name: "dbfocus",

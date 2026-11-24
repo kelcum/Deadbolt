@@ -52,7 +52,7 @@ async function checkReminders() {
 
 export default definePlugin({
     name: "MessageReminders",
-    description: "Set local reminders for messages or tasks. Reminders are checked while Deadbolt is running.",
+    description: "Set reminders for messages and tasks.",
     authors: [Devs.Zot],
     tags: ["Notifications", "Organisation"],
     dependencies: ["CommandsAPI"],

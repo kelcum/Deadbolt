@@ -96,7 +96,7 @@ const InboxModal = ErrorBoundary.wrap(({ modalProps, userId }: { modalProps: Ren
 
 export default definePlugin({
     name: "UnreadInbox",
-    description: "Adds a searchable toolbar inbox for cached unread channels, direct messages and mentions.",
+    description: "Find unread channels and mentions in one place.",
     authors: [Devs.Zot],
     tags: ["Organisation", "Notifications"],
     headerBarButton: {

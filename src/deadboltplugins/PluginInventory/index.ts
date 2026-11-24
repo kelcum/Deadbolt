@@ -14,7 +14,7 @@ import { openInventory } from "./panel";
 
 export default definePlugin({
     name: "PluginInventory",
-    description: "Inspect and copy a read-only list of installed plugins and enabled states.",
+    description: "Search installed plugins and see which are enabled.",
     authors: [Devs.Zot],
     tags: ["Developers", "Utility"],
     dependencies: ["CommandsAPI"],

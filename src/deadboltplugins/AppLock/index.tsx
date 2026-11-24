@@ -14,7 +14,7 @@ import { Text } from "@components/Text";
 import { Devs } from "@utils/constants";
 import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType, ReporterTestable, StartAt } from "@utils/types";
-import { useState } from "@webpack/common";
+import { showToast, useState } from "@webpack/common";
 
 import { createCredential, parseCredential, STORAGE_KEY, verifyPassword } from "./password";
 
@@ -183,7 +183,7 @@ const PasswordSettings = ErrorBoundary.wrap(() => {
         <input type="password" aria-label="Confirm password" placeholder="Confirm password" autoComplete="new-password" maxLength={128} value={confirm} onChange={e => setConfirm(e.target.value)} />
         <div className="db-app-lock-actions">
             <Button size="small" disabled={busy} onClick={() => void save()}>Save password</Button>
-            {configured && <Button size="small" variant="secondary" disabled={busy} onClick={() => lock()}>Lock now</Button>}
+            {configured && <Button size="small" variant="secondary" disabled={busy} onClick={manualLock}>Lock now</Button>}
             {configured && <Button size="small" variant="dangerSecondary" disabled={busy || !current} onClick={() => void save(true)}>Remove password</Button>}
         </div>
         {status && <Text size="xs" color="text-muted" role="status">{status}</Text>}
@@ -191,15 +191,28 @@ const PasswordSettings = ErrorBoundary.wrap(() => {
     </div>;
 });
 
+function manualLock() {
+    try {
+        if (!readCredential()) {
+            showToast({ text: "Set a password in AppLock settings first.", variant: "critical" });
+            return;
+        }
+        lock();
+        if (!dialog) showToast({ text: "AppLock is unavailable on this client.", variant: "critical" });
+    } catch {
+        showToast({ text: "AppLock storage is unavailable.", variant: "critical" });
+    }
+}
+
 function LockButton() {
     const { showButton } = settings.use(["showButton"]);
     if (!showButton) return null;
-    return <UserAreaButton icon={<LockIcon />} tooltipText="Lock Discord" aria-label="Lock Discord" role="button" onClick={() => lock()} />;
+    return <UserAreaButton icon={<LockIcon />} tooltipText="Lock Discord" aria-label="Lock Discord" role="button" onClick={manualLock} />;
 }
 
 export default definePlugin({
     name: "AppLock",
-    description: "Lock Discord with a separate password when you open it or click the lock button.",
+    description: "Lock Discord with a separate password.",
     authors: [Devs.Zot],
     tags: ["Privacy", "Utility"],
     settings,
@@ -207,7 +220,7 @@ export default definePlugin({
     reporterTestable: ReporterTestable.None,
     settingsAboutComponent: PasswordSettings,
     userAreaButton: { icon: LockIcon, render: LockButton },
-    toolboxActions: { "Lock Discord": lock },
+    toolboxActions: { "Lock Discord": manualLock },
     start() {
         running = true;
         if (settings.store.lockOnStartup) lock();

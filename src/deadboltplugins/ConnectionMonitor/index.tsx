@@ -70,7 +70,7 @@ const MonitorModal = ErrorBoundary.wrap(({ modalProps, userId }: { modalProps: R
 
 export default definePlugin({
     name: "ConnectionMonitor",
-    description: "Inspect local Discord connection events and the browser network indicator from a toolbar panel.",
+    description: "See your network status and recent connection events.",
     authors: [Devs.Zot],
     tags: ["Utility", "Developers"],
     headerBarButton: {

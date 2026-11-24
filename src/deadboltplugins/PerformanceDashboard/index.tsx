@@ -82,7 +82,7 @@ const Dashboard = ErrorBoundary.wrap(({ modalProps }: { modalProps: RenderModalP
 
 export default definePlugin({
     name: "PerformanceDashboard",
-    description: "View local memory, plugin counts and a lightweight responsiveness sample on demand.",
+    description: "Check client memory, plugin counts and responsiveness.",
     authors: [Devs.Zot],
     tags: ["Utility", "Developers"],
     headerBarButton: {
