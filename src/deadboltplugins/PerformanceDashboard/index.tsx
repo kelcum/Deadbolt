@@ -25,7 +25,7 @@ interface Snapshot {
 }
 
 function collect(delay: number | null = null): Snapshot {
-    const memory = (performance as Performance & { memory?: { usedJSHeapSize: number; }; }).memory;
+    const { memory } = performance as Performance & { memory?: { usedJSHeapSize: number; }; };
     const names = Object.keys(plugins);
     return {
         enabled: names.filter(isPluginEnabled).length,
