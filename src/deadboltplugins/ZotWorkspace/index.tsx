@@ -84,7 +84,7 @@ function WorkspacePanel({ userId, modalProps }: { userId: string; modalProps: Re
         return () => { active = false; };
     }, [userId, revision]);
 
-    async function mutate(action: () => Promise<unknown>, success: string) {
+    async function mutate(action: () => Promise<unknown>, success: string, onSuccess?: () => void) {
         if (!owns(userId) || busy) return;
         setBusy(true);
         setStatus("");
@@ -92,6 +92,7 @@ function WorkspacePanel({ userId, modalProps }: { userId: string; modalProps: Re
             await action();
             if (owns(userId)) {
                 setStatus(success);
+                onSuccess?.();
                 setRevision(n => n + 1);
             }
         } catch {
@@ -121,8 +122,7 @@ function WorkspacePanel({ userId, modalProps }: { userId: string; modalProps: Re
             const entries = old ?? [];
             if (entries.length >= 100) throw new Error("Task limit");
             return [...entries, { id: crypto.randomUUID().slice(0, 12), text, done: false }];
-        }), "Task added.");
-        setTask("");
+        }), "Task added.", () => setTask(current => current === task ? "" : current));
     }
 
     function go(link: string) {

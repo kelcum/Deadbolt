@@ -1,6 +1,6 @@
 # Zot expansion (development only)
 
-Author: **Zot**, Discord ID `1531412914005606513`. All 22 new plugins are original implementations, opt-in, and GPL-3.0-or-later. Existing plugin authors and copyright notices are retained.
+Author: **Zot**, Discord ID `1531412914005606513`. All 26 new plugins are original implementations, opt-in, and GPL-3.0-or-later. Existing plugin authors and copyright notices are retained.
 
 ## New plugins
 
@@ -33,6 +33,17 @@ Enable individually in Deadbolt plugin settings.
 
 Local data is not encrypted and can be included in backups or sync. Never store credentials in these plugins. Local command responses use Deadbolt's existing local message helper and can be visible to other enabled plugins.
 
+## Visual expansion
+
+| Feature | Usage |
+| --- | --- |
+| ZotWorkspace | Header bar workspace with notes, task checkboxes, saved template copying, bookmarks, workspaces and reminder overview. |
+| TemplatePicker | Chat bar template search, copy and draft insertion; never automatically sends. |
+| UnreadInbox | Header bar panel to filter cached unread channels and mentions; opens only channels the local permission store allows. |
+| ConnectionMonitor | Header bar panel for the last 20 observed connection events and the browser network indicator. |
+
+The workspace shares the original plugins' account-specific DataStore keys. The new panels do not enable other plugins automatically. The reminder panel displays stored reminders; MessageReminders must be enabled to receive alerts.
+
 ## Existing fixes
 
 - ChatExport: restrict exported HTML links to HTTP(S), escape labels.
@@ -44,7 +55,7 @@ Local data is not encrypted and can be included in backups or sync. Never store 
 
 ## Validation
 
-The original nineteen new plugins passed 20 mocked smoke-test groups and a strict TypeScript check against API stubs. Three additional plugins and existing-source changes still require actual repository builds and runtime tests. No production releases or main-branch changes are part of this batch.
+The original nineteen new plugins passed 20 mocked smoke-test groups and a strict TypeScript check against API stubs. The 22-plugin build at commit 924aa30 passed TypeScript, desktop and web builds on Apple Silicon macOS, with successful core-module injection and partial manual runtime testing reported by the tester. Three lint findings were corrected in commit 308248c. The four visual expansion plugins still require full build and runtime validation. No production releases or main-branch changes are part of this batch.
 
 Run pnpm testTsc, pnpm lint, pnpm buildStandalone, pnpm buildWebStandalone and pnpm test on a clean checkout. Review changes made by the existing lint-fix step. Test desktop Windows, macOS, Linux, browser, and supported wrappers. Test each plugin disabled, enabled, stopped, and with other commonly enabled plugins. Validate backup restoration on disposable settings, not a real user profile. Do not publish or merge until these checks pass.
 
