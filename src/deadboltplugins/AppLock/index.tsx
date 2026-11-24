@@ -96,7 +96,7 @@ function lock() {
                 status.textContent = "Wait a few seconds before trying again.";
                 return;
             }
-            const value = password.value;
+            const { value } = password;
             password.value = "";
             button.disabled = true;
             status.textContent = "Checking…";
