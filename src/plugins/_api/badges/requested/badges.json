@@ -717,5 +717,28 @@
             "for": "zot"
         },
         "imageHash": "ec9cb64db9989638"
+    },
+    {
+        "id": "c5d57d55e5db79b2",
+        "users": ["1531412914005606513"],
+        "name": ".gg/sl8",
+        "colors": ["#000000"],
+        "image": "c5d57d55e5db79b2.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "rounded",
+            "background": "solid",
+            "effects": ["glint"],
+            "speed": 1.1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": ".gg/sl8",
+            "for": "zxt.lol"
+        },
+        "imageHash": "5f9019b127d2a786"
     }
 ]

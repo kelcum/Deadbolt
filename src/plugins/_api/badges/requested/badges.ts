@@ -28,6 +28,7 @@ import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
 import img_a3d29a87f2975bbf from "file://a3d29a87f2975bbf.png?base64";
 import img_a3426277639ce221 from "file://a3426277639ce221.gif?base64";
 import img_b5495ef6ab812999 from "file://b5495ef6ab812999.png?base64";
+import img_c5d57d55e5db79b2 from "file://c5d57d55e5db79b2.png?base64";
 import img_c5228d5c86d5d501 from "file://c5228d5c86d5d501.webp?base64";
 import img_c59680f86e5ee683 from "file://c59680f86e5ee683.webp?base64";
 import img_e1109634f824d9be from "file://e1109634f824d9be.png?base64";
@@ -253,5 +254,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Lil Uzi Vert Sprite",
         image: `data:image/webp;base64,${img_7828a0d7dc3f810b}`,
         design: { shape: "none", background: "gradient", colors: [0xf78e68, 0xf7c58d, 0x33200e], effects: [], speed: 3, zoom: 1.3, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "c5d57d55e5db79b2",
+        users: ["1531412914005606513"],
+        name: ".gg/sl8",
+        image: `data:image/png;base64,${img_c5d57d55e5db79b2}`,
+        design: { shape: "rounded", background: "solid", colors: [0x000000], effects: ["glint"], speed: 1.1, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];
