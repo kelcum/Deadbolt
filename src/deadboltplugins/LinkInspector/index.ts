@@ -29,7 +29,7 @@ export default definePlugin({
                 const url = new URL(raw);
                 if (url.protocol !== "http:" && url.protocol !== "https:") return reply("Only HTTP and HTTPS URLs are supported.");
                 const host = url.hostname.replaceAll(".", "[.]");
-                const flags = [];
+                const flags: string[] = [];
                 if (url.protocol === "http:") flags.push("Unencrypted HTTP");
                 if (url.username || url.password) flags.push("Contains URL credentials");
                 if (url.hostname.includes("xn--")) flags.push("Internationalized hostname");
