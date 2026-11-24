@@ -87,3 +87,7 @@ An optional, local screen lock with password setup, startup locking, an optional
 - FocusTimer: a visual timer panel in the toolbox, with quick presets.
 
 Password logic was checked with local Node/TypeScript assertions for correct and wrong passwords, randomized salts, length bounds and malformed credential records. Run `node --test scripts/applock.test.mjs` with Node 24+ to repeat. The full client build and actual lock-screen behavior still need verification.
+
+### AppLock storage and toolbar fix
+
+AppLock uses a separate IndexedDB database outside the default settings/data backup. The previous localStorage accessor may be unavailable. Accessible old verifiers are migrated; removal writes a null marker. AppLock, QuickRestart and FocusTimer use the same top-bar API as Workspace. Client runtime verification is still needed.

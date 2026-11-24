@@ -10,7 +10,7 @@ import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { UserStore } from "@webpack/common";
 
-import { openFocusTimer } from "./panel";
+import { openFocusTimer, renderFocusButton, TimerIcon } from "./panel";
 
 let timer: ReturnType<typeof setTimeout> | undefined;
 let end = 0;
@@ -58,6 +58,7 @@ export default definePlugin({
     authors: [Devs.Zot],
     tags: ["Utility", "Notifications"],
     dependencies: ["CommandsAPI"],
+    headerBarButton: { icon: TimerIcon, render: () => renderFocusButton(openPanel) },
     toolboxActions: { "Focus timer": openPanel },
     start() { running = true; },
     stop() { running = false; cancel(); },

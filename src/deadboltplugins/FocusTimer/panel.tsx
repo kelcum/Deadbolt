@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { HeaderBarButton } from "@api/HeaderBar";
 import { Button } from "@components/Button";
 import ErrorBoundary from "@components/ErrorBoundary";
 import { Text } from "@components/Text";
@@ -55,4 +56,14 @@ const TimerPanel = ErrorBoundary.wrap(({ modalProps, controls }: { modalProps: R
 export function openFocusTimer(remaining: TimerControls["remaining"], start: TimerControls["start"], cancel: TimerControls["cancel"]) {
     const controls = { remaining, start, cancel };
     openModal(props => <TimerPanel modalProps={props} controls={controls} />);
+}
+
+export function TimerIcon({ width = 24, height = 24 }: { width?: number; height?: number; }) {
+    return <svg width={width} height={height} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <circle cx="12" cy="13" r="8" /><path d="M9 2h6M12 5V2M12 9v4l3 2" />
+    </svg>;
+}
+
+export function renderFocusButton(open: () => void) {
+    return <HeaderBarButton icon={TimerIcon} tooltip="Focus timer" onClick={open} />;
 }
