@@ -41,7 +41,7 @@ export default definePlugin({
             }
             if (!/^[a-zA-Z0-9 _-]{1,32}$/.test(name)) return reply("Use a name of 1 to 32 letters, numbers, spaces, underscores or dashes.");
             if (action === "save") {
-                const channel = ctx.channel;
+                const { channel } = ctx;
                 const link = "https://discord.com/channels/" + (channel.guild_id || "@me") + "/" + channel.id;
                 if (!/^https:\/\/discord\.com\/channels\/(@me|\d{17,20})\/\d{17,20}$/.test(link)) return reply("Open a channel first.");
                 let saved = false;

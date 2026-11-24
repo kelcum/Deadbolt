@@ -7,7 +7,7 @@
 import { ApplicationCommandInputType, sendBotMessage } from "@api/Commands";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
-import { GuildStore, GuildRoleStore } from "@webpack/common";
+import { GuildRoleStore, GuildStore } from "@webpack/common";
 
 export default definePlugin({
     name: "ServerDetails",
