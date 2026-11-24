@@ -67,3 +67,13 @@ Deferred: updater/release signing and transaction recovery, installer, safe-mode
 - PerformanceDashboard: on-demand local renderer diagnostics with clipboard export.
 
 These changes still require type, lint, build and focused runtime verification.
+
+### Further improvements
+
+- Workspace: browse saved attachment bookmarks and create timed reminders.
+- RoleExplorer: native role/member browser via the server menu and toolbox; no network member requests.
+- PluginInventory: searchable read-only status and dependency inspection panel in the toolbox.
+- MessageReminders: right-click a message to schedule a local reminder; record notifications only after the notification call succeeds.
+- FocusTimer and ChannelHistory: account/logout cleanup.
+
+All new plugins remain opt-in. No production release or core, updater, installer, or dependency changes were made in this expansion. Use the existing dev branch test workflow for automated checks if Actions are enabled in the fork.

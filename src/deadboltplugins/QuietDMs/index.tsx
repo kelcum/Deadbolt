@@ -14,7 +14,7 @@ import { Menu, showToast, UserStore } from "@webpack/common";
 
 // Adapted from reqon’s QuietDMs (GPL-3.0-or-later).
 const logger = new Logger("QuietDMs");
-const ChannelActions = findByPropsLazy("openPrivateChannel", "ensurePrivateChannel");
+const ChannelActions = findByPropsLazy("getOrEnsurePrivateChannel");
 
 async function openQuietly(userId: string) {
     const user = UserStore.getUser(userId);

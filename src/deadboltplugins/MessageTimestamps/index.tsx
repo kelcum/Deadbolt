@@ -33,7 +33,7 @@ function relativeAge(ms: number): string {
     const wk = Math.floor(day / 7);
     if (wk < 5) return `${wk}w ago`;
     const mo = Math.floor(day / 30);
-    if (mo < 12) return `${mo}mo ago`;
+    if (day < 365) return `${Math.min(11, mo)}mo ago`;
     return `${Math.floor(day / 365)}y ago`;
 }
 
@@ -58,7 +58,12 @@ function updateStyle() {
         styleEl = undefined;
         return;
     }
-    const { latin24CompactTimeStamp: className } = MessageClasses;
+    let className: string;
+    try {
+        ({ latin24CompactTimeStamp: className } = MessageClasses);
+    } catch {
+        return;
+    }
     if (!className || !/^[\w-]+$/.test(className)) return;
     if (!styleEl) {
         styleEl = document.createElement("style");

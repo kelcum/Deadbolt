@@ -11,6 +11,8 @@ import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { UserStore } from "@webpack/common";
 
+import { messageMenu } from "./menu";
+
 interface Reminder {
     id: string;
     text: string;
@@ -33,16 +35,14 @@ async function checkReminders() {
         const entries = await DataStore.get<Reminder[]>(key) ?? [];
         const now = Date.now();
         if (!entries.some(entry => !entry.notified && entry.due <= now) || run !== generation || UserStore.getCurrentUser()?.id !== userId) return;
-        let due: Reminder[] = [];
-        await DataStore.update<Reminder[]>(key, old => {
-            const reminders = old ?? [];
-            if (run !== generation || UserStore.getCurrentUser()?.id !== userId) return reminders;
-            due = reminders.filter(entry => !entry.notified && entry.due <= now);
-            return reminders.map(entry => entry.due <= now ? { ...entry, notified: true } : entry);
-        });
-        if (due.length && run === generation && UserStore.getCurrentUser()?.id === userId) {
-            await showNotification({ title: "Message reminders", body: due.length + " reminder(s) due. Open /dbreminder list to view them.", noPersist: true });
-        }
+        const due = entries.filter(entry => !entry.notified && entry.due <= now);
+        if (!due.length || run !== generation || UserStore.getCurrentUser()?.id !== userId) return;
+        await showNotification({ title: "Message reminders", body: due.length + " reminder(s) due. Open /dbreminder list to view them.", noPersist: true });
+        if (run !== generation || UserStore.getCurrentUser()?.id !== userId) return;
+        const notifiedIds = new Set(due.map(entry => entry.id));
+        await DataStore.update<Reminder[]>(key, old => (old ?? []).map(entry =>
+            notifiedIds.has(entry.id) ? { ...entry, notified: true } : entry
+        ));
     } catch {
         // Storage or notification failures must not interrupt Discord. Due reminders remain in the list.
     } finally {
@@ -56,6 +56,7 @@ export default definePlugin({
     authors: [Devs.Zot],
     tags: ["Notifications", "Organisation"],
     dependencies: ["CommandsAPI"],
+    contextMenus: { message: messageMenu },
     start() {
         if (timer !== undefined) return;
         generation++;
