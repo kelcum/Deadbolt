@@ -60,3 +60,10 @@ The original nineteen new plugins passed 20 mocked smoke-test groups and a stric
 Run pnpm testTsc, pnpm lint, pnpm buildStandalone, pnpm buildWebStandalone and pnpm test on a clean checkout. Review changes made by the existing lint-fix step. Test desktop Windows, macOS, Linux, browser, and supported wrappers. Test each plugin disabled, enabled, stopped, and with other commonly enabled plugins. Validate backup restoration on disposable settings, not a real user profile. Do not publish or merge until these checks pass.
 
 Deferred: updater/release signing and transaction recovery, installer, safe-mode architecture, global message hooks, plugin uploader concurrency, plugin marketplace and sandboxing, advanced audio and performance monitoring, theme/layout engines and remaining high-risk feature proposals. These are deliberately separated from this opt-in update.
+
+## Further expansion
+
+- MessageTimestamps and QuietDMs: third-party adaptations, see [ZOT-PORTS.md](ZOT-PORTS.md).
+- PerformanceDashboard: on-demand local renderer diagnostics with clipboard export.
+
+These changes still require type, lint, build and focused runtime verification.
