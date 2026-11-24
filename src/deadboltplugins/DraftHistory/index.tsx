@@ -8,9 +8,9 @@ import { ChatBarButton, ChatBarButtonFactory } from "@api/ChatButtons";
 import * as DataStore from "@api/DataStore";
 import { definePluginSettings } from "@api/Settings";
 import { Devs } from "@utils/constants";
-import { Logger } from "@utils/Logger";
 import { insertTextIntoChatInputBox } from "@utils/discord";
 import { proxyLazy } from "@utils/lazy";
+import { Logger } from "@utils/Logger";
 import definePlugin, { OptionType } from "@utils/types";
 import { ComponentDispatch, ContextMenuApi, DraftStore, DraftType, Menu, moment, zustandCreate } from "@webpack/common";
 
