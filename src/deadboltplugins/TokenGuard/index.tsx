@@ -59,7 +59,7 @@ const API_KEY_RES = [
 const PASSWORD_RE = /\b(?:password|passwd|passwort|pwd)\s*[:=]\s*\S{4,}/i;
 
 const CONFIRM_WINDOW_MS = 15_000;
-const armed = new Set<string>();
+const armed = new Map<string, number>();
 
 function looksLikeDiscordToken(content: string) {
     const own = TokenModule.getToken();
@@ -90,13 +90,14 @@ function guard(channelId: string, content: string) {
     if (!found.length) return;
 
     const key = `${channelId}:${content}`;
-    if (armed.has(key)) {
-        armed.delete(key);
-        return;
-    }
+    const expires = armed.get(key);
+    armed.delete(key);
+    if (expires !== undefined && expires > Date.now()) return;
 
-    armed.add(key);
-    setTimeout(() => armed.delete(key), CONFIRM_WINDOW_MS);
+    const now = Date.now();
+    for (const [entry, expiry] of armed) if (expiry <= now) armed.delete(entry);
+    if (armed.size >= 100) armed.clear();
+    armed.set(key, now + CONFIRM_WINDOW_MS);
 
     Alerts.show({
         title: "This looks like a secret",

@@ -35,7 +35,7 @@ let arrivedAt = 0;
 let arrivalDraft = "";
 let typedBeforeArrival: { channelId: string; at: number; } | null = null;
 let lastTyped: { channelId: string; at: number; } | null = null;
-const armed = new Set<string>();
+const armed = new Map<string, number>();
 
 function chatLabel(channelId: string) {
     const channel = ChannelStore.getChannel(channelId);
@@ -93,13 +93,14 @@ export default definePlugin({
         if (!why) return;
 
         const key = `${channelId}:${content}`;
-        if (armed.has(key)) {
-            armed.delete(key);
-            return;
-        }
+        const expires = armed.get(key);
+        armed.delete(key);
+        if (expires !== undefined && expires > Date.now()) return;
 
-        armed.add(key);
-        setTimeout(() => armed.delete(key), CONFIRM_WINDOW_MS);
+        const now = Date.now();
+        for (const [entry, expiry] of armed) if (expiry <= now) armed.delete(entry);
+        if (armed.size >= 100) armed.clear();
+        armed.set(key, now + CONFIRM_WINDOW_MS);
 
         Alerts.show({
             title: "Right chat?",
