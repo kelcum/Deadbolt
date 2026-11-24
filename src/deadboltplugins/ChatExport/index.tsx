@@ -146,6 +146,18 @@ function toText(rows: Row[], channel: Channel) {
 
 const esc = (text: string) => text.replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;" })[c] ?? c);
 
+function safeLink(url: string, label: string) {
+    try {
+        const parsed = new URL(url);
+        if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+            return `<a href="${esc(parsed.href)}" rel="noreferrer noopener">${esc(label)}</a>`;
+        }
+    } catch {
+        // Invalid or unsupported links are exported as text.
+    }
+    return esc(label);
+}
+
 function toHtml(rows: Row[], channel: Channel) {
     const { timestamps } = settings.store;
     const title = esc(chatName(channel));
@@ -156,9 +168,9 @@ function toHtml(rows: Row[], channel: Channel) {
         if (r.content) parts.push(`<div class="text">${esc(plainContent(r.content, channel.guild_id))}</div>`);
         for (const e of r.embeds) {
             const text = [e.title, e.description].filter(isTruthy).map(esc).join("<br>");
-            if (text || e.url) parts.push(`<div class="embed">${text}${e.url ? `${text ? "<br>" : ""}<a href="${esc(e.url)}">${esc(e.url)}</a>` : ""}</div>`);
+            if (text || e.url) parts.push(`<div class="embed">${text}${e.url ? `${text ? "<br>" : ""}${safeLink(e.url, e.url)}` : ""}</div>`);
         }
-        for (const a of r.attachments) parts.push(`<div class="file"><a href="${esc(a.url)}">${esc(a.filename)}</a></div>`);
+        for (const a of r.attachments) parts.push(`<div class="file">${safeLink(a.url, a.filename)}</div>`);
         return `<div class="msg" id="m${r.id}">${parts.join("")}</div>`;
     }).join("\n");
 

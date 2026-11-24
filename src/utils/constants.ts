@@ -68,6 +68,11 @@ export interface Dev {
  * If you are fine with attribution but don't want the badge, add badge: false
  */
 export const Devs = /* #__PURE__*/ Object.freeze({
+    Zot: {
+        name: "Zot",
+        id: 1531412914005606513n,
+        badge: false
+    },
     K3: {
         name: "k3",
         id: 195516525631897600n,
