@@ -10,12 +10,15 @@ import { copyToClipboard } from "@utils/clipboard";
 import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 
+import { openInventory } from "./panel";
+
 export default definePlugin({
     name: "PluginInventory",
     description: "Inspect and copy a read-only list of installed plugins and enabled states.",
     authors: [Devs.Zot],
     tags: ["Developers", "Utility"],
     dependencies: ["CommandsAPI"],
+    toolboxActions: { "Plugin inventory": openInventory },
     commands: [{
         name: "dbpluginlist",
         description: "List, filter or copy installed plugin names.",

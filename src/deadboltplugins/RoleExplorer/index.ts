@@ -9,12 +9,16 @@ import { Devs } from "@utils/constants";
 import definePlugin from "@utils/types";
 import { GuildMemberStore, GuildRoleStore, UserStore } from "@webpack/common";
 
+import { guildMenu, openRoleExplorer } from "./panel";
+
 export default definePlugin({
     name: "RoleExplorer",
     description: "Browse roles and members already loaded in the current server cache.",
     authors: [Devs.Zot],
     tags: ["Roles", "Servers"],
     dependencies: ["CommandsAPI"],
+    contextMenus: { "guild-context": guildMenu, "guild-header-popout": guildMenu },
+    toolboxActions: { "Browse roles": openRoleExplorer },
     commands: [{
         name: "dbroles",
         description: "Find roles or cached members of a role.",
