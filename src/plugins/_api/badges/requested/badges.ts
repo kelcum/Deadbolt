@@ -8,6 +8,7 @@ import img_0a17108bb5b80dae from "file://0a17108bb5b80dae.png?base64";
 import img_2e9aa52581c65bcc from "file://2e9aa52581c65bcc.jpg?base64";
 import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
 import img_4aa034ff71d29f41 from "file://4aa034ff71d29f41.png?base64";
+import img_4fb7dcb321da8621 from "file://4fb7dcb321da8621.png?base64";
 import img_7ba5be8fd879e304 from "file://7ba5be8fd879e304.gif?base64";
 import img_7bc3b700ec18e4b6 from "file://7bc3b700ec18e4b6.png?base64";
 import img_8a1b71709664c8bd from "file://8a1b71709664c8bd.png?base64";
@@ -261,5 +262,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: ".gg/sl8",
         image: `data:image/png;base64,${img_c5d57d55e5db79b2}`,
         design: { shape: "rounded", background: "solid", colors: [0x000000], effects: ["glint"], speed: 1.1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "4fb7dcb321da8621",
+        users: ["1531412914005606513"],
+        name: "Developer",
+        image: `data:image/png;base64,${img_4fb7dcb321da8621}`,
+        design: { shape: "none", background: "gradient", colors: [0xffffff], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
     },
 ];

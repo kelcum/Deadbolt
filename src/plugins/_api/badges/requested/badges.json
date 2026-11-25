@@ -740,5 +740,28 @@
             "for": "zxt.lol"
         },
         "imageHash": "5f9019b127d2a786"
+    },
+    {
+        "id": "4fb7dcb321da8621",
+        "users": ["1531412914005606513"],
+        "name": "Developer",
+        "colors": ["#ffffff"],
+        "image": "4fb7dcb321da8621.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "none",
+            "background": "gradient",
+            "effects": [],
+            "speed": 1,
+            "zoom": 1,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "Developer",
+            "for": "zxt.lol"
+        },
+        "imageHash": "e62d1070bd6b1ca3"
     }
 ]
