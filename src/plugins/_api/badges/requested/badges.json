@@ -786,5 +786,53 @@
             "for": "♰𝖒𝖊𝖙𝖗𝖔.𝖘𝖑8✘"
         },
         "imageHash": "23187198fd3b730d"
+    },
+    {
+        "id": "b4964c0e1b4b2a61",
+        "users": ["1524473843664551996"],
+        "name": "ph",
+        "colors": ["#ff7a00", "#050505"],
+        "image": "b4964c0e1b4b2a61.webp",
+        "imageType": "image/webp",
+        "design": {
+            "shape": "circle",
+            "background": "gradient",
+            "effects": ["shine", "glint", "float", "pulse"],
+            "speed": 0.35,
+            "zoom": 1.77,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "ph",
+            "for": "made by young me",
+            "pair": "79e29738979ae1a1"
+        },
+        "imageHash": "969cf2078fc02d29"
+    },
+    {
+        "id": "79e29738979ae1a1",
+        "users": ["1524473843664551996"],
+        "name": "xxxvids",
+        "colors": ["#ff0000", "#fafafa"],
+        "image": "79e29738979ae1a1.png",
+        "imageType": "image/png",
+        "design": {
+            "shape": "circle",
+            "background": "gradient",
+            "effects": ["shine", "glint", "float", "pulse"],
+            "speed": 1,
+            "zoom": 1.52,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "xxxvids",
+            "for": "made by young me",
+            "pair": "b4964c0e1b4b2a61"
+        },
+        "imageHash": "9831cffbb56577a8"
     }
 ]

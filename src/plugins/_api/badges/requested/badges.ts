@@ -18,6 +18,7 @@ import img_13dfcbf5f6640ac6 from "file://13dfcbf5f6640ac6.png?base64";
 import img_17b954e0cb2b20b8 from "file://17b954e0cb2b20b8.jpg?base64";
 import img_72bd506d4970fa4f from "file://72bd506d4970fa4f.png?base64";
 import img_76a226e52e1d8120 from "file://76a226e52e1d8120.gif?base64";
+import img_79e29738979ae1a1 from "file://79e29738979ae1a1.png?base64";
 import img_92d46af597578d72 from "file://92d46af597578d72.png?base64";
 import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
 import img_303af8f410632e09 from "file://303af8f410632e09.gif?base64";
@@ -29,6 +30,7 @@ import img_6416591f7ec53a25 from "file://6416591f7ec53a25.png?base64";
 import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
 import img_a3d29a87f2975bbf from "file://a3d29a87f2975bbf.png?base64";
 import img_a3426277639ce221 from "file://a3426277639ce221.gif?base64";
+import img_b4964c0e1b4b2a61 from "file://b4964c0e1b4b2a61.webp?base64";
 import img_b5495ef6ab812999 from "file://b5495ef6ab812999.png?base64";
 import img_c5d57d55e5db79b2 from "file://c5d57d55e5db79b2.png?base64";
 import img_c5228d5c86d5d501 from "file://c5228d5c86d5d501.webp?base64";
@@ -277,5 +279,19 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "♰ʏᴏᴜɴɢ ᴍᴇᴛʀᴏ✘",
         image: `data:image/gif;base64,${img_2b648a5d9b113c32}`,
         design: { shape: "rounded", background: "solid", colors: [0x5a0000, 0x000000], effects: ["pulse", "glint"], speed: 0.35, zoom: 1.47, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "b4964c0e1b4b2a61",
+        users: ["1524473843664551996"],
+        name: "ph",
+        image: `data:image/webp;base64,${img_b4964c0e1b4b2a61}`,
+        design: { shape: "circle", background: "gradient", colors: [0xff7a00, 0x050505], effects: ["shine", "glint", "float", "pulse"], speed: 0.35, zoom: 1.77, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "79e29738979ae1a1",
+        users: ["1524473843664551996"],
+        name: "xxxvids",
+        image: `data:image/png;base64,${img_79e29738979ae1a1}`,
+        design: { shape: "circle", background: "gradient", colors: [0xff0000, 0xfafafa], effects: ["shine", "glint", "float", "pulse"], speed: 1, zoom: 1.52, x: 0, y: 0, rotate: 0 },
     },
 ];
