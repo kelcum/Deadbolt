@@ -5,6 +5,7 @@
  */
 
 import img_0a17108bb5b80dae from "file://0a17108bb5b80dae.png?base64";
+import img_2b648a5d9b113c32 from "file://2b648a5d9b113c32.gif?base64";
 import img_2e9aa52581c65bcc from "file://2e9aa52581c65bcc.jpg?base64";
 import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
 import img_4aa034ff71d29f41 from "file://4aa034ff71d29f41.png?base64";
@@ -269,5 +270,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "Developer",
         image: `data:image/png;base64,${img_4fb7dcb321da8621}`,
         design: { shape: "none", background: "gradient", colors: [0xffffff], effects: [], speed: 1, zoom: 1, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "2b648a5d9b113c32",
+        users: ["1524473843664551996"],
+        name: "♰ʏᴏᴜɴɢ ᴍᴇᴛʀᴏ✘",
+        image: `data:image/gif;base64,${img_2b648a5d9b113c32}`,
+        design: { shape: "rounded", background: "solid", colors: [0x5a0000, 0x000000], effects: ["pulse", "glint"], speed: 0.35, zoom: 1.47, x: 0, y: 0, rotate: 0 },
     },
 ];

@@ -763,5 +763,28 @@
             "for": "zxt.lol"
         },
         "imageHash": "e62d1070bd6b1ca3"
+    },
+    {
+        "id": "2b648a5d9b113c32",
+        "users": ["1524473843664551996"],
+        "name": "♰ʏᴏᴜɴɢ ᴍᴇᴛʀᴏ✘",
+        "colors": ["#5a0000", "#000000"],
+        "image": "2b648a5d9b113c32.gif",
+        "imageType": "image/gif",
+        "design": {
+            "shape": "rounded",
+            "background": "solid",
+            "effects": ["pulse", "glint"],
+            "speed": 0.35,
+            "zoom": 1.47,
+            "x": 0,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "♰ʏᴏᴜɴɢ ᴍᴇᴛʀᴏ✘",
+            "for": "♰𝖒𝖊𝖙𝖗𝖔.𝖘𝖑8✘"
+        },
+        "imageHash": "23187198fd3b730d"
     }
 ]
