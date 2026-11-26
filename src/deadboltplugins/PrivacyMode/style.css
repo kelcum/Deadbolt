@@ -1,0 +1,85 @@
+.db-privacy-messages
+    :is(
+        [class*="messageContent_"],
+        [class*="messageContent-"],
+        [class*="messageAccessories_"],
+        [class*="messageAccessories-"],
+        [class*="embedWrapper_"],
+        [class*="attachment_"],
+        [class*="repliedTextPreview_"],
+        [class*="slateTextArea_"],
+        [class*="searchResult_"],
+        [class*="typing_"]
+    ) {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+.db-privacy-lists
+    :is(
+        [class*="guilds_"],
+        [class*="privateChannels_"],
+        [class*="channels_"],
+        [class*="membersWrap_"],
+        [class*="memberList_"]
+    ) {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+.db-privacy-profiles
+    :is(
+        [class*="avatar_"],
+        [class*="avatarDecoration_"],
+        [class*="username_"],
+        [class*="displayName_"],
+        [class*="nameTag_"],
+        [class*="userPopout_"],
+        [class*="userProfileOuter_"],
+        [class*="channelName_"],
+        [class*="headerText_"],
+        [class*="titleWrapper_"]
+    ) {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+.db-privacy :is([class*="notification_"] [class*="content_"], [class*="toast_"] [class*="body_"]) {
+    visibility: hidden !important;
+    opacity: 0 !important;
+    pointer-events: none !important;
+}
+.db-privacy-curtain {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    border: 0;
+    box-sizing: border-box;
+    z-index: 2147483647;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+    gap: 16px;
+    padding: 24px;
+    background: #111214;
+    color: #fff;
+    font:
+        600 16px system-ui,
+        sans-serif;
+    text-align: center;
+    pointer-events: auto;
+}
+
+.db-privacy-curtain::backdrop {
+    background: #111214;
+}
+.db-privacy-curtain button {
+    padding: 8px 16px;
+    border-radius: 6px;
+    background: #303238;
+    color: #fff;
+}

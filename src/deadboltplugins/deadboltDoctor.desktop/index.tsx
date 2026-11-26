@@ -24,6 +24,8 @@ import { failedPatchPlugins, getBuildNumber } from "@webpack/patcher";
 
 import { PluginMeta } from "~plugins";
 
+import { openRecovery } from "../SafeMode.desktop";
+import { openRollback } from "../UpdateRollback.desktop";
 import { BackupSection } from "./BackupSection";
 import type { Health, Level, VersionState } from "./native";
 
@@ -214,6 +216,8 @@ function HealthPanel() {
                 {safeMode?.active && (
                     <Button size="small" variant="primary" onClick={leaveSafeMode}>Turn everything back on</Button>
                 )}
+                <Button size="small" variant="secondary" onClick={openRecovery}>Safe mode recovery</Button>
+                <Button size="small" variant="secondary" onClick={openRollback}>Update rollback</Button>
                 {health.versions.length > 0 && (
                     <Button size="small" variant={needsInject(health) ? "primary" : "secondary"} disabled={!!busy} onClick={inject}>
                         {busy === "inject" ? "Injecting…" : "Re-inject now"}

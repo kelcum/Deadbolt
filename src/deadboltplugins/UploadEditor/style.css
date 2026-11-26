@@ -1,0 +1,36 @@
+.db-upload-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.db-upload-tools {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.db-upload-tools label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-default);
+    font-size: 12px;
+}
+.db-upload-tools select {
+    background: var(--background-base-lower);
+    color: var(--text-default);
+}
+.db-upload-preview {
+    overflow: auto;
+    max-height: 55vh;
+    text-align: center;
+    background: var(--background-base-lowest);
+}
+.db-upload-preview canvas {
+    display: inline-block;
+    max-width: 100%;
+    max-height: 52vh;
+    object-fit: contain;
+    touch-action: none;
+    cursor: crosshair;
+}
