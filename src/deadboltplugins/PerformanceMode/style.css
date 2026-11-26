@@ -1,0 +1,24 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Zot
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.db-performance-motion
+    :is(
+        [role="dialog"],
+        [role="menu"],
+        [class*="tooltip_"],
+        [class*="avatarDecoration_"],
+        [class*="profileEffect_"]
+    ) {
+    animation: none !important;
+    transition: none !important;
+}
+.db-performance-effects :is([class*="profileEffect_"], [class*="avatarDecoration_"]) {
+    display: none !important;
+}
+.db-performance-effects :is([class*="backdrop_"], [class*="modal_"], [class*="popout_"]) {
+    backdrop-filter: none !important;
+    box-shadow: none !important;
+}

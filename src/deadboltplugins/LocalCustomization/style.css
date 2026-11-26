@@ -1,0 +1,9 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Zot
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+.db-privacy-profiles .db-local-alias {
+    visibility: hidden !important;
+    opacity: 0 !important;
+}

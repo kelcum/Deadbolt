@@ -1,0 +1,57 @@
+/*
+ * Vencord, a Discord client mod
+ * Copyright (c) 2026 Zot
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.db-code-tools label {
+    display: inline-flex;
+    gap: 6px;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+.db-code-tools select {
+    color: var(--text-default);
+    background: var(--background-base-lower, var(--background-secondary));
+    border: 1px solid var(--border-subtle);
+    border-radius: 4px;
+    padding: 4px;
+}
+.db-code-tools input[type="range"] {
+    max-width: 100px;
+    padding: 0;
+}
+.db-code-fold {
+    color: var(--text-muted);
+    float: left;
+    cursor: pointer;
+}
+.db-code-keyword {
+    color: #c792ea;
+}
+.db-code-string {
+    color: #c3e88d;
+}
+.db-code-number {
+    color: #f78c6c;
+}
+.db-code-comment {
+    color: var(--text-muted);
+    font-style: italic;
+}
+.db-code-operator {
+    color: #82aaff;
+}
+.theme-light .db-code-keyword {
+    color: #7a239e;
+}
+.theme-light .db-code-string {
+    color: #357020;
+}
+.theme-light .db-code-number {
+    color: #a14c19;
+}
+.theme-light .db-code-operator {
+    color: #245db4;
+}

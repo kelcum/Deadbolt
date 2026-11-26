@@ -4,6 +4,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  */
 
+import { RendererSettings } from "@main/settings";
 import { IpcEvents } from "@shared/IpcEvents";
 import { ipcMain } from "electron";
 import { existsSync } from "fs";
@@ -11,6 +12,7 @@ import { join } from "path";
 
 import gitRemote from "~git-remote";
 
+import { withUpdateCheckpoint } from "./checkpoint";
 import { serializeErrors } from "./common";
 
 export type UpdateData = Record<"hash" | "message" | "author", string>;
@@ -45,6 +47,11 @@ const updater: Updater = IS_UPDATER_DISABLED
 ipcMain.handle(IpcEvents.UPDATER_GET_REPO, serializeErrors(updater.getRepo));
 ipcMain.handle(IpcEvents.UPDATER_LIST_UPDATES, serializeErrors(updater.listUpdates));
 ipcMain.handle(IpcEvents.UPDATER_FETCH_UPDATE, serializeErrors(updater.fetchUpdate));
-ipcMain.handle(IpcEvents.UPDATER_APPLY_UPDATE, serializeErrors(updater.applyUpdate));
+ipcMain.handle(IpcEvents.UPDATER_APPLY_UPDATE, serializeErrors(async () => {
+    if (!IS_UPDATER_DISABLED && !IS_STANDALONE && IS_DISCORD_DESKTOP && RendererSettings.plain.plugins?.UpdateRollback?.enabled) {
+        return withUpdateCheckpoint(__dirname, () => updater.applyUpdate());
+    }
+    return updater.applyUpdate();
+}));
 
 export default updater;

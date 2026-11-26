@@ -1,0 +1,151 @@
+/* Keep copy controls in the modal header, outside the scrolling body. */
+.db-tfp-header,
+.db-tfp-header-actions {
+    display: inline-flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 100%;
+    min-width: 0;
+    vertical-align: middle;
+}
+
+.db-tfp-header {
+    gap: 12px;
+}
+
+.db-tfp-filename {
+    min-width: 0;
+    max-width: min(42vw, 420px);
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.db-tfp-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.db-tfp-tools,
+.db-tfp-buttons {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.db-tfp-buttons {
+    margin-top: 6px;
+}
+
+.db-tfp-tools input:not([type="checkbox"]) {
+    box-sizing: border-box;
+    min-width: 0;
+    padding: 8px 10px;
+    border: 1px solid var(--border-subtle, var(--background-modifier-accent));
+    border-radius: 6px;
+    background: var(--input-background, var(--background-base-lower));
+    color: var(--text-default);
+    font: inherit;
+}
+
+.db-tfp-search {
+    flex: 1;
+    min-width: 140px;
+}
+
+.db-tfp-line {
+    width: 85px;
+}
+
+.db-tfp-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: auto;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.db-tfp-code {
+    --db-tfp-scroll-track: var(--background-base-lowest, var(--background-tertiary));
+    --db-tfp-scroll-thumb: var(--scrollbar-auto-thumb, var(--text-muted));
+
+    height: min(54vh, 600px);
+    max-height: calc(100dvh - 260px);
+    min-height: 120px;
+    overflow: auto;
+    scrollbar-color: var(--db-tfp-scroll-thumb) var(--db-tfp-scroll-track);
+    scrollbar-width: thin;
+    border: 1px solid var(--border-subtle, var(--background-modifier-accent));
+    border-radius: 8px;
+    background: var(--db-tfp-scroll-track);
+    color: var(--text-default);
+    font-family: var(--font-code, monospace);
+    font-size: 13px;
+    line-height: 1.6;
+    tab-size: 4;
+    user-select: text;
+}
+
+.db-tfp-code::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+.db-tfp-code::-webkit-scrollbar-track,
+.db-tfp-code::-webkit-scrollbar-corner {
+    background: var(--db-tfp-scroll-track);
+}
+
+.db-tfp-code::-webkit-scrollbar-thumb {
+    border: 2px solid var(--db-tfp-scroll-track);
+    border-radius: 8px;
+    background: var(--db-tfp-scroll-thumb);
+}
+
+.db-tfp-row {
+    display: flex;
+    min-width: 100%;
+    width: max-content;
+}
+
+.db-tfp-row:has(.db-tfp-wrapped) {
+    width: 100%;
+}
+
+.db-tfp-gutter {
+    position: sticky;
+    left: 0;
+    flex: 0 0 76px;
+    box-sizing: border-box;
+    padding: 0 12px 0 4px;
+    text-align: right;
+    color: var(--text-muted);
+    background: var(--background-base-lower, var(--background-secondary));
+    border-right: 1px solid var(--border-subtle, var(--background-modifier-accent));
+    user-select: none;
+}
+
+.db-tfp-text {
+    padding: 0 12px;
+    white-space: pre;
+}
+
+.db-tfp-wrapped {
+    min-width: 0;
+    flex: 1;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.db-tfp-target {
+    background: var(--background-modifier-hover);
+}
+
+.db-tfp-code mark {
+    background: #e6b94c;
+    color: #161616;
+}
