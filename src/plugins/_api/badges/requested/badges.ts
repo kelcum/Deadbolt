@@ -5,6 +5,7 @@
  */
 
 import img_0a17108bb5b80dae from "file://0a17108bb5b80dae.png?base64";
+import img_2b00d99c3945b462 from "file://2b00d99c3945b462.jpg?base64";
 import img_2b648a5d9b113c32 from "file://2b648a5d9b113c32.gif?base64";
 import img_2e9aa52581c65bcc from "file://2e9aa52581c65bcc.jpg?base64";
 import img_3b7a05876fba5c07 from "file://3b7a05876fba5c07.png?base64";
@@ -293,5 +294,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "xxxvids",
         image: `data:image/png;base64,${img_79e29738979ae1a1}`,
         design: { shape: "circle", background: "gradient", colors: [0xff0000, 0xfafafa], effects: ["shine", "glint", "float", "pulse"], speed: 1, zoom: 1.52, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "2b00d99c3945b462",
+        users: ["924108206299561984"],
+        name: "claude ai",
+        image: `data:image/jpeg;base64,${img_2b00d99c3945b462}`,
+        design: { shape: "circle", background: "gradient", colors: [0x7c6ff0, 0x1e1a4d], effects: ["shine", "glint"], speed: 1, zoom: 1.43, x: -0.025, y: 0, rotate: 0 },
     },
 ];

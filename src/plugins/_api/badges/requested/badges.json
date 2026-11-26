@@ -834,5 +834,28 @@
             "pair": "b4964c0e1b4b2a61"
         },
         "imageHash": "9831cffbb56577a8"
+    },
+    {
+        "id": "2b00d99c3945b462",
+        "users": ["924108206299561984"],
+        "name": "claude ai",
+        "colors": ["#7c6ff0", "#1e1a4d"],
+        "image": "2b00d99c3945b462.jpg",
+        "imageType": "image/jpeg",
+        "design": {
+            "shape": "circle",
+            "background": "gradient",
+            "effects": ["shine", "glint"],
+            "speed": 1,
+            "zoom": 1.43,
+            "x": -0.025,
+            "y": 0,
+            "rotate": 0
+        },
+        "request": {
+            "badge": "claude ai",
+            "for": "57zu"
+        },
+        "imageHash": "4b2d322bb516cacf"
     }
 ]
