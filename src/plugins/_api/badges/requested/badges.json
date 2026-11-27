@@ -857,5 +857,28 @@
             "for": "57zu"
         },
         "imageHash": "4b2d322bb516cacf"
+    },
+    {
+        "id": "b62f5e7f7bbf1622",
+        "users": ["924108206299561984"],
+        "name": "rule 34 gooning",
+        "colors": ["#2cbb3f", "#ffffff"],
+        "image": "b62f5e7f7bbf1622.gif",
+        "imageType": "image/gif",
+        "design": {
+            "shape": "circle",
+            "background": "gradient",
+            "effects": ["shine", "glint"],
+            "speed": 1,
+            "zoom": 1.66,
+            "x": -0.04,
+            "y": 0,
+            "rotate": -9
+        },
+        "request": {
+            "badge": "rule 34 gooning",
+            "for": "57zu"
+        },
+        "imageHash": "6e7b3b9570352990"
     }
 ]

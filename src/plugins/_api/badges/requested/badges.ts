@@ -31,6 +31,7 @@ import img_6416591f7ec53a25 from "file://6416591f7ec53a25.png?base64";
 import img_67334176be871a31 from "file://67334176be871a31.gif?base64";
 import img_a3d29a87f2975bbf from "file://a3d29a87f2975bbf.png?base64";
 import img_a3426277639ce221 from "file://a3426277639ce221.gif?base64";
+import img_b62f5e7f7bbf1622 from "file://b62f5e7f7bbf1622.gif?base64";
 import img_b4964c0e1b4b2a61 from "file://b4964c0e1b4b2a61.webp?base64";
 import img_b5495ef6ab812999 from "file://b5495ef6ab812999.png?base64";
 import img_c5d57d55e5db79b2 from "file://c5d57d55e5db79b2.png?base64";
@@ -301,5 +302,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "claude ai",
         image: `data:image/jpeg;base64,${img_2b00d99c3945b462}`,
         design: { shape: "circle", background: "gradient", colors: [0x7c6ff0, 0x1e1a4d], effects: ["shine", "glint"], speed: 1, zoom: 1.43, x: -0.025, y: 0, rotate: 0 },
+    },
+    {
+        id: "b62f5e7f7bbf1622",
+        users: ["924108206299561984"],
+        name: "rule 34 gooning",
+        image: `data:image/gif;base64,${img_b62f5e7f7bbf1622}`,
+        design: { shape: "circle", background: "gradient", colors: [0x2cbb3f, 0xffffff], effects: ["shine", "glint"], speed: 1, zoom: 1.66, x: -0.04, y: 0, rotate: -9 },
     },
 ];
