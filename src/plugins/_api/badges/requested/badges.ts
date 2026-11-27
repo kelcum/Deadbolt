@@ -17,6 +17,8 @@ import img_8a1b71709664c8bd from "file://8a1b71709664c8bd.png?base64";
 import img_9f947d83963d1a8b from "file://9f947d83963d1a8b.jpg?base64";
 import img_13dfcbf5f6640ac6 from "file://13dfcbf5f6640ac6.png?base64";
 import img_17b954e0cb2b20b8 from "file://17b954e0cb2b20b8.jpg?base64";
+import img_045eb8491f132b82 from "file://045eb8491f132b82.jpg?base64";
+import img_59bba0db6b3421d4 from "file://59bba0db6b3421d4.jpg?base64";
 import img_72bd506d4970fa4f from "file://72bd506d4970fa4f.png?base64";
 import img_76a226e52e1d8120 from "file://76a226e52e1d8120.gif?base64";
 import img_79e29738979ae1a1 from "file://79e29738979ae1a1.png?base64";
@@ -309,5 +311,19 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "rule 34 gooning",
         image: `data:image/gif;base64,${img_b62f5e7f7bbf1622}`,
         design: { shape: "circle", background: "gradient", colors: [0x2cbb3f, 0xffffff], effects: ["shine", "glint"], speed: 1, zoom: 1.66, x: -0.04, y: 0, rotate: -9 },
+    },
+    {
+        id: "045eb8491f132b82",
+        users: ["1524473843664551996"],
+        name: "overnight throwaways",
+        image: `data:image/jpeg;base64,${img_045eb8491f132b82}`,
+        design: { shape: "circle", background: "gradient", colors: [0x330077, 0x6f00ff], effects: ["shine", "glint", "pulse"], speed: 1, zoom: 1.02, x: 0.009, y: 0, rotate: 0 },
+    },
+    {
+        id: "59bba0db6b3421d4",
+        users: ["1524473843664551996"],
+        name: "wifiskeleton",
+        image: `data:image/jpeg;base64,${img_59bba0db6b3421d4}`,
+        design: { shape: "circle", background: "gradient", colors: [0xffe100, 0xffea00], effects: ["shine", "glint", "pulse"], speed: 1, zoom: 1.22, x: 0, y: 0, rotate: 0 },
     },
 ];
