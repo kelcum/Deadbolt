@@ -25,6 +25,7 @@ import img_79e29738979ae1a1 from "file://79e29738979ae1a1.png?base64";
 import img_92d46af597578d72 from "file://92d46af597578d72.png?base64";
 import img_166fe28fc2c180a4 from "file://166fe28fc2c180a4.png?base64";
 import img_303af8f410632e09 from "file://303af8f410632e09.gif?base64";
+import img_325f003d51f83165 from "file://325f003d51f83165.gif?base64";
 import img_390d4897f131034b from "file://390d4897f131034b.gif?base64";
 import img_7828a0d7dc3f810b from "file://7828a0d7dc3f810b.webp?base64";
 import img_65727ab54f2ac6f1 from "file://65727ab54f2ac6f1.webp?base64";
@@ -325,5 +326,12 @@ export const requestedBadges: RequestedBadgeEntry[] = [
         name: "wifiskeleton",
         image: `data:image/jpeg;base64,${img_59bba0db6b3421d4}`,
         design: { shape: "circle", background: "gradient", colors: [0xffe100, 0xffea00], effects: ["shine", "glint", "pulse"], speed: 1, zoom: 1.22, x: 0, y: 0, rotate: 0 },
+    },
+    {
+        id: "325f003d51f83165",
+        users: ["195516525631897600"],
+        name: "Soul of Eternity",
+        image: `data:image/gif;base64,${img_325f003d51f83165}`,
+        design: { shape: "none", background: "none", colors: [0x2a2a63, 0xdfe6f8, 0x60c00f, 0xfda102], effects: [], speed: 1, zoom: 1.36, x: 0, y: 0, rotate: 0 },
     },
 ];
