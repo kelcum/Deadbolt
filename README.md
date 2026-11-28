@@ -71,6 +71,7 @@ New Deadbolt plugins:
 - **ModQuickActions** — right click a member and pick Quick Mod to time them out for one of your preset lengths, kick or ban them, with a saved reason for the audit log.
 - **HighlightWords** — colors words and names you pick, including your own name, wherever they show up in chat, without pinging or notifying you.
 - **ChatExport** — right click a channel or DM and pick Export Chat to save its recent messages, plus a few hundred older ones loaded like scrolling up, as a text, HTML or JSON file.
+- **NotesInChat** — a small note icon next to someone's name in chat shows that you wrote a Discord note about them, and hovering it shows the note.
 
 ## Installing
 

@@ -1,0 +1,19 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-notes-in-chat-icon {
+    display: inline-flex;
+    vertical-align: middle;
+    margin-left: 4px;
+    color: var(--interactive-normal);
+    cursor: default;
+}
+
+.vc-notes-in-chat-tooltip {
+    max-width: 320px;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
