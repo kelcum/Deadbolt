@@ -1,0 +1,60 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-away-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.vc-away-row {
+    display: flex;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.vc-away-row:hover {
+    background: var(--background-modifier-hover);
+}
+
+.vc-away-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.vc-away-body {
+    min-width: 0;
+    flex: 1;
+}
+
+.vc-away-meta {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+}
+
+.vc-away-name {
+    color: var(--header-primary);
+    font-weight: 600;
+}
+
+.vc-away-count {
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.vc-away-text {
+    color: var(--text-normal);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
