@@ -64,6 +64,7 @@ New Deadbolt plugins:
 - **JoinMuted** — mutes your mic (or deafens you, if you pick that) whenever you join a voice channel or call, so nobody hears you until you unmute.
 - **AutoCodeblock** — code you paste into the chat box gets wrapped in a code block with its language picked for you, so it keeps its formatting and gets highlighted.
 - **UnansweredDMs** — a button in the top bar lists the DMs where someone is still waiting on your reply, oldest first, with an optional reminder after a few hours.
+- **EventsCalendar** — a calendar button in the top bar lists the scheduled events from all your servers by day, with the ones happening now first, and clicking one opens its details.
 - **CollapseLongMessages** — folds very long messages down to a few lines with a Show more button under them, so walls of text don't take over the chat.
 - **WrongChannelGuard** — holds back a message you send right after switching chats when it looks meant for somewhere else, like an old draft or a reply you were typing in another chat, and sends it if you press send again.
 - **PasteCrop** — a crop button on images waiting to be sent lets you trim a pasted screenshot or blur out private parts before it uploads.

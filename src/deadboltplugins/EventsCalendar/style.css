@@ -1,0 +1,101 @@
+/*
+ * Deadbolt, a Discord client mod
+ * Copyright (c) 2026 k3 and contributors
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ */
+
+.vc-events-calendar-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.vc-events-calendar-day {
+    color: var(--header-secondary);
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0 10px 4px;
+}
+
+.vc-events-calendar-row {
+    display: flex;
+    gap: 12px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.vc-events-calendar-row:hover {
+    background: var(--background-modifier-hover);
+}
+
+.vc-events-calendar-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    flex-shrink: 0;
+}
+
+.vc-events-calendar-acronym {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--background-secondary);
+    color: var(--header-primary);
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.vc-events-calendar-body {
+    min-width: 0;
+    flex: 1;
+}
+
+.vc-events-calendar-meta {
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+}
+
+.vc-events-calendar-time {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.vc-events-calendar-live {
+    color: var(--status-positive);
+}
+
+.vc-events-calendar-interested {
+    color: var(--brand-500);
+    font-size: 12px;
+}
+
+.vc-events-calendar-name {
+    color: var(--header-primary);
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-events-calendar-details {
+    color: var(--text-muted);
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.vc-events-calendar-empty {
+    padding: 16px 0;
+    text-align: center;
+}
+
+.vc-events-calendar-dot {
+    fill: var(--status-positive);
+}
