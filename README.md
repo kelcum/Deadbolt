@@ -71,6 +71,7 @@ New Deadbolt plugins:
 - **ModQuickActions** — right click a member and pick Quick Mod to time them out for one of your preset lengths, kick or ban them, with a saved reason for the audit log.
 - **HighlightWords** — colors words and names you pick, including your own name, wherever they show up in chat, without pinging or notifying you.
 - **ChatExport** — right click a channel or DM and pick Export Chat to save its recent messages, plus a few hundred older ones loaded like scrolling up, as a text, HTML or JSON file.
+- **ScreenshareBlur** — right click a channel, group or person to blur that chat in your sidebar and its messages while you share your screen, with an option to blur every DM.
 
 ## Installing
 
@@ -244,7 +245,6 @@ It only interrupts you when something is actually wrong, with a Windows notifica
 
 - **Broken** (a failed build, a merge that broke the build, a failed reapply): announced right away, then at most once every 24 hours while it lasts.
 - **Only waiting** (an upstream conflict, uncommitted changes, unpushed commits, a failed push or fetch): logged quietly, and announced only if it is still like that after 3 days.
-- **ScreenshareBlur** — right click a channel, group or person to blur that chat in your sidebar and its messages while you share your screen, with an option to blur every DM.
 
 Each problem is tracked on its own in `%LOCALAPPDATA%\DeadboltAutoUpdate\last-alert.json` and forgotten as soon as a run finds it fixed. The notification code is in [`scripts/stuck-alert.ps1`](scripts/stuck-alert.ps1).
 
